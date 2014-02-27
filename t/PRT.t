@@ -8,5 +8,5 @@ sub _require : Test(startup => 1) {
 }
 
 sub welcome : Tests {
-    is PRT->welcome, 'welcome!!!';
+    is PRT->welcome, 'welcome!!!!';
 }
