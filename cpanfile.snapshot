@@ -1,0 +1,274 @@
+# carton snapshot format: version 1.0
+DISTRIBUTIONS
+  Class-Inspector-1.28
+    pathname: A/AD/ADAMK/Class-Inspector-1.28.tar.gz
+    provides:
+      Class::Inspector 1.28
+      Class::Inspector::Functions 1.28
+    requirements:
+      ExtUtils::MakeMaker 6.59
+      File::Spec 0.80
+      Test::More 0.47
+      perl 5.006
+  Clone-0.36
+    pathname: G/GA/GARU/Clone-0.36.tar.gz
+    provides:
+      Clone 0.36
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 0
+  ExtUtils-MakeMaker-6.90
+    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-6.90.tar.gz
+    provides:
+      DynaLoader 6.90
+      ExtUtils::Command::MM 6.90
+      ExtUtils::Liblist 6.90
+      ExtUtils::Liblist::Kid 6.90
+      ExtUtils::MM 6.90
+      ExtUtils::MM_AIX 6.90
+      ExtUtils::MM_Any 6.90
+      ExtUtils::MM_BeOS 6.90
+      ExtUtils::MM_Cygwin 6.90
+      ExtUtils::MM_DOS 6.90
+      ExtUtils::MM_Darwin 6.90
+      ExtUtils::MM_MacOS 6.90
+      ExtUtils::MM_NW5 6.90
+      ExtUtils::MM_OS2 6.90
+      ExtUtils::MM_QNX 6.90
+      ExtUtils::MM_UWIN 6.90
+      ExtUtils::MM_Unix 6.90
+      ExtUtils::MM_VMS 6.90
+      ExtUtils::MM_VOS 6.90
+      ExtUtils::MM_Win32 6.90
+      ExtUtils::MM_Win95 6.90
+      ExtUtils::MY 6.90
+      ExtUtils::MakeMaker 6.90
+      ExtUtils::MakeMaker::Config 6.90
+      ExtUtils::MakeMaker::_version 6.90
+      ExtUtils::Mkbootstrap 6.90
+      ExtUtils::Mksymlists 6.90
+      ExtUtils::testlib 6.90
+      MM 6.90
+      MY 6.90
+      in 6.90
+    requirements:
+      Data::Dumper 0
+      DirHandle 0
+      File::Basename 0
+      File::Spec 0.8
+      Pod::Man 0
+      perl 5.006
+  File-Remove-1.52
+    pathname: A/AD/ADAMK/File-Remove-1.52.tar.gz
+    provides:
+      File::Remove 1.52
+    requirements:
+      Cwd 3.29
+      ExtUtils::MakeMaker 6.36
+      File::Spec 3.29
+      Test::More 0.42
+      perl 5.00503
+  Hook-LexWrap-0.24
+    pathname: C/CH/CHORNY/Hook-LexWrap-0.24.tar.gz
+    provides:
+      Hook::LexWrap 0.24
+    requirements:
+      Test::More 0
+      perl 5.006
+  IO-String-1.08
+    pathname: G/GA/GAAS/IO-String-1.08.tar.gz
+    provides:
+      IO::String 1.08
+    requirements:
+      ExtUtils::MakeMaker 0
+  List-MoreUtils-0.33
+    pathname: A/AD/ADAMK/List-MoreUtils-0.33.tar.gz
+    provides:
+      List::MoreUtils 0.33
+    requirements:
+      ExtUtils::CBuilder 0.27
+      ExtUtils::MakeMaker 6.52
+      Test::More 0.82
+      perl 5.00503
+  PPI-1.215
+    pathname: A/AD/ADAMK/PPI-1.215.tar.gz
+    provides:
+      PPI 1.215
+      PPI::Cache 1.215
+      PPI::Document 1.215
+      PPI::Document::File 1.215
+      PPI::Document::Fragment 1.215
+      PPI::Document::Normalized 1.215
+      PPI::Dumper 1.215
+      PPI::Element 1.215
+      PPI::Exception 1.215
+      PPI::Exception::ParserRejection 1.215
+      PPI::Exception::ParserTimeout 1.215
+      PPI::Find 1.215
+      PPI::Lexer 1.215
+      PPI::Node 1.215
+      PPI::Normal 1.215
+      PPI::Normal::Standard 1.215
+      PPI::Statement 1.215
+      PPI::Statement::Break 1.215
+      PPI::Statement::Compound 1.215
+      PPI::Statement::Data 1.215
+      PPI::Statement::End 1.215
+      PPI::Statement::Expression 1.215
+      PPI::Statement::Given 1.215
+      PPI::Statement::Include 1.215
+      PPI::Statement::Include::Perl6 1.215
+      PPI::Statement::Null 1.215
+      PPI::Statement::Package 1.215
+      PPI::Statement::Scheduled 1.215
+      PPI::Statement::Sub 1.215
+      PPI::Statement::Unknown 1.215
+      PPI::Statement::UnmatchedBrace 1.215
+      PPI::Statement::Variable 1.215
+      PPI::Statement::When 1.215
+      PPI::Structure 1.215
+      PPI::Structure::Block 1.215
+      PPI::Structure::Condition 1.215
+      PPI::Structure::Constructor 1.215
+      PPI::Structure::For 1.215
+      PPI::Structure::Given 1.215
+      PPI::Structure::List 1.215
+      PPI::Structure::Subscript 1.215
+      PPI::Structure::Unknown 1.215
+      PPI::Structure::When 1.215
+      PPI::Token 1.215
+      PPI::Token::ArrayIndex 1.215
+      PPI::Token::Attribute 1.215
+      PPI::Token::BOM 1.215
+      PPI::Token::Cast 1.215
+      PPI::Token::Comment 1.215
+      PPI::Token::DashedWord 1.215
+      PPI::Token::Data 1.215
+      PPI::Token::End 1.215
+      PPI::Token::HereDoc 1.215
+      PPI::Token::Label 1.215
+      PPI::Token::Magic 1.215
+      PPI::Token::Number 1.215
+      PPI::Token::Number::Binary 1.215
+      PPI::Token::Number::Exp 1.215
+      PPI::Token::Number::Float 1.215
+      PPI::Token::Number::Hex 1.215
+      PPI::Token::Number::Octal 1.215
+      PPI::Token::Number::Version 1.215
+      PPI::Token::Operator 1.215
+      PPI::Token::Pod 1.215
+      PPI::Token::Prototype 1.215
+      PPI::Token::Quote 1.215
+      PPI::Token::Quote::Double 1.215
+      PPI::Token::Quote::Interpolate 1.215
+      PPI::Token::Quote::Literal 1.215
+      PPI::Token::Quote::Single 1.215
+      PPI::Token::QuoteLike 1.215
+      PPI::Token::QuoteLike::Backtick 1.215
+      PPI::Token::QuoteLike::Command 1.215
+      PPI::Token::QuoteLike::Readline 1.215
+      PPI::Token::QuoteLike::Regexp 1.215
+      PPI::Token::QuoteLike::Words 1.215
+      PPI::Token::Regexp 1.215
+      PPI::Token::Regexp::Match 1.215
+      PPI::Token::Regexp::Substitute 1.215
+      PPI::Token::Regexp::Transliterate 1.215
+      PPI::Token::Separator 1.215
+      PPI::Token::Structure 1.215
+      PPI::Token::Symbol 1.215
+      PPI::Token::Unknown 1.215
+      PPI::Token::Whitespace 1.215
+      PPI::Token::Word 1.215
+      PPI::Token::_QuoteEngine 1.215
+      PPI::Token::_QuoteEngine::Full 1.215
+      PPI::Token::_QuoteEngine::Simple 1.215
+      PPI::Tokenizer 1.215
+      PPI::Transform 1.215
+      PPI::Transform::UpdateCopyright 1.215
+      PPI::Util 1.215
+      PPI::XSAccessor 1.215
+    requirements:
+      Class::Inspector 1.22
+      Clone 0.30
+      Digest::MD5 2.35
+      ExtUtils::MakeMaker 6.42
+      File::Remove 1.42
+      File::Spec 0.84
+      IO::String 1.07
+      List::MoreUtils 0.16
+      List::Util 1.20
+      Params::Util 1.00
+      Storable 2.17
+      Task::Weaken 0
+      Test::More 0.86
+      Test::NoWarnings 0.084
+      Test::Object 0.07
+      Test::SubCalls 1.07
+      perl 5.006
+  Params-Util-1.07
+    pathname: A/AD/ADAMK/Params-Util-1.07.tar.gz
+    provides:
+      Params::Util 1.07
+    requirements:
+      ExtUtils::CBuilder 0.27
+      ExtUtils::MakeMaker 6.52
+      File::Spec 0.80
+      Scalar::Util 1.18
+      Test::More 0.42
+      perl 5.00503
+  Task-Weaken-1.04
+    pathname: A/AD/ADAMK/Task-Weaken-1.04.tar.gz
+    provides:
+      Task::Weaken 1.04
+    requirements:
+      ExtUtils::MakeMaker 6.42
+      File::Spec 0.80
+      Scalar::Util 1.14
+      Test::More 0.42
+      perl 5.005
+  Test-NoWarnings-1.04
+    pathname: A/AD/ADAMK/Test-NoWarnings-1.04.tar.gz
+    provides:
+      Test::NoWarnings 1.04
+      Test::NoWarnings::Warning 1.04
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::Builder 0.86
+      Test::More 0.47
+      Test::Tester 0.107
+      perl 5.006
+  Test-Object-0.07
+    pathname: A/AD/ADAMK/Test-Object-0.07.tar.gz
+    provides:
+      Test::Object 0.07
+      Test::Object::Test 0.07
+    requirements:
+      Carp 0
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      File::Spec 0.80
+      Scalar::Util 1.16
+      Test::Builder 0.33
+      Test::Builder::Tester 1.02
+      Test::More 0.42
+      overload 0
+  Test-SubCalls-1.09
+    pathname: A/AD/ADAMK/Test-SubCalls-1.09.tar.gz
+    provides:
+      Test::SubCalls 1.09
+    requirements:
+      ExtUtils::MakeMaker 6.42
+      File::Spec 0.80
+      Hook::LexWrap 0.20
+      Test::Builder::Tester 1.02
+      Test::More 0.42
+  Test-Tester-0.109
+    pathname: F/FD/FDALY/Test-Tester-0.109.tar.gz
+    provides:
+      Test::Tester 0.109
+      Test::Tester::Capture undef
+      Test::Tester::CaptureRunner undef
+      Test::Tester::Delegate undef
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::Builder 0
