@@ -1,0 +1,12 @@
+language: perl
+perl:
+  - "5.14"
+
+before_install:
+  - cpanm Carton
+
+install:
+  - carton install
+
+script:
+  - carton exec -- prove -v
