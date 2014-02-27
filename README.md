@@ -8,6 +8,12 @@ Command line tool for Perl code refacoring
 - Rename a class
 - Rename a name space
 
+## Setup
+
+```
+carton install
+```
+
 ## Usage
 
 Not implemented
