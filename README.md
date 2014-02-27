@@ -16,7 +16,9 @@ carton install
 
 ## Usage
 
-Not implemented
+```
+carton exec -- prt
+```
 
 ## License
 
