@@ -17,6 +17,14 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
+  Exporter-Lite-0.02
+    pathname: M/MS/MSCHWERN/Exporter-Lite-0.02.tar.gz
+    provides:
+      Dummy 0.5
+      Exporter::Lite 0.02
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 0.34
   ExtUtils-MakeMaker-6.90
     pathname: B/BI/BINGOS/ExtUtils-MakeMaker-6.90.tar.gz
     provides:
@@ -364,6 +372,18 @@ DISTRIBUTIONS
       Test::Harness 2.03
       Test::More 0.7
       Test::Simple 0.7
+  Test-Fatal-0.013
+    pathname: R/RJ/RJBS/Test-Fatal-0.013.tar.gz
+    provides:
+      Test::Fatal 0.013
+    requirements:
+      Carp 0
+      Exporter 5.57
+      ExtUtils::MakeMaker 6.30
+      Test::Builder 0
+      Try::Tiny 0.07
+      strict 0
+      warnings 0
   Test-NoWarnings-1.04
     pathname: A/AD/ADAMK/Test-NoWarnings-1.04.tar.gz
     provides:
@@ -410,3 +430,14 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::Builder 0
+  Try-Tiny-0.19
+    pathname: D/DO/DOY/Try-Tiny-0.19.tar.gz
+    provides:
+      Try::Tiny 0.19
+    requirements:
+      Carp 0
+      Exporter 5.57
+      ExtUtils::MakeMaker 6.30
+      constant 0
+      strict 0
+      warnings 0
