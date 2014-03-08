@@ -58,6 +58,14 @@ DISTRIBUTIONS
       File::Spec 0.8
       Pod::Man 0
       perl 5.006
+  File-Copy-Recursive-0.38
+    pathname: D/DM/DMUEY/File-Copy-Recursive-0.38.tar.gz
+    provides:
+      File::Copy::Recursive 0.38
+    requirements:
+      ExtUtils::MakeMaker 0
+      File::Copy 0
+      File::Spec 0
   File-Remove-1.52
     pathname: A/AD/ADAMK/File-Remove-1.52.tar.gz
     provides:
