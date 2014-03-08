@@ -29,6 +29,7 @@ sub import {
 
         use parent qw(Test::Class);
         use Test::More;
+        use Test::Fatal;
 
         END { $package->runtests }
     ];
