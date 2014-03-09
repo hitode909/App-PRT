@@ -45,19 +45,35 @@ sub execute : Tests {
     my $command = PRT::Command::ReplaceToken->new;
     my $file = "$directory/hello_world.pl";
 
-    subtest 'nothing happen when source/dest specified' => sub {
+    subtest 'nothing happen when no rules are specified' => sub {
         $command->execute($file);
         is file($file)->slurp, <<'CODE';
 print "Hello, World!\n";
 CODE
     };
 
-    subtest 'tokens will be replaced when source/dest specified' => sub {
+    subtest 'tokens will be replaced when a rules is specified' => sub {
         $command->register('print' => 'warn');
         $command->execute($file);
         is file($file)->slurp, <<'CODE';
 warn "Hello, World!\n";
 CODE
     };
+
+}
+
+sub execute_when_many_rules : Tests {
+    my $directory = t::test::create_hello_world();
+    my $command = PRT::Command::ReplaceToken->new;
+    my $file = "$directory/hello_world.pl";
+
+    $command->register('print' => 'die');
+    $command->register('"Hello, World!\n"' => '"Bye!"');
+
+    $command->execute($file);
+
+        is file($file)->slurp, <<'CODE';
+die "Bye!";
+CODE
 
 }
