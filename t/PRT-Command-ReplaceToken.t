@@ -11,6 +11,35 @@ sub instantiate : Tests {
     isa_ok PRT::Command::ReplaceToken->new, 'PRT::Command::ReplaceToken';
 }
 
+sub register_rules : Tests {
+    my $command = PRT::Command::ReplaceToken->new;
+
+    is_deeply $command->rules, {}, 'empty';
+
+    is $command->rule('print'), undef, 'not registered';
+
+    $command->register('print' => 'warn');
+
+    is $command->rule('print'), 'warn', 'registered';
+
+    is_deeply $command->rules, {
+        'print' => 'warn',
+    }, 'registered';
+
+    $command->register('print' => 'say');
+
+    is_deeply $command->rules, {
+        'print' => 'say',
+    }, 'updated';
+
+    $command->register('say' => 'print');
+
+    is_deeply $command->rules, {
+        'print' => 'say',
+        'say' => 'print',
+    }, 'added';
+}
+
 sub execute : Tests {
     my $directory = t::test::create_hello_world();
     my $command = PRT::Command::ReplaceToken->new;
@@ -18,12 +47,13 @@ sub execute : Tests {
 
     subtest 'nothing happen when source/dest specified' => sub {
         $command->execute($file);
-        is file($file)->slurp, file(__FILE__)->dir->file('data', 'hello_world', 'hello_world.pl')->slurp;
+        is file($file)->slurp, <<'CODE';
+print "Hello, World!\n";
+CODE
     };
 
     subtest 'tokens will be replaced when source/dest specified' => sub {
-        $command->set_source_token('print');
-        $command->set_dest_token('warn');
+        $command->register('print' => 'warn');
         $command->execute($file);
         is file($file)->slurp, <<'CODE';
 warn "Hello, World!\n";
