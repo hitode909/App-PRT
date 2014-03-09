@@ -37,6 +37,7 @@ sub rules {
 #   undef             (when not registered)
 sub rule {
     my ($self, $source) = @_;
+
     $self->rules->{$source};
 }
 
