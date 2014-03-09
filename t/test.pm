@@ -44,10 +44,17 @@ sub import {
     die $@ if $@;
 }
 
-sub create_hello_world {
+sub prepare_test_code {
+    my ($name) = @_;
+
+    my $base_directory = file(__FILE__)->dir->subdir('data', $name);
     my $tmpdir = tempdir;
 
-    File::Copy::Recursive::dircopy(file(__FILE__)->dir->subdir('data', 'hello_world'), $tmpdir);
+    unless (-d $base_directory) {
+        die "$name is not defined";
+    }
+
+    File::Copy::Recursive::dircopy($base_directory, $tmpdir);
     $tmpdir;
 }
 

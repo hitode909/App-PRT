@@ -12,7 +12,7 @@ sub instantiate : Tests {
 }
 
 sub collect : Tests {
-    my $directory = t::test::create_hello_world();
+    my $directory = t::test::prepare_test_code('hello_world');
 
     subtest 'when no files specified' => sub {
         my $collector = PRT::Collector::Files->new;

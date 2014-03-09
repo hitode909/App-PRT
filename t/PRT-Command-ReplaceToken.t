@@ -41,7 +41,7 @@ sub register_rules : Tests {
 }
 
 sub execute : Tests {
-    my $directory = t::test::create_hello_world();
+    my $directory = t::test::prepare_test_code('hello_world');
     my $command = PRT::Command::ReplaceToken->new;
     my $file = "$directory/hello_world.pl";
 
@@ -63,7 +63,7 @@ CODE
 }
 
 sub execute_when_many_rules : Tests {
-    my $directory = t::test::create_hello_world();
+    my $directory = t::test::prepare_test_code('hello_world');
     my $command = PRT::Command::ReplaceToken->new;
     my $file = "$directory/hello_world.pl";
 
