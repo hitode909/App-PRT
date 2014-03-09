@@ -24,8 +24,4 @@ sub _prepare_as_git_repository : Tests {
     t::test::prepare_as_git_repository($directory);
 
     ok -d "$directory/.git", '.git directory exists';
-
-    system "git --git-dir @{[ $directory ]}/.git ls-files >& /dev/null";
-
-    is $?, 0, 'git ls-files success';
 }
