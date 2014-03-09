@@ -58,4 +58,10 @@ sub prepare_test_code {
     $tmpdir;
 }
 
+sub prepare_as_git_repository {
+    my ($directory) = @_;
+
+    system "cd $directory && git init --quiet && git add * && git commit --quiet -m 'init'";
+}
+
 1;

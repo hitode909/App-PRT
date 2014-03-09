@@ -16,5 +16,16 @@ sub _prepare_test_code : Tests {
             t::test::prepare_test_code('not_defined_name');
         }, 'dies when specified code is not prepared'
     };
+}
 
+sub _prepare_as_git_repository : Tests {
+    my $directory = t::test::prepare_test_code('hello_world');
+
+    t::test::prepare_as_git_repository($directory);
+
+    ok -d "$directory/.git", '.git directory exists';
+
+    system "git --git-dir @{[ $directory ]}/.git ls-files >& /dev/null";
+
+    is $?, 0, 'git ls-files success';
 }
