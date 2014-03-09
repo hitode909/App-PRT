@@ -19,7 +19,7 @@ sub new {
 sub register {
     my ($self, $source, $dest) = @_;
 
-    $self->{rules}->{$source} = $dest;
+    $self->rules->{$source} = $dest;
 }
 
 # return replacing rules
