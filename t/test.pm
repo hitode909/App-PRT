@@ -19,6 +19,10 @@ our @EXPORT = qw(
 sub import {
     my ($class) = @_;
 
+    strict->import;
+    utf8->import;
+    warnings->import;
+
     my ($package, $file) = caller;
 
     my $code = qq[
