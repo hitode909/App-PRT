@@ -30,5 +30,18 @@ sub collect : Tests {
             $collector->collect;
         }, 'died';
     };
+}
+
+sub collect_multi_files: Tests {
+    my $directory = t::test::prepare_test_code('dinner');
+
+    my $files = [
+        "$directory/dinner.pl",
+        "$directory/lib/My/Food.pm",
+        "$directory/lib/My/Human.pm",
+    ];
+
+    my $collector = PRT::Collector::Files->new($files);
+    is_deeply $collector->collect, $files, 'specified files are returned';
 
 }
