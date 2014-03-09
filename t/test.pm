@@ -31,6 +31,8 @@ sub import {
         use Test::More;
         use Test::Fatal;
 
+        use Path::Class;
+
         END { $package->runtests }
     ];
 
