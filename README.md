@@ -11,6 +11,7 @@ All features are not implemented.
 - Replace tokens
 - Rename a class
 - Rename a name space
+- Set a method as obsolute
 
 ## Setup
 
