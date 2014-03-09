@@ -2,6 +2,10 @@
 
 Command line tool for Perl code refacoring
 
+## Features
+
+All features are not implemented.
+
 ## TODO
 
 - Replace tokens
