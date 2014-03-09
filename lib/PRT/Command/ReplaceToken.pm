@@ -40,7 +40,6 @@ sub set_dest_token {
 # argumensts:
 #   $file: filename for refactoring
 # discussions:
-#   TODO: too complicated
 #   TOO:  use PPI
 sub execute {
     my ($self, $file) = @_;
