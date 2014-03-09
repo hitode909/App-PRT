@@ -8,11 +8,25 @@ sub new {
     bless {}, $class;
 }
 
+# get a source token for replacement
+sub source_token {
+    my ($self) = @_;
+
+    $self->{source_token} // '';
+}
+
 # set a source token for replacement
 sub set_source_token {
     my ($self, $source_token) = @_;
 
-    $self->{source_tokan} = $source_token;
+    $self->{source_token} = $source_token;
+}
+
+# get a source token for replacement
+sub dest_token {
+    my ($self) = @_;
+
+    $self->{dest_token} // '';
 }
 
 # set a destination token for replacement
@@ -31,10 +45,8 @@ sub set_dest_token {
 sub execute {
     my ($self, $file) = @_;
 
-    return unless exists $self->{source_tokan} && exists $self->{dest_token};
-
-    my $source = $self->{source_tokan} // '';
-    my $dest   = $self->{dest_token} // '';
+    my $source = $self->source_token;
+    my $dest   = $self->dest_token;
 
     my $content = file($file)->slurp;
     $content =~ s/\Q$source\E/$dest/g;
