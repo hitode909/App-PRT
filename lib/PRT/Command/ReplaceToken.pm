@@ -8,17 +8,6 @@ sub new {
     bless {}, $class;
 }
 
-# set a collector for this command
-# arguments:
-#   $collector: PRT::Collector::*
-# discussions:
-#   Should command has a collector?
-sub set_collector {
-    my ($self, $collector) = @_;
-
-    $self->{collector} = $collector;
-}
-
 # set a source token for replacement
 sub set_source_token {
     my ($self, $source_token) = @_;
@@ -33,22 +22,13 @@ sub set_dest_token {
     $self->{dest_token} = $dest_token;
 }
 
-# refactor all files
-sub execute {
-    my ($self) = @_;
-
-    for my $file (@{$self->{collector}->collect}) {
-        $self->execute_file($file);
-    }
-}
-
 # refactor a file
 # argumensts:
 #   $file: filename for refactoring
 # discussions:
 #   TODO: too complicated
 #   TOO:  use PPI
-sub execute_file {
+sub execute {
     my ($self, $file) = @_;
 
     return unless exists $self->{source_tokan} && exists $self->{dest_token};

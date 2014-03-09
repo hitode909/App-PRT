@@ -1,6 +1,5 @@
 package t::PRT::Command::ReplaceToken;
 use t::test;
-use PRT::Collector::Files;
 
 sub _require : Test(startup => 1) {
     my ($self) = @_;
@@ -15,19 +14,18 @@ sub instantiate : Tests {
 sub execute : Tests {
     my $directory = t::test::create_hello_world();
     my $command = PRT::Command::ReplaceToken->new;
-    my $collector = PRT::Collector::Files->new(["$directory/hello_world.pl"]);
-    $command->set_collector($collector);
+    my $file = "$directory/hello_world.pl";
 
     subtest 'nothing happen when source/dest specified' => sub {
-        $command->execute;
-        is dir($directory)->file('hello_world.pl')->slurp, file(__FILE__)->dir->file('data', 'hello_world', 'hello_world.pl')->slurp;
+        $command->execute($file);
+        is file($file)->slurp, file(__FILE__)->dir->file('data', 'hello_world', 'hello_world.pl')->slurp;
     };
 
     subtest 'tokens will be replaced when source/dest specified' => sub {
         $command->set_source_token('print');
         $command->set_dest_token('warn');
-        $command->execute;
-        is dir($directory)->file('hello_world.pl')->slurp, <<'CODE';
+        $command->execute($file);
+        is file($file)->slurp, <<'CODE';
 warn "Hello, World!\n";
 CODE
     };
