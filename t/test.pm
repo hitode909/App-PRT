@@ -61,7 +61,7 @@ sub prepare_test_code {
 sub prepare_as_git_repository {
     my ($directory) = @_;
 
-    system "cd $directory && git init --quiet && git add * && git commit --quiet -m 'init'";
+    system "cd $directory && git init --quiet && git config user.email 'test at example.com' &&  git config user.name 'Tester' && git add * && git commit --quiet -m 'init'";
 }
 
 1;
