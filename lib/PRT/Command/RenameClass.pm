@@ -43,14 +43,22 @@ sub destination_class_name {
 sub execute {
     my ($self, $file) = @_;
 
+    my $replaced = 0;
 
     my $document = PPI::Document->new($file);
 
     my $package_statement_renamed = $self->_try_rename_package_statement($document);
 
+    $replaced += $self->_try_rename_includes($document);
+
+    $replaced += $self->_try_rename_tokens($document);
+
     if ($package_statement_renamed) {
         $document->save($self->_destination_file($file));
         unlink($file);
+    } else {
+        return unless $replaced;
+        $document->save($file);
     }
 }
 
@@ -68,6 +76,42 @@ sub _try_rename_package_statement {
 
     $namespace->set_content($self->destination_class_name);
     1;
+}
+
+sub _try_rename_includes {
+    my ($self, $document) = @_;
+
+    my $replaced = 0;
+
+    for my $statement (@{ $document->find('PPI::Statement::Include') }) {
+        next unless defined $statement->module;
+        next unless $statement->module eq $self->source_class_name;
+
+        my $module = $statement->schild(1);
+
+        return unless $module->isa('PPI::Token::Word');
+
+        $module->set_content($self->destination_class_name);
+        $replaced++;
+    }
+
+    $replaced;
+}
+
+# discussions:
+#   seems too wild
+sub _try_rename_tokens {
+    my ($self, $document) = @_;
+
+    my $replaced = 0;
+
+    for my $token (@{ $document->find('PPI::Token') }) {
+        next unless $token->content eq $self->source_class_name;
+        $token->set_content($self->destination_class_name);
+        $replaced++;
+    }
+
+    $replaced;
 }
 
 sub _destination_file {

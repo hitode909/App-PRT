@@ -40,14 +40,14 @@ sub _destination_file : Tests {
 sub execute : Tests {
     my $directory = t::test::prepare_test_code('dinner');
 
-    my $food_file = "$directory/lib/My/Food.pm";
-    my $meal_file = "$directory/lib/My/Meal.pm";
-
     my $command = PRT::Command::RenameClass->new;
 
     $command->register('My::Food' => 'My::Meal');
 
     subtest 'target class' => sub {
+        my $food_file = "$directory/lib/My/Food.pm";
+        my $meal_file = "$directory/lib/My/Meal.pm";
+
         $command->execute($food_file);
 
         ok ! -f $food_file, "Food.pm doesn't exists";
@@ -74,5 +74,28 @@ sub name {
 
 1;
 CODE
-    };
+
+     };
+
+    subtest 'client file' => sub {
+        my $dinner_file = "$directory/dinner.pl";
+        $command->execute($dinner_file);
+
+        ok -f $dinner_file, 'dinner.pl exists';
+
+        is file($dinner_file)->slurp, <<'CODE', 'use statement and class-method invocation were rewritten';
+use strict;
+use warnings;
+use lib 'lib';
+
+use My::Human;
+use My::Meal;
+
+my $human = My::Human->new('Alice');
+my $food = My::Meal->new('Pizza');
+
+$human->eat($food);
+CODE
+
+     };
 }
