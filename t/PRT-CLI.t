@@ -53,3 +53,21 @@ sub parse : Tests {
         }, 'died';
     };
 }
+
+sub run : Tests {
+    my $runner;
+    my $g = mock_guard 'PRT::Runner' => {
+        run => sub {
+            $runner = shift;
+            1;
+        },
+    };
+    my $cli = PRT::CLI->new;
+    $cli->parse;
+    $cli->run;
+
+    is $g->call_count('PRT::Runner', 'run'), 1, 'Runner#run called';
+
+    cmp_deeply $runner->command, $cli->command, 'command matches';
+    cmp_deeply $runner->collector, $cli->collector, 'collector matches';
+}

@@ -2,6 +2,7 @@ package PRT::CLI;
 use strict;
 use warnings;
 
+use PRT::Runner;
 use Class::Load qw(load_class);
 use Getopt::Long qw(GetOptionsFromArray);
 
@@ -25,6 +26,15 @@ sub parse {
     load_class $collector_class;
 
     $self->{collector} = $collector_class->new;
+}
+
+sub run {
+    my ($self) = @_;
+
+    my $runner = PRT::Runner->new;
+    $runner->set_command($self->command);
+    $runner->set_collector($self->collector);
+    $runner->run;
 }
 
 sub command {

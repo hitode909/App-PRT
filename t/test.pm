@@ -35,6 +35,7 @@ sub import {
         use Test::More;
         use Test::Fatal;
         use Test::Deep;
+        use Test::Mock::Guard;
 
         use Path::Class;
 
