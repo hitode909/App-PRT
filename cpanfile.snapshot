@@ -10,6 +10,26 @@ DISTRIBUTIONS
       File::Spec 0.80
       Test::More 0.47
       perl 5.006
+  Class-Load-0.21
+    pathname: E/ET/ETHER/Class-Load-0.21.tar.gz
+    provides:
+      Class::Load 0.21
+      Class::Load::PP 0.21
+    requirements:
+      Carp 0
+      Data::OptList 0
+      Exporter 0
+      ExtUtils::MakeMaker 6.30
+      Module::Build::Tiny 0.034
+      Module::Implementation 0.04
+      Module::Runtime 0.012
+      Package::Stash 0.14
+      Scalar::Util 0
+      Try::Tiny 0
+      base 0
+      perl 5.008
+      strict 0
+      warnings 0
   Clone-0.36
     pathname: G/GA/GARU/Clone-0.36.tar.gz
     provides:
@@ -17,6 +37,30 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
+  Data-OptList-0.109
+    pathname: R/RJ/RJBS/Data-OptList-0.109.tar.gz
+    provides:
+      Data::OptList 0.109
+    requirements:
+      ExtUtils::MakeMaker 6.30
+      List::Util 0
+      Params::Util 0
+      Sub::Install 0.921
+      strict 0
+      warnings 0
+  Dist-CheckConflicts-0.10
+    pathname: D/DO/DOY/Dist-CheckConflicts-0.10.tar.gz
+    provides:
+      Dist::CheckConflicts 0.10
+    requirements:
+      Carp 0
+      Exporter 0
+      ExtUtils::MakeMaker 6.30
+      List::MoreUtils 0.12
+      Module::Runtime 0.009
+      base 0
+      strict 0
+      warnings 0
   Exporter-Lite-0.02
     pathname: M/MS/MSCHWERN/Exporter-Lite-0.02.tar.gz
     provides:
@@ -25,6 +69,48 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0.34
+  ExtUtils-Config-0.007
+    pathname: L/LE/LEONT/ExtUtils-Config-0.007.tar.gz
+    provides:
+      ExtUtils::Config 0.007
+    requirements:
+      Config 0
+      Data::Dumper 0
+      ExtUtils::MakeMaker 6.30
+      File::Find 0
+      File::Temp 0
+      Test::More 0.88
+      strict 0
+      warnings 0
+  ExtUtils-Helpers-0.022
+    pathname: L/LE/LEONT/ExtUtils-Helpers-0.022.tar.gz
+    provides:
+      ExtUtils::Helpers 0.022
+      ExtUtils::Helpers::Unix 0.022
+      ExtUtils::Helpers::VMS 0.022
+      ExtUtils::Helpers::Windows 0.022
+    requirements:
+      Carp 0
+      Exporter 5.57
+      ExtUtils::MakeMaker 6.30
+      File::Basename 0
+      File::Copy 0
+      File::Spec::Functions 0
+      Module::Load 0
+      Text::ParseWords 3.24
+      strict 0
+      warnings 0
+  ExtUtils-InstallPaths-0.010
+    pathname: L/LE/LEONT/ExtUtils-InstallPaths-0.010.tar.gz
+    provides:
+      ExtUtils::InstallPaths 0.010
+    requirements:
+      Carp 0
+      ExtUtils::Config 0.002
+      ExtUtils::MakeMaker 6.30
+      File::Spec 0
+      strict 0
+      warnings 0
   ExtUtils-MakeMaker-6.90
     pathname: B/BI/BINGOS/ExtUtils-MakeMaker-6.90.tar.gz
     provides:
@@ -169,6 +255,56 @@ DISTRIBUTIONS
       Text::ParseWords 0
       perl 5.006001
       version 0.87
+  Module-Build-Tiny-0.035
+    pathname: L/LE/LEONT/Module-Build-Tiny-0.035.tar.gz
+    provides:
+      Module::Build::Tiny 0.035
+    requirements:
+      CPAN::Meta 0
+      DynaLoader 0
+      Exporter 5.57
+      ExtUtils::CBuilder 0
+      ExtUtils::Config 0.003
+      ExtUtils::Helpers 0.020
+      ExtUtils::Install 0
+      ExtUtils::InstallPaths 0.002
+      ExtUtils::ParseXS 0
+      File::Basename 0
+      File::Find 0
+      File::Path 0
+      File::Spec::Functions 0
+      Getopt::Long 2.36
+      JSON::PP 2
+      Pod::Man 0
+      TAP::Harness::Env 0
+      perl 5.006
+      strict 0
+      warnings 0
+  Module-Implementation-0.07
+    pathname: D/DR/DROLSKY/Module-Implementation-0.07.tar.gz
+    provides:
+      Module::Implementation 0.07
+      T::Impl1 undef
+      T::Impl2 undef
+      T::ImplFails1 undef
+      T::ImplFails2 undef
+    requirements:
+      Carp 0
+      ExtUtils::MakeMaker 6.30
+      Module::Runtime 0.012
+      Try::Tiny 0
+      strict 0
+      warnings 0
+  Module-Runtime-0.014
+    pathname: Z/ZE/ZEFRAM/Module-Runtime-0.014.tar.gz
+    provides:
+      Module::Runtime 0.014
+    requirements:
+      Module::Build 0
+      Test::More 0
+      perl 5.006
+      strict 0
+      warnings 0
   PPI-1.215
     pathname: A/AD/ADAMK/PPI-1.215.tar.gz
     provides:
@@ -284,6 +420,44 @@ DISTRIBUTIONS
       Test::Object 0.07
       Test::SubCalls 1.07
       perl 5.006
+  Package-Stash-0.36
+    pathname: D/DO/DOY/Package-Stash-0.36.tar.gz
+    provides:
+      Package::Stash 0.36
+      Package::Stash::PP 0.36
+    requirements:
+      B 0
+      Carp 0
+      Config 0
+      Dist::CheckConflicts 0.02
+      ExtUtils::MakeMaker 6.30
+      File::Find 0
+      File::Spec 0
+      File::Temp 0
+      Getopt::Long 0
+      Module::Implementation 0.06
+      Package::Stash::XS 0.26
+      Scalar::Util 0
+      Symbol 0
+      Test::Fatal 0
+      Test::More 0.88
+      Test::Requires 0
+      Text::ParseWords 0
+      base 0
+      constant 0
+      lib 0
+      strict 0
+      warnings 0
+  Package-Stash-XS-0.28
+    pathname: D/DO/DOY/Package-Stash-XS-0.28.tar.gz
+    provides:
+      CompileTime undef
+      Package::Stash::XS 0.28
+    requirements:
+      ExtUtils::MakeMaker 6.30
+      XSLoader 0
+      strict 0
+      warnings 0
   Params-Util-1.07
     pathname: A/AD/ADAMK/Params-Util-1.07.tar.gz
     provides:
@@ -320,6 +494,17 @@ DISTRIBUTIONS
       overload 0
       parent 0
       strict 0
+  Sub-Install-0.927
+    pathname: R/RJ/RJBS/Sub-Install-0.927.tar.gz
+    provides:
+      Sub::Install 0.927
+    requirements:
+      B 0
+      Carp 0
+      ExtUtils::MakeMaker 6.30
+      Scalar::Util 0
+      strict 0
+      warnings 0
   Sub-Uplevel-0.24
     pathname: D/DA/DAGOLDEN/Sub-Uplevel-0.24.tar.gz
     provides:
@@ -384,6 +569,59 @@ DISTRIBUTIONS
       Try::Tiny 0.07
       strict 0
       warnings 0
+  Test-Harness-3.30
+    pathname: L/LE/LEONT/Test-Harness-3.30.tar.gz
+    provides:
+      App::Prove 3.30
+      App::Prove::State 3.30
+      App::Prove::State::Result 3.30
+      App::Prove::State::Result::Test 3.30
+      TAP::Base 3.30
+      TAP::Formatter::Base 3.30
+      TAP::Formatter::Color 3.30
+      TAP::Formatter::Console 3.30
+      TAP::Formatter::Console::ParallelSession 3.30
+      TAP::Formatter::Console::Session 3.30
+      TAP::Formatter::File 3.30
+      TAP::Formatter::File::Session 3.30
+      TAP::Formatter::Session 3.30
+      TAP::Harness 3.30
+      TAP::Harness::Env 3.30
+      TAP::Object 3.30
+      TAP::Parser 3.30
+      TAP::Parser::Aggregator 3.30
+      TAP::Parser::Grammar 3.30
+      TAP::Parser::Iterator 3.30
+      TAP::Parser::Iterator::Array 3.30
+      TAP::Parser::Iterator::Process 3.30
+      TAP::Parser::Iterator::Stream 3.30
+      TAP::Parser::IteratorFactory 3.30
+      TAP::Parser::Multiplexer 3.30
+      TAP::Parser::Result 3.30
+      TAP::Parser::Result::Bailout 3.30
+      TAP::Parser::Result::Comment 3.30
+      TAP::Parser::Result::Plan 3.30
+      TAP::Parser::Result::Pragma 3.30
+      TAP::Parser::Result::Test 3.30
+      TAP::Parser::Result::Unknown 3.30
+      TAP::Parser::Result::Version 3.30
+      TAP::Parser::Result::YAML 3.30
+      TAP::Parser::ResultFactory 3.30
+      TAP::Parser::Scheduler 3.30
+      TAP::Parser::Scheduler::Job 3.30
+      TAP::Parser::Scheduler::Spinner 3.30
+      TAP::Parser::Source 3.30
+      TAP::Parser::SourceHandler 3.30
+      TAP::Parser::SourceHandler::Executable 3.30
+      TAP::Parser::SourceHandler::File 3.30
+      TAP::Parser::SourceHandler::Handle 3.30
+      TAP::Parser::SourceHandler::Perl 3.30
+      TAP::Parser::SourceHandler::RawTAP 3.30
+      TAP::Parser::YAMLish::Reader 3.30
+      TAP::Parser::YAMLish::Writer 3.30
+      Test::Harness 3.30
+    requirements:
+      ExtUtils::MakeMaker 0
   Test-NoWarnings-1.04
     pathname: A/AD/ADAMK/Test-NoWarnings-1.04.tar.gz
     provides:
@@ -410,6 +648,18 @@ DISTRIBUTIONS
       Test::Builder::Tester 1.02
       Test::More 0.42
       overload 0
+  Test-Requires-0.07
+    pathname: T/TO/TOKUHIROM/Test-Requires-0.07.tar.gz
+    provides:
+      Test::Requires 0.07
+    requirements:
+      CPAN::Meta 0
+      CPAN::Meta::Prereqs 0
+      ExtUtils::MakeMaker 6.59
+      Module::Build 0.38
+      Test::Builder::Module 0
+      Test::More 0.61
+      perl 5.008_001
   Test-SubCalls-1.09
     pathname: A/AD/ADAMK/Test-SubCalls-1.09.tar.gz
     provides:

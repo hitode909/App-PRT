@@ -1,4 +1,5 @@
 requires 'PPI';
+requires 'Class::Load';
 
 on 'test' => sub {
     test_requires 'Path::Class';
