@@ -34,6 +34,7 @@ sub import {
         use parent qw(Test::Class);
         use Test::More;
         use Test::Fatal;
+        use Test::Deep;
 
         use Path::Class;
 
