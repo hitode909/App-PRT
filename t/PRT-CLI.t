@@ -26,8 +26,30 @@ sub _collector_name_to_collector_class : Tests {
 }
 
 sub parse : Tests {
-    my $cli = PRT::CLI->new;
-    $cli->parse;
-    isa_ok $cli->command, 'PRT::Command::Help', 'Help command loaded';
-    isa_ok $cli->collector, 'PRT::Collector::Files', 'Files collector loaded';
+    subtest 'when empty input' => sub {
+        my $cli = PRT::CLI->new;
+        $cli->parse;
+        cmp_deeply $cli->command, isa('PRT::Command::Help'), 'Help command loaded';
+        cmp_deeply $cli->collector, isa('PRT::Collector::Files') & methods(
+            collect => [],
+        ), 'Files collector loaded';
+    };
+
+    subtest 'when command specified' => sub {
+        my $cli = PRT::CLI->new;
+        $cli->parse('replace_token');
+        cmp_deeply $cli->command, isa('PRT::Command::ReplaceToken') & methods(
+            rules => {},
+        ), 'ReplaceToken command loaded';
+        cmp_deeply $cli->collector, isa('PRT::Collector::Files') & methods(
+            collect => [],
+        ), 'Files collector loaded';
+    };
+
+    subtest 'when invalid command specified' => sub {
+        my $cli = PRT::CLI->new;
+        ok exception {
+            $cli->parse('invalid_comand');
+        }, 'died';
+    };
 }
