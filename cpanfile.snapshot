@@ -681,6 +681,20 @@ DISTRIBUTIONS
       Test::Harness 3.30
     requirements:
       ExtUtils::MakeMaker 0
+  Test-Mock-Guard-0.10
+    pathname: X/XA/XAICRON/Test-Mock-Guard-0.10.tar.gz
+    provides:
+      Test::Mock::Guard 0.10
+    requirements:
+      CPAN::Meta 0
+      CPAN::Meta::Prereqs 0
+      Class::Load 0.06
+      Exporter 5.63
+      ExtUtils::CBuilder 0
+      ExtUtils::MakeMaker 6.59
+      Module::Build 0.38
+      Test::More 0.96
+      perl 5.008001
   Test-NoWarnings-1.04
     pathname: A/AD/ADAMK/Test-NoWarnings-1.04.tar.gz
     provides:

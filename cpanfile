@@ -9,4 +9,5 @@ on 'test' => sub {
     test_requires 'Test::Deep';
     test_requires 'File::Temp';
     test_requires 'File::Copy::Recursive';
+    test_requires 'Test::Mock::Guard';
 };
