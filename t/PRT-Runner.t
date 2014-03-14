@@ -18,7 +18,7 @@ sub run : Tests {
     my $directory = t::test::prepare_test_code('hello_world');
 
     my $runner = PRT::Runner->new;
-    my $collector = PRT::Collector::Files->new(["$directory/hello_world.pl"]);
+    my $collector = PRT::Collector::Files->new("$directory/hello_world.pl");
     my $command = PRT::Command::ReplaceToken->new;
 
     ok exception {
