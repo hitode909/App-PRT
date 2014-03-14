@@ -77,3 +77,28 @@ die "Bye!";
 CODE
 
 }
+
+sub parse_arguments : Tests {
+    subtest "when source and destination specified" => sub {
+        my $command = PRT::Command::ReplaceToken->new;
+        my @args = qw(foo bar a.pl lib/B.pm);
+
+
+        my @args_after = $command->parse_arguments(@args);
+
+        cmp_deeply $command->rules, {
+            foo => 'bar',
+        }, 'registered';
+
+        cmp_deeply \@args_after, [qw(a.pl lib/B.pm)], 'parse_arguments returns rest arguments';
+    };
+
+    subtest "when arguments are not enough" => sub {
+        my $command = PRT::Command::ReplaceToken->new;
+
+        ok exception {
+            $command->parse_arguments('hi');
+        }, 'died';
+    };
+
+}

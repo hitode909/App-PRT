@@ -99,3 +99,27 @@ CODE
 
      };
 }
+
+sub parse_arguments : Tests {
+    subtest "when source and destination specified" => sub {
+        my $command = PRT::Command::RenameClass->new;
+        my @args = qw(From To a.pl lib/B.pm);
+
+
+        my @args_after = $command->parse_arguments(@args);
+
+        is $command->source_class_name, 'From';
+        is $command->destination_class_name, 'To';
+
+        cmp_deeply \@args_after, [qw(a.pl lib/B.pm)], 'parse_arguments returns rest arguments';
+    };
+
+    subtest "when arguments are not enough" => sub {
+        my $command = PRT::Command::RenameClass->new;
+
+        ok exception {
+            $command->parse_arguments('hi');
+        }, 'died';
+    };
+
+}

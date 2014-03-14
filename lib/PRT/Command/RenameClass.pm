@@ -11,6 +11,22 @@ sub new {
     }, $class;
 }
 
+# parse arguments from CLI
+# arguments:
+#   @arguments
+# returns:
+#   @rest_arguments
+sub parse_arguments {
+    my ($self, @arguments) = @_;
+
+    die "source and destination class are required" unless @arguments >= 2;
+
+    $self->register(shift @arguments => shift @arguments);
+
+    @arguments;
+}
+
+
 # register a replacing rule
 # arguments:
 #   $source: source class name
