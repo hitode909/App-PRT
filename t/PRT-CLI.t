@@ -57,6 +57,27 @@ sub parse : Tests {
         ), 'Files collector loaded';
     };
 
+    subtest 'when source, destination, target files specified' => sub {
+        my $cli = PRT::CLI->new;
+        my $directory = t::test::prepare_test_code('dinner');
+        $cli->parse(
+            qw{replace_token foo bar},
+            qq{$directory/dinner.pl},
+            qq{$directory/lib/My/Food.pm},
+            qq{$directory/lib/My/Human.pm}
+        );
+        cmp_deeply $cli->command, isa('PRT::Command::ReplaceToken') & methods(
+            rules => {foo => 'bar'},
+        ), 'ReplaceToken command loaded and foo => bar registered';
+        cmp_deeply $cli->collector, isa('PRT::Collector::Files') & methods(
+            collect => [
+                qq{$directory/dinner.pl},
+                qq{$directory/lib/My/Food.pm},
+                qq{$directory/lib/My/Human.pm}
+            ],
+        ), 'Files collector loaded and files are registered';
+    };
+
     subtest 'when invalid command specified' => sub {
         my $cli = PRT::CLI->new;
         ok exception {

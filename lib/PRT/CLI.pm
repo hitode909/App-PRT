@@ -29,7 +29,7 @@ sub parse {
     my $collector_class = $self->_collector_name_to_collector_class($collector_name);
     load_class $collector_class;
 
-    $self->{collector} = $collector_class->new;
+    $self->{collector} = $collector_class->new(@args);
 }
 
 sub run {
