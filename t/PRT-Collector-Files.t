@@ -20,12 +20,12 @@ sub collect : Tests {
     }, 'result is empty';
 
     subtest 'when files specified' => sub {
-        my $collector = PRT::Collector::Files->new(["$directory/hello_world.pl"]);
+        my $collector = PRT::Collector::Files->new("$directory/hello_world.pl");
         is_deeply $collector->collect, ["$directory/hello_world.pl"];
     }, 'specified files returned';
 
     subtest 'when not existing file specified' => sub {
-        my $collector = PRT::Collector::Files->new(["$directory/not_existd.pl"]);
+        my $collector = PRT::Collector::Files->new("$directory/not_existd.pl");
         ok exception {
             $collector->collect;
         }, 'died';
@@ -41,7 +41,7 @@ sub collect_multi_files: Tests {
         "$directory/lib/My/Human.pm",
     ];
 
-    my $collector = PRT::Collector::Files->new($files);
+    my $collector = PRT::Collector::Files->new(@$files);
     is_deeply $collector->collect, $files, 'specified files are returned';
 
 }

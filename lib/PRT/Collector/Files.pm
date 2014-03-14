@@ -3,9 +3,9 @@ use strict;
 use warnings;
 
 sub new {
-    my ($class, $files) = @_;
+    my ($class, @files) = @_;
     bless {
-        files => $files || [],
+        files => [@files],
     }, $class;
 }
 
