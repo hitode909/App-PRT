@@ -21,6 +21,10 @@ sub parse {
     load_class $command_class;
     $self->{command} = $command_class->new;
 
+    if (@args >= 2) {
+        $self->{command}->register(shift @args => shift @args);
+    }
+
     my $collector_name = 'files';
     my $collector_class = $self->_collector_name_to_collector_class($collector_name);
     load_class $collector_class;

@@ -46,6 +46,17 @@ sub parse : Tests {
         ), 'Files collector loaded';
     };
 
+    subtest 'when source and destination specified' => sub {
+        my $cli = PRT::CLI->new;
+        $cli->parse(qw{replace_token foo bar});
+        cmp_deeply $cli->command, isa('PRT::Command::ReplaceToken') & methods(
+            rules => {foo => 'bar'},
+        ), 'ReplaceToken command loaded and foo => bar registered';
+        cmp_deeply $cli->collector, isa('PRT::Collector::Files') & methods(
+            collect => [],
+        ), 'Files collector loaded';
+    };
+
     subtest 'when invalid command specified' => sub {
         my $cli = PRT::CLI->new;
         ok exception {
