@@ -15,21 +15,26 @@ sub new {
 sub parse {
     my ($self, @args) = @_;
 
-    my $command = shift @args || 'help';
+    my $command = shift @args;
+
+    unless ($command) {
+        $self->help;
+        return 0;
+    }
 
     my $command_class = $self->_command_name_to_command_class($command);
     load_class $command_class;
     $self->{command} = $command_class->new;
 
-    if (@args >= 2) {
-        $self->{command}->register(shift @args => shift @args);
-    }
+    my @rest_args = $self->{command}->parse_arguments(@args);
 
     my $collector_name = 'files';
     my $collector_class = $self->_collector_name_to_collector_class($collector_name);
     load_class $collector_class;
 
-    $self->{collector} = $collector_class->new(@args);
+    $self->{collector} = $collector_class->new(@rest_args);
+
+    1;
 }
 
 sub run {
@@ -68,5 +73,18 @@ sub _collector_name_to_collector_class {
 
     'PRT::Collector::' . $command_class;
 }
+
+sub help {
+    my ($self) = @_;
+
+    print $self->help_message;
+}
+
+sub help_message {
+    return <<HELP;
+usage: prt <command> <args>
+HELP
+}
+
 
 1;

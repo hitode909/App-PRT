@@ -28,18 +28,16 @@ sub _collector_name_to_collector_class : Tests {
 sub parse : Tests {
     subtest 'when empty input' => sub {
         my $cli = PRT::CLI->new;
-        $cli->parse;
-        cmp_deeply $cli->command, isa('PRT::Command::Help'), 'Help command loaded';
-        cmp_deeply $cli->collector, isa('PRT::Collector::Files') & methods(
-            collect => [],
-        ), 'Files collector loaded';
+        ok ! $cli->parse;
+        ok ! $cli->command;
+        ok ! $cli->collector;
     };
 
     subtest 'when command specified' => sub {
         my $cli = PRT::CLI->new;
-        $cli->parse('replace_token');
+        $cli->parse(qw{replace_token foo bar});
         cmp_deeply $cli->command, isa('PRT::Command::ReplaceToken') & methods(
-            rules => {},
+            rules => {foo => 'bar'},
         ), 'ReplaceToken command loaded';
         cmp_deeply $cli->collector, isa('PRT::Collector::Files') & methods(
             collect => [],
