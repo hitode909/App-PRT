@@ -28,7 +28,13 @@ sub parse {
 
     my @rest_args = $self->{command}->parse_arguments(@args);
 
+    # TODO: use Getopt::Long
     my $collector_name = 'files';
+    if ($rest_args[0] eq '--collector' && @rest_args >= 2) {
+        shift @rest_args;
+        $collector_name = shift @rest_args;
+    }
+
     my $collector_class = $self->_collector_name_to_collector_class($collector_name);
     load_class $collector_class;
 
