@@ -117,7 +117,7 @@ sub execute_with_inherit : Tests {
         $command->execute($file);
 
         ok -e $file, "script file exists";
-        is file($file)->slurp, <<'CODE', 'package statement was rewritten';
+        is file($file)->slurp, <<'CODE', 'use parent, use base statements were rewritten';
 package Child1 {
     use DateTime;
     use utf8;
