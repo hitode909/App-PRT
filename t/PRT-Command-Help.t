@@ -11,9 +11,9 @@ sub instantiate : Tests {
     isa_ok PRT::Command::Help->new, 'PRT::Command::Help';
 }
 
-sub register_rule : Tests {
+sub execute : Tests {
     my $command = PRT::Command::Help->new;
 
-    ok $command->help_message;
+    ok $command->execute;
 }
 
