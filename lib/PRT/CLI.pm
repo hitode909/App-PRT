@@ -16,12 +16,7 @@ sub new {
 sub parse {
     my ($self, @args) = @_;
 
-    my $command = shift @args;
-
-    unless ($command) {
-        $self->help;
-        return 0;
-    }
+    my $command = shift @args || 'help';
 
     my $command_class = $self->_command_name_to_command_class($command);
     load_class $command_class;
@@ -29,7 +24,9 @@ sub parse {
 
     my @rest_args = $self->{command}->parse_arguments(@args);
 
-    $self->{collector} = PRT::Collector::Files->new(@rest_args);
+    if ($self->{command}->handle_files) {
+        $self->{collector} = PRT::Collector::Files->new(@rest_args);
+    }
 
     1;
 }

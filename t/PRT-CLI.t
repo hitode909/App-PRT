@@ -21,8 +21,8 @@ sub _command_name_to_command_class : Tests {
 sub parse : Tests {
     subtest 'when empty input' => sub {
         my $cli = PRT::CLI->new;
-        ok ! $cli->parse;
-        ok ! $cli->command;
+        ok $cli->parse;
+        isa_ok $cli->command, 'PRT::Command::Help', 'default command is help';
         ok ! $cli->collector;
     };
 
