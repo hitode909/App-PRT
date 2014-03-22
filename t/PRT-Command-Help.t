@@ -21,3 +21,8 @@ sub execute : Tests {
     ok $command->execute;
 }
 
+sub parse_arguments : Tests {
+    my $command = PRT::Command::Help->new;
+    my $args = [qw(foo bar bazz)];
+    cmp_deeply [$command->parse_arguments(@$args)], $args, 'NOP';
+}
