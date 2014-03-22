@@ -1,4 +1,4 @@
-# Perl Refactoring Tools [![Build Status](https://travis-ci.org/hitode909/perl-refactoring-tools.png?branch=master)](https://travis-ci.org/hitode909/perl-refactoring-tools)
+# Perl Refactoring Tools [![Build Status](https://travis-ci.org/hitode909/perl-refactoring-tools.png?branch=master)](https://travis-ci.org/hitode909/perl-refactoring-tools) [![Coverage Status](https://coveralls.io/repos/hitode909/perl-refactoring-tools/badge.png?branch=master)](https://coveralls.io/r/hitode909/perl-refactoring-tools?branch=master)
 
 Command line tool for Perl code refacoring
 
