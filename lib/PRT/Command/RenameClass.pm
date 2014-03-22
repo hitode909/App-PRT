@@ -11,6 +11,8 @@ sub new {
     }, $class;
 }
 
+sub handle_files { 1 }
+
 # parse arguments from CLI
 # arguments:
 #   @arguments

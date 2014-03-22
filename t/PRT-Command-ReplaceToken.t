@@ -11,6 +11,10 @@ sub instantiate : Tests {
     isa_ok PRT::Command::ReplaceToken->new, 'PRT::Command::ReplaceToken';
 }
 
+sub handle_files : Tests {
+    ok PRT::Command::ReplaceToken->handle_files, 'ReplaceToken handles files';
+}
+
 sub register_rules : Tests {
     my $command = PRT::Command::ReplaceToken->new;
 

@@ -11,6 +11,10 @@ sub instantiate : Tests {
     isa_ok PRT::Command::Help->new, 'PRT::Command::Help';
 }
 
+sub handle_files : Tests {
+    ok ! PRT::Command::Help->handle_files, "Help doesn't handle files";
+}
+
 sub execute : Tests {
     my $command = PRT::Command::Help->new;
 

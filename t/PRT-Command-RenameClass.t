@@ -11,6 +11,11 @@ sub instantiate : Tests {
     isa_ok PRT::Command::RenameClass->new, 'PRT::Command::RenameClass';
 }
 
+sub handle_files : Tests {
+    ok PRT::Command::RenameClass->handle_files, 'RenameClass handles files';
+}
+
+
 sub register_rule : Tests {
     my $command = PRT::Command::RenameClass->new;
 

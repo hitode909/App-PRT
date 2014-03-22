@@ -8,6 +8,8 @@ sub new {
     bless {}, $class;
 }
 
+sub handle_files { 0 }
+
 # TODO: collector must provide at leatst a file. Should need more hook point?
 sub execute {
     my ($self) = @_;
