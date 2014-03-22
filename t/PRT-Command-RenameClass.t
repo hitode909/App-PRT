@@ -15,7 +15,6 @@ sub handle_files : Tests {
     ok PRT::Command::RenameClass->handle_files, 'RenameClass handles files';
 }
 
-
 sub register_rule : Tests {
     my $command = PRT::Command::RenameClass->new;
 
@@ -103,6 +102,43 @@ $human->eat($food);
 CODE
 
      };
+}
+
+sub execute_with_inherit : Tests {
+    my $directory = t::test::prepare_test_code('inherit');
+
+    my $command = PRT::Command::RenameClass->new;
+
+    $command->register('Parent' => 'Boss');
+
+    subtest 'target class' => sub {
+        my $file = "$directory/inherit.pl";
+
+        $command->execute($file);
+
+        ok -e $file, "script file exists";
+        is file($file)->slurp, <<'CODE', 'package statement was rewritten';
+package Child1 {
+    use DateTime;
+    use utf8;
+    use parent 'Boss';
+};
+
+package Child2 {
+    use parent qw(Boss AnotherParent YetAnother::Parent);
+};
+
+package Child3 {
+    use base 'Boss';
+};
+
+package GrandChild {
+    use base 'Child';
+};
+CODE
+
+     };
+
 }
 
 sub parse_arguments : Tests {

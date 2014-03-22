@@ -69,6 +69,8 @@ sub execute {
 
     $replaced += $self->_try_rename_includes($document);
 
+    $replaced += $self->_try_rename_parent_class($document);
+
     $replaced += $self->_try_rename_tokens($document);
 
     if ($package_statement_renamed) {
@@ -111,6 +113,48 @@ sub _try_rename_includes {
 
         $module->set_content($self->destination_class_name);
         $replaced++;
+    }
+
+    $replaced;
+}
+
+# TODO: too complicated
+sub _try_rename_parent_class {
+    my ($self, $document) = @_;
+
+    my $replaced = 0;
+
+    for my $statement (@{ $document->find('PPI::Statement::Include') }) {
+        next unless defined $statement->pragma;
+        next unless $statement->pragma ~~ [qw(parent base)]; # only 'use parent' and 'use base' are supported
+
+        # schild(2) is 'Foo' of use parent Foo
+        my $parent = $statement->schild(2);
+
+        if ($parent->isa('PPI::Token::Quote')) {
+            if ($parent->literal eq $self->source_class_name) {
+                $parent->set_content("'@{[ $self->destination_class_name ]}'");
+                $replaced++;
+            }
+        } elsif ($parent->isa('PPI::Token::QuoteLike::Words')) {
+            # use parent qw(A B C) pattern
+            # literal is array when QuoteLike::Words
+            my $_replaced = 0;
+            my @new_literal = map {
+                if ($_ eq $self->source_class_name) {
+                    $_replaced++;
+                    $self->destination_class_name;
+                } else {
+                    $_;
+                }
+            } $parent->literal;
+            if ($_replaced) {
+                $parent->set_content('qw(' . join(' ', @new_literal) . ')');
+                $replaced++;
+            }
+        } else {
+            next;
+        }
     }
 
     $replaced;
