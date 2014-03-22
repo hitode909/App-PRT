@@ -34,10 +34,16 @@ sub parse {
 sub run {
     my ($self) = @_;
 
-    my $runner = PRT::Runner->new;
-    $runner->set_command($self->command);
-    $runner->set_collector($self->collector);
-    $runner->run;
+    if ($self->command->handle_files) {
+        # collect files and execute for each
+        my $runner = PRT::Runner->new;
+        $runner->set_command($self->command);
+        $runner->set_collector($self->collector);
+        $runner->run;
+    } else {
+        # just run
+        $self->command->execute;
+    }
 }
 
 sub command {
@@ -59,18 +65,5 @@ sub _command_name_to_command_class {
 
     'PRT::Command::' . $command_class;
 }
-
-sub help {
-    my ($self) = @_;
-
-    print $self->help_message;
-}
-
-sub help_message {
-    return <<HELP;
-usage: prt <command> <args>
-HELP
-}
-
 
 1;

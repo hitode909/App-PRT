@@ -78,19 +78,34 @@ sub parse : Tests {
 }
 
 sub run : Tests {
-    my $runner;
-    my $g = mock_guard 'PRT::Runner' => {
-        run => sub {
-            $runner = shift;
-            1;
-        },
+    subtest "command which doesn't handle files" => sub {
+        my $cli = PRT::CLI->new;
+        my $g = mock_guard 'PRT::Command::Help' => {
+            execute => sub {
+                1;
+            },
+        };
+        $cli->parse('help');
+        $cli->run;
+
+        is $g->call_count('PRT::Command::Help', 'execute'), 1, 'execute called';
     };
-    my $cli = PRT::CLI->new;
-    $cli->parse;
-    $cli->run;
 
-    is $g->call_count('PRT::Runner', 'run'), 1, 'Runner#run called';
+    subtest 'command which handles files' => sub {
+        my $runner;
+        my $g = mock_guard 'PRT::Runner' => {
+            run => sub {
+                $runner = shift;
+                1;
+            },
+        };
+        my $cli = PRT::CLI->new;
+        $cli->parse(qw(replace_token foo bar));
+        $cli->run;
 
-    cmp_deeply $runner->command, $cli->command, 'command matches';
-    cmp_deeply $runner->collector, $cli->collector, 'collector matches';
+        is $g->call_count('PRT::Runner', 'run'), 1, 'Runner#run called';
+
+        cmp_deeply $runner->command, $cli->command, 'command matches';
+        cmp_deeply $runner->collector, $cli->collector, 'collector matches';
+    };
 }

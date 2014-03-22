@@ -16,7 +16,6 @@ sub parse_arguments {
     @args;
 }
 
-# TODO: collector must provide at leatst a file. Should need more hook point?
 sub execute {
     my ($self) = @_;
 
