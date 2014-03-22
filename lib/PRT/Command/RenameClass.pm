@@ -152,8 +152,6 @@ sub _try_rename_parent_class {
                 $parent->set_content('qw(' . join(' ', @new_literal) . ')');
                 $replaced++;
             }
-        } else {
-            next;
         }
     }
 
