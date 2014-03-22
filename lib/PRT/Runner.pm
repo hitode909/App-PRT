@@ -40,9 +40,7 @@ sub run {
     my $collector = $self->collector;
     my $command = $self->command;
 
-    for my $file (@{$collector->collect}) {
-        $command->execute($file);
-    }
+
 }
 
 1;

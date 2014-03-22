@@ -2,7 +2,6 @@ package PRT::CLI;
 use strict;
 use warnings;
 
-use PRT::Runner;
 use Class::Load qw(load_class);
 use Getopt::Long qw(GetOptionsFromArray);
 use PRT::Collector::Files;
@@ -35,14 +34,21 @@ sub run {
     my ($self) = @_;
 
     if ($self->command->handle_files) {
-        # collect files and execute for each
-        my $runner = PRT::Runner->new;
-        $runner->set_command($self->command);
-        $runner->set_collector($self->collector);
-        $runner->run;
+        $self->_run_for_each_files;
     } else {
         # just run
         $self->command->execute;
+    }
+}
+
+sub _run_for_each_files {
+    my ($self) = @_;
+
+    my $collector = $self->collector;
+    my $command = $self->command;
+
+    for my $file (@{$collector->collect}) {
+        $command->execute($file);
     }
 }
 

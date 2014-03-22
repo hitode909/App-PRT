@@ -92,20 +92,21 @@ sub run : Tests {
     };
 
     subtest 'command which handles files' => sub {
-        my $runner;
-        my $g = mock_guard 'PRT::Runner' => {
-            run => sub {
-                $runner = shift;
-                1;
+        my $directory = t::test::prepare_test_code('hello_world');
+
+        my $cli = PRT::CLI->new;
+        $cli->parse(qw(replace_token foo bar), "$directory/hello_world.pl");
+
+        my $file;
+        my $g = mock_guard 'PRT::Command::ReplaceToken' => {
+            execute => sub {
+                (undef, $file) = @_;
             },
         };
-        my $cli = PRT::CLI->new;
-        $cli->parse(qw(replace_token foo bar));
+
         $cli->run;
 
-        is $g->call_count('PRT::Runner', 'run'), 1, 'Runner#run called';
-
-        cmp_deeply $runner->command, $cli->command, 'command matches';
-        cmp_deeply $runner->collector, $cli->collector, 'collector matches';
+        is $g->call_count('PRT::Command::ReplaceToken', 'execute'), 1, 'execute called';
+        is $file, "$directory/hello_world.pl", 'called with file'
     };
 }
