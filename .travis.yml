@@ -9,4 +9,7 @@ install:
   - carton install
 
 script:
-  - carton exec -- prove -v
+  - HARNESS_PERL_SWITCHES="-MDevel::Cover=+ignore,^local/|^t/" carton exec prove -lrv t
+
+after_success:
+  - carton exec -- cover -report coveralls
