@@ -22,7 +22,7 @@ sub _collector_name_to_collector_class : Tests {
     my $cli = PRT::CLI->new;
 
     is $cli->_collector_name_to_collector_class('files'), 'PRT::Collector::Files', 'ucfirst';
-    is $cli->_collector_name_to_collector_class('git_directory'), 'PRT::Collector::GitDirectory', 'separate by _';
+    is $cli->_collector_name_to_collector_class('give_me_files'), 'PRT::Collector::GiveMeFiles', 'separate by _';
 }
 
 sub parse : Tests {
@@ -82,21 +82,6 @@ sub parse : Tests {
             $cli->parse('invalid_comand');
         }, 'died';
     };
-
-    subtest 'when collector specified' => sub {
-        my $cli = PRT::CLI->new;
-        my $directory = t::test::prepare_test_code('dinner');
-        t::test::prepare_as_git_repository($directory);
-        $cli->parse(qw{replace_token foo bar --collector git_directory}, $directory);
-
-        cmp_deeply $cli->command, isa('PRT::Command::ReplaceToken') & methods(
-            rules => {foo => 'bar'},
-        ), 'ReplaceToken command loaded and foo => bar registered';
-
-        cmp_deeply $cli->collector, isa('PRT::Collector::GitDirectory') & methods(
-            directory => $directory,
-        ), 'GitDirectory collector loaded and files are registered';
-    }
 }
 
 sub run : Tests {
