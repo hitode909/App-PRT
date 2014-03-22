@@ -18,13 +18,6 @@ sub _command_name_to_command_class : Tests {
     is $cli->_command_name_to_command_class('replace_token'), 'PRT::Command::ReplaceToken', 'separate by _';
 }
 
-sub _collector_name_to_collector_class : Tests {
-    my $cli = PRT::CLI->new;
-
-    is $cli->_collector_name_to_collector_class('files'), 'PRT::Collector::Files', 'ucfirst';
-    is $cli->_collector_name_to_collector_class('give_me_files'), 'PRT::Collector::GiveMeFiles', 'separate by _';
-}
-
 sub parse : Tests {
     subtest 'when empty input' => sub {
         my $cli = PRT::CLI->new;
