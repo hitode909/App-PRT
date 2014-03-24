@@ -9,6 +9,7 @@ Command line tool for Perl code refacoring
 
 ## TODO
 
+- Delete a method
 - Rename a name space
 - Set a method as obsolute
 
