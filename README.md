@@ -9,7 +9,6 @@ Command line tool for Perl code refacoring
 
 ## TODO
 
-- Delete a method
 - Rename a name space
 - Set a method as obsolute
 
@@ -29,6 +28,11 @@ carton exec -- bin/prt replace_tokens foo bar lib/**/**.pm
 Rename `Foo` class to `Bar` class.
 ```
 carton exec -- bin/prt rename_class   Foo Bar lib/**/**.pm
+```
+
+Delete `eat` method from  `Food` class.
+```
+carton exec -- bin/prt delete_method Food eat lib/**/**.pm
 ```
 
 ## License
