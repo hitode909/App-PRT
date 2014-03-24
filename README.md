@@ -35,6 +35,13 @@ Delete `eat` method from  `Food` class.
 carton exec -- bin/prt delete_method Food eat lib/**/**.pm
 ```
 
-## License
+# LICENSE
 
-MIT
+Copyright (C) hitode909.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+# AUTHOR
+
+hitode909 <hitode909@gmail.com>
