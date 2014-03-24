@@ -24,6 +24,30 @@ sub register : Tests {
     is $command->target_method_name, 'name';
 }
 
+sub parse_arguments : Tests {
+    subtest "when class and method specified" => sub {
+        my $command = PRT::Command::DeleteMethod->new;
+        my @args = qw(Class method a.pl lib/B.pm);
+
+
+        my @args_after = $command->parse_arguments(@args);
+
+        is $command->target_class_name, 'Class';
+        is $command->target_method_name, 'method';
+
+        cmp_deeply \@args_after, [qw(a.pl lib/B.pm)], 'parse_arguments returns rest arguments';
+    };
+
+    subtest "when arguments are not enough" => sub {
+        my $command = PRT::Command::DeleteMethod->new;
+
+        ok exception {
+            $command->parse_arguments('Method');
+        }, 'died';
+    };
+
+}
+
 sub execute : Tests {
     my $directory = t::test::prepare_test_code('dinner');
 
