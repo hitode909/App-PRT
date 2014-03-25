@@ -1,1 +1,2 @@
-badges = ['travis', 'coveralls']
+name = "App-PRT"
+badges = ["travis", "coveralls"]
