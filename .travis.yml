@@ -1,15 +1,12 @@
 language: perl
 perl:
-  - "5.14"
-
-before_install:
-  - cpanm Carton
-
-install:
-  - carton install
-
-script:
-  - HARNESS_PERL_SWITCHES="-MDevel::Cover=+ignore,^local/|^t/" carton exec -- prove -v
-
+  - 5.10
+  - 5.12
+  - 5.14
+  - 5.16
+  - 5.18
 after_success:
-  - carton exec -- cover -report coveralls
+  - cpanm --quiet --notest --skip-satisfied Devel::Cover::Report::Coveralls
+  - cover -delete
+  - perl Build.PL && ./Build build && HARNESS_PERL_SWITCHES="-MDevel::Cover=+ignore,inc" PERL5LIB="lib" prove t/
+  - cover -report coveralls
