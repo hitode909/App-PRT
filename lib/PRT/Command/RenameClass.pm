@@ -105,7 +105,10 @@ sub _try_rename_includes {
 
     my $replaced = 0;
 
-    for my $statement (@{ $document->find('PPI::Statement::Include') }) {
+    my $statements = $document->find('PPI::Statement::Include');
+    return 0 unless $statements;
+
+    for my $statement (@$statements) {
         next unless defined $statement->module;
         next unless $statement->module eq $self->source_class_name;
 
@@ -125,7 +128,10 @@ sub _try_rename_quotes {
 
     my $replaced = 0;
 
-    for my $quote (@{ $document->find('PPI::Token::Quote') }) {
+    my $quotes = $document->find('PPI::Token::Quote');
+    return 0 unless $quotes;
+
+    for my $quote (@$quotes) {
         next unless $quote->string eq $self->source_class_name;
         $quote->set_content("'@{[ $self->destination_class_name ]}'");
 
@@ -141,7 +147,10 @@ sub _try_rename_parent_class {
 
     my $replaced = 0;
 
-    for my $statement (@{ $document->find('PPI::Statement::Include') }) {
+    my $includes = $document->find('PPI::Statement::Include');
+    return 0 unless $includes;
+
+    for my $statement (@$includes) {
         next unless defined $statement->pragma;
         next unless $statement->pragma ~~ [qw(parent base)]; # only 'use parent' and 'use base' are supported
 
@@ -182,7 +191,10 @@ sub _try_rename_tokens {
 
     my $replaced = 0;
 
-    for my $token (@{ $document->find('PPI::Token') }) {
+    my $tokens = $document->find('PPI::Token');
+    return 0 unless $tokens;
+
+    for my $token (@$tokens) {
         next unless $token->content eq $self->source_class_name;
         $token->set_content($self->destination_class_name);
         $replaced++;
