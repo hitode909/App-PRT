@@ -1,40 +1,40 @@
-# App::PRT [![Build Status](https://travis-ci.org/hitode909/App-PRT.png?branch=master)](https://travis-ci.org/hitode909/App-PRT) [![Coverage Status](https://coveralls.io/repos/hitode909/App-PRT/badge.png?branch=master)](https://coveralls.io/r/hitode909/App-PRT?branch=master)
+[![Build Status](https://travis-ci.org/hitode909/App-PRT.png?branch=master)](https://travis-ci.org/hitode909/App-PRT) [![Coverage Status](https://coveralls.io/repos/hitode909/App-PRT/badge.png?branch=master)](https://coveralls.io/r/hitode909/App-PRT?branch=master)
+# NAME
 
-Command line tool for Perl code refacoring
+App::PRT - Command line Perl Refacoring Tool
 
-## Features
+# SYNOPSIS
 
-- Replace tokens
-- Rename a class
+    use App::PRT::CLI;
+    my $cli = App::PRT::CLI->new;
+    $cli->parse(@ARGV);
+    $cli->run;
 
-## TODO
+# DESCRIPTION
 
-- Rename a name space
-- Set a method as obsolute
+App::PRT is command line tools for Refactoring Perl.
 
-## Setup
-
-```
-carton install
-```
-
-## Usage
+# Usage
 
 Replace `foo` token with `bar`.
-```
-carton exec -- bin/prt replace_tokens foo bar lib/**/**.pm
-```
+
+    prt replace_tokens foo bar lib/**/**.pm
 
 Rename `Foo` class to `Bar` class.
-```
-carton exec -- bin/prt rename_class   Foo Bar lib/**/**.pm
-```
 
-Delete `eat` method from  `Food` class.
-```
-carton exec -- bin/prt delete_method Food eat lib/**/**.pm
-```
+    prt rename_class   Foo Bar lib/**/**.pm
 
-## License
+Delete `eat` method from `Food` class.
 
-MIT
+    prt delete_method Food eat lib/**/**.pm
+
+# LICENSE
+
+Copyright (C) hitode909.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+# AUTHOR
+
+hitode909 <hitode909@gmail.com>

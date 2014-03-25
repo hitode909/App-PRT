@@ -148,7 +148,7 @@ sub execute_test_more_style_test_file : Tests {
 
     $command->register('My::Food' => 'My::Meal');
 
-    my $file = "$directory/t/001-my-food.t";
+    my $file = "$directory/t/001-my-food._t";
 
     $command->execute($file);
 
