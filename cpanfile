@@ -1,4 +1,4 @@
-requires 'perl', '5.008005';
+requires 'perl', '5.010001';
 requires 'Class::Load';
 requires 'Getopt::Long', '2.42';
 requires 'PPI';

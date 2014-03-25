@@ -1,7 +1,7 @@
 package App::PRT;
 use strict;
 use warnings;
-use 5.008005;
+use 5.010001;
 
 our $VERSION = "0.03";
 
