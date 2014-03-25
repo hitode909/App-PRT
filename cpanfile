@@ -1,20 +1,27 @@
-requires 'PPI';
+requires 'perl', '5.010001';
 requires 'Class::Load';
+requires 'Getopt::Long', '2.42';
+requires 'PPI';
+requires 'Path::Class';
+
+on configure => sub {
+    requires 'CPAN::Meta';
+    requires 'CPAN::Meta::Prereqs';
+    requires 'Module::Build';
+};
 
 on 'test' => sub {
-    test_requires 'Path::Class';
-    test_requires 'Test::More';
-    test_requires 'Test::Class';
-    test_requires 'Test::Fatal';
-    test_requires 'Test::Deep';
-    test_requires 'File::Temp';
-    test_requires 'File::Copy::Recursive';
-    test_requires 'Test::Mock::Guard';
-
-    test_requires 'Devel::Cover::Report::Coveralls';
+    requires 'Test::More', '0.98';
+    requires 'Test::Class';
+    requires 'Test::Fatal';
+    requires 'Test::Deep';
+    requires 'Test::Mock::Guard';
+    requires 'Path::Class';
+    requires 'File::Temp';
+    requires 'File::Copy::Recursive';
+    requires 'parent';
 };
 
 on develop => sub {
     requires 'Test::Perl::Critic';
 };
-
