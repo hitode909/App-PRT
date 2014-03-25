@@ -1,9 +1,7 @@
-#! /usr/bin/env perl
+#!perl
+
 use strict;
 use warnings;
-use FindBin;
-use lib 'lib';
-use lib "$FindBin::Bin/../lib";
 use App::PRT::CLI;
 
 my $cli = App::PRT::CLI->new;
