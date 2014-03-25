@@ -37,6 +37,7 @@
          "requires" : {
             "Test::CPAN::Meta" : "0",
             "Test::MinimumVersion" : "0.10108",
+            "Test::Perl::Critic" : "0",
             "Test::Pod" : "1.41",
             "Test::Spellunker" : "v0.2.7"
          }
@@ -44,12 +45,14 @@
       "runtime" : {
          "requires" : {
             "Class::Load" : "0",
-            "PPI" : "0"
+            "Getopt::Long" : "2.42",
+            "PPI" : "0",
+            "Path::Class" : "0",
+            "perl" : "5.010001"
          }
       },
       "test" : {
          "requires" : {
-            "Devel::Cover::Report::Coveralls" : "0",
             "File::Copy::Recursive" : "0",
             "File::Temp" : "0",
             "Path::Class" : "0",
@@ -57,7 +60,8 @@
             "Test::Deep" : "0",
             "Test::Fatal" : "0",
             "Test::Mock::Guard" : "0",
-            "Test::More" : "0"
+            "Test::More" : "0.98",
+            "parent" : "0"
          }
       }
    },

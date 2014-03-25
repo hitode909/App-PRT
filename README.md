@@ -14,19 +14,9 @@ App::PRT - Command line Perl Refacoring Tool
 
 App::PRT is command line tools for Refactoring Perl.
 
-# Usage
+# SEE ALSO
 
-Replace `foo` token with `bar`.
-
-    prt replace_tokens foo bar lib/**/**.pm
-
-Rename `Foo` class to `Bar` class.
-
-    prt rename_class   Foo Bar lib/**/**.pm
-
-Delete `eat` method from `Food` class.
-
-    prt delete_method Food eat lib/**/**.pm
+[prt](https://metacpan.org/pod/prt)
 
 # LICENSE
 
