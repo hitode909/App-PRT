@@ -141,6 +141,34 @@ CODE
 
 }
 
+sub execute_test_more_style_test_file : Tests {
+    my $directory = t::test::prepare_test_code('dinner');
+
+    my $command = PRT::Command::RenameClass->new;
+
+    $command->register('My::Food' => 'My::Meal');
+
+    my $file = "$directory/t/001-my-food.t";
+
+    $command->execute($file);
+
+    is file($file)->slurp, <<'CODE', 'test replaced';
+use Test::More tests => 4;
+
+use_ok 'My::Meal';
+require_ok 'My::Meal';
+
+new_ok 'My::Meal';
+isa_ok My::Meal->new, 'My::Meal';
+
+subtest 'name' => sub {
+    my $pizza = My::Meal->new('Pizza');
+    is $pizza->name, 'Pizza';
+};
+CODE
+
+}
+
 sub parse_arguments : Tests {
     subtest "when source and destination specified" => sub {
         my $command = PRT::Command::RenameClass->new;

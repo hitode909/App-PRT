@@ -71,6 +71,8 @@ sub execute {
 
     $replaced += $self->_try_rename_parent_class($document);
 
+    $replaced += $self->_try_rename_quotes($document);
+
     $replaced += $self->_try_rename_tokens($document);
 
     if ($package_statement_renamed) {
@@ -112,6 +114,21 @@ sub _try_rename_includes {
         return unless $module->isa('PPI::Token::Word');
 
         $module->set_content($self->destination_class_name);
+        $replaced++;
+    }
+
+    $replaced;
+}
+
+sub _try_rename_quotes {
+    my ($self, $document) = @_;
+
+    my $replaced = 0;
+
+    for my $quote (@{ $document->find('PPI::Token::Quote') }) {
+        next unless $quote->string eq $self->source_class_name;
+        $quote->set_content("'@{[ $self->destination_class_name ]}'");
+
         $replaced++;
     }
 
