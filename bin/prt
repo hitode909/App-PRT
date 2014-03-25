@@ -9,3 +9,55 @@ use App::PRT::CLI;
 my $cli = App::PRT::CLI->new;
 $cli->parse(@ARGV);
 $cli->run;
+__END__
+
+=encoding utf-8
+
+=head1 NAME
+
+prt - Command line frontend of App::PRT
+
+=head1 SYNOPSIS
+
+    $ prt [sub command] [argumants]
+
+=head1 DESCRIPTION
+
+prt is the command line frontend of L<App::PRT>.
+
+=head1 SUBCOMMANDS
+
+=over 4
+
+=item * replace_tokens
+
+Replace C<foo> token with C<bar>.
+
+    prt replace_tokens foo bar path/**/**.pm
+
+=item * rename_class
+
+Rename C<Foo> class to C<Bar> class.
+
+    prt rename_class Foo Bar lib/**/**.pm
+
+=item * delete_method
+
+Delete C<eat> method from C<Food> class.
+
+    prt delete_method Food eat lib/**/**.pm
+
+=back
+
+=head1 LICENSE
+
+Copyright (C) hitode909.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=head1 AUTHOR
+
+hitode909 E<lt>hitode909@gmail.comE<gt>
+
+=cut
