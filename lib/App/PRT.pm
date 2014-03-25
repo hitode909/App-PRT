@@ -1,4 +1,4 @@
-package PRT;
+package App::PRT;
 use strict;
 use warnings;
 

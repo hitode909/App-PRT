@@ -1,4 +1,4 @@
-package PRT::Command::Help;
+package App::PRT::Command::Help;
 use strict;
 use warnings;
 use PPI;

@@ -1,10 +1,10 @@
-package PRT::CLI;
+package App::PRT::CLI;
 use strict;
 use warnings;
 
 use Class::Load qw(load_class);
 use Getopt::Long qw(GetOptionsFromArray);
-use PRT::Collector::Files;
+use App::PRT::Collector::Files;
 
 sub new {
     my ($class) = @_;
@@ -24,7 +24,7 @@ sub parse {
     my @rest_args = $self->{command}->parse_arguments(@args);
 
     if ($self->{command}->handle_files) {
-        $self->{collector} = PRT::Collector::Files->new(@rest_args);
+        $self->{collector} = App::PRT::Collector::Files->new(@rest_args);
     }
 
     1;
@@ -69,7 +69,7 @@ sub _command_name_to_command_class {
 
     my $command_class = join '', map { ucfirst } split '_', $name;
 
-    'PRT::Command::' . $command_class;
+    'App::PRT::Command::' . $command_class;
 }
 
 1;

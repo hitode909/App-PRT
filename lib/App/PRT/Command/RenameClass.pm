@@ -1,4 +1,4 @@
-package PRT::Command::RenameClass;
+package App::PRT::Command::RenameClass;
 use strict;
 use warnings;
 use PPI;

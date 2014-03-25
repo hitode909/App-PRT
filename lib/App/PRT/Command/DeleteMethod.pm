@@ -1,4 +1,4 @@
-package PRT::Command::DeleteMethod;
+package App::PRT::Command::DeleteMethod;
 use strict;
 use warnings;
 use PPI;

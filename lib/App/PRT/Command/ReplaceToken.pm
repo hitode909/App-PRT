@@ -1,4 +1,4 @@
-package PRT::Command::ReplaceToken;
+package App::PRT::Command::ReplaceToken;
 use strict;
 use warnings;
 use PPI;

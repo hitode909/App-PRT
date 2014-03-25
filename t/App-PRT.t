@@ -1,12 +1,12 @@
-package t::PRT;
+package t::App::PRT;
 use t::test;
 
 sub _require : Test(startup => 1) {
     my ($self) = @_;
 
-    use_ok 'PRT';
+    use_ok 'App::PRT';
 }
 
 sub welcome : Tests {
-    is PRT->welcome, 'welcome!!!!';
+    is App::PRT->welcome, 'welcome!!!!';
 }

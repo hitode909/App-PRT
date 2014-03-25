@@ -1,22 +1,22 @@
-package t::PRT::Command::RenameClass;
+package t::App::PRT::Command::RenameClass;
 use t::test;
 
 sub _require : Test(startup => 1) {
     my ($self) = @_;
 
-    use_ok 'PRT::Command::RenameClass';
+    use_ok 'App::PRT::Command::RenameClass';
 }
 
 sub instantiate : Tests {
-    isa_ok PRT::Command::RenameClass->new, 'PRT::Command::RenameClass';
+    isa_ok App::PRT::Command::RenameClass->new, 'App::PRT::Command::RenameClass';
 }
 
 sub handle_files : Tests {
-    ok PRT::Command::RenameClass->handle_files, 'RenameClass handles files';
+    ok App::PRT::Command::RenameClass->handle_files, 'RenameClass handles files';
 }
 
 sub register_rule : Tests {
-    my $command = PRT::Command::RenameClass->new;
+    my $command = App::PRT::Command::RenameClass->new;
 
     $command->register('Foo' => 'Bar');
 
@@ -35,7 +35,7 @@ sub _destination_file : Tests {
     ) {
         my ($source_class_name, $destination_class_name, $input_file, $expected_file, $description) = @$case;
 
-        my $command = PRT::Command::RenameClass->new;
+        my $command = App::PRT::Command::RenameClass->new;
         $command->register($source_class_name => $destination_class_name);
         is $command->_destination_file($input_file), $expected_file, $description;
     }
@@ -44,7 +44,7 @@ sub _destination_file : Tests {
 sub execute : Tests {
     my $directory = t::test::prepare_test_code('dinner');
 
-    my $command = PRT::Command::RenameClass->new;
+    my $command = App::PRT::Command::RenameClass->new;
 
     $command->register('My::Food' => 'My::Meal');
 
@@ -107,7 +107,7 @@ CODE
 sub execute_with_inherit : Tests {
     my $directory = t::test::prepare_test_code('inherit');
 
-    my $command = PRT::Command::RenameClass->new;
+    my $command = App::PRT::Command::RenameClass->new;
 
     $command->register('Parent' => 'Boss');
 
@@ -144,7 +144,7 @@ CODE
 sub execute_test_more_style_test_file : Tests {
     my $directory = t::test::prepare_test_code('dinner');
 
-    my $command = PRT::Command::RenameClass->new;
+    my $command = App::PRT::Command::RenameClass->new;
 
     $command->register('My::Food' => 'My::Meal');
 
@@ -171,7 +171,7 @@ CODE
 
 sub parse_arguments : Tests {
     subtest "when source and destination specified" => sub {
-        my $command = PRT::Command::RenameClass->new;
+        my $command = App::PRT::Command::RenameClass->new;
         my @args = qw(From To a.pl lib/B.pm);
 
 
@@ -184,7 +184,7 @@ sub parse_arguments : Tests {
     };
 
     subtest "when arguments are not enough" => sub {
-        my $command = PRT::Command::RenameClass->new;
+        my $command = App::PRT::Command::RenameClass->new;
 
         ok exception {
             $command->parse_arguments('hi');

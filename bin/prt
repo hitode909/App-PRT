@@ -4,8 +4,8 @@ use warnings;
 use FindBin;
 use lib 'lib';
 use lib "$FindBin::Bin/../lib";
-use PRT::CLI;
+use App::PRT::CLI;
 
-my $cli = PRT::CLI->new;
+my $cli = App::PRT::CLI->new;
 $cli->parse(@ARGV);
 $cli->run;

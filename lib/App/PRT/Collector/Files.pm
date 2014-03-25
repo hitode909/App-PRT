@@ -1,4 +1,4 @@
-package PRT::Collector::Files;
+package App::PRT::Collector::Files;
 use strict;
 use warnings;
 

@@ -1,22 +1,22 @@
-package t::PRT::Command::ReplaceToken;
+package t::App::PRT::Command::ReplaceToken;
 use t::test;
 
 sub _require : Test(startup => 1) {
     my ($self) = @_;
 
-    use_ok 'PRT::Command::ReplaceToken';
+    use_ok 'App::PRT::Command::ReplaceToken';
 }
 
 sub instantiate : Tests {
-    isa_ok PRT::Command::ReplaceToken->new, 'PRT::Command::ReplaceToken';
+    isa_ok App::PRT::Command::ReplaceToken->new, 'App::PRT::Command::ReplaceToken';
 }
 
 sub handle_files : Tests {
-    ok PRT::Command::ReplaceToken->handle_files, 'ReplaceToken handles files';
+    ok App::PRT::Command::ReplaceToken->handle_files, 'ReplaceToken handles files';
 }
 
 sub register_rules : Tests {
-    my $command = PRT::Command::ReplaceToken->new;
+    my $command = App::PRT::Command::ReplaceToken->new;
 
     is_deeply $command->rules, {}, 'empty';
 
@@ -46,7 +46,7 @@ sub register_rules : Tests {
 
 sub execute : Tests {
     my $directory = t::test::prepare_test_code('hello_world');
-    my $command = PRT::Command::ReplaceToken->new;
+    my $command = App::PRT::Command::ReplaceToken->new;
     my $file = "$directory/hello_world.pl";
 
     subtest 'nothing happen when no rules are specified' => sub {
@@ -68,7 +68,7 @@ CODE
 
 sub execute_when_many_rules : Tests {
     my $directory = t::test::prepare_test_code('hello_world');
-    my $command = PRT::Command::ReplaceToken->new;
+    my $command = App::PRT::Command::ReplaceToken->new;
     my $file = "$directory/hello_world.pl";
 
     $command->register('print' => 'die');
@@ -84,7 +84,7 @@ CODE
 
 sub parse_arguments : Tests {
     subtest "when source and destination specified" => sub {
-        my $command = PRT::Command::ReplaceToken->new;
+        my $command = App::PRT::Command::ReplaceToken->new;
         my @args = qw(foo bar a.pl lib/B.pm);
 
 
@@ -98,7 +98,7 @@ sub parse_arguments : Tests {
     };
 
     subtest "when arguments are not enough" => sub {
-        my $command = PRT::Command::ReplaceToken->new;
+        my $command = App::PRT::Command::ReplaceToken->new;
 
         ok exception {
             $command->parse_arguments('hi');

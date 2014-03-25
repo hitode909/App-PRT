@@ -1,22 +1,22 @@
-package t::PRT::Command::DeleteMethod;
+package t::App::PRT::Command::DeleteMethod;
 use t::test;
 
 sub _require : Test(startup => 1) {
     my ($self) = @_;
 
-    use_ok 'PRT::Command::DeleteMethod';
+    use_ok 'App::PRT::Command::DeleteMethod';
 }
 
 sub instantiate : Tests {
-    isa_ok PRT::Command::DeleteMethod->new, 'PRT::Command::DeleteMethod';
+    isa_ok App::PRT::Command::DeleteMethod->new, 'App::PRT::Command::DeleteMethod';
 }
 
 sub handle_files : Tests {
-    ok PRT::Command::DeleteMethod->handle_files, 'DeleteMethod handles files';
+    ok App::PRT::Command::DeleteMethod->handle_files, 'DeleteMethod handles files';
 }
 
 sub register : Tests {
-    my $command = PRT::Command::DeleteMethod->new;
+    my $command = App::PRT::Command::DeleteMethod->new;
 
     $command->register('My::Food' => 'name');
 
@@ -26,7 +26,7 @@ sub register : Tests {
 
 sub parse_arguments : Tests {
     subtest "when class and method specified" => sub {
-        my $command = PRT::Command::DeleteMethod->new;
+        my $command = App::PRT::Command::DeleteMethod->new;
         my @args = qw(Class method a.pl lib/B.pm);
 
 
@@ -39,7 +39,7 @@ sub parse_arguments : Tests {
     };
 
     subtest "when arguments are not enough" => sub {
-        my $command = PRT::Command::DeleteMethod->new;
+        my $command = App::PRT::Command::DeleteMethod->new;
 
         ok exception {
             $command->parse_arguments('Method');
@@ -51,7 +51,7 @@ sub parse_arguments : Tests {
 sub execute : Tests {
     my $directory = t::test::prepare_test_code('dinner');
 
-    my $command = PRT::Command::DeleteMethod->new;
+    my $command = App::PRT::Command::DeleteMethod->new;
 
     $command->register('My::Human' => 'name');
 
