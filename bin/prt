@@ -17,7 +17,7 @@ prt - Command line frontend of App::PRT
 
 =head1 SYNOPSIS
 
-    $ prt [sub command] [argumants]
+    $ prt <command> <args> <files>
 
 =head1 DESCRIPTION
 
