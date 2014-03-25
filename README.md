@@ -1,4 +1,4 @@
-# App::PRT [![Build Status](https://travis-ci.org/hitode909/perl-refactoring-tools.png?branch=master)](https://travis-ci.org/hitode909/perl-refactoring-tools) [![Coverage Status](https://coveralls.io/repos/hitode909/perl-refactoring-tools/badge.png?branch=master)](https://coveralls.io/r/hitode909/perl-refactoring-tools?branch=master)
+# App::PRT [![Build Status](https://travis-ci.org/hitode909/App-PRT.png?branch=master)](https://travis-ci.org/hitode909/App-PRT) [![Coverage Status](https://coveralls.io/repos/hitode909/App-PRT/badge.png?branch=master)](https://coveralls.io/r/hitode909/App-PRT?branch=master)
 
 Command line tool for Perl code refacoring
 
