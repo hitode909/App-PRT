@@ -2,6 +2,10 @@ Revision history for Perl extension App-PRT
 
 {{$NEXT}}
 
+0.03 2014-03-25T03:19:54Z
+
+    - Remove cpanfile.snapshot
+
 0.02 2014-03-25T03:16:37Z
 
     - FAKE_RELEASE succeed at version 0.01
