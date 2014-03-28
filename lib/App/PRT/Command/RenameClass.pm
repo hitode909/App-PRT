@@ -228,6 +228,7 @@ sub _destination_file {
     } else {
         my $fallback_delimiter = $delimiters[-1];
         my $dir = file($file)->dir;
+        $dir = $dir->parent for grep { $_ eq '/' } @delimiters;
         my $basename = $self->destination_class_name =~ s{::}{
             shift @delimiters // $fallback_delimiter;
         }gre;

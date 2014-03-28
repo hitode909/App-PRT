@@ -35,6 +35,7 @@ sub _destination_file : Tests {
         ['A::B::C', 'D::E::F', 'A-B_C.pm', './D-E_F.pm', 'separated with -, _'],
         ['A::B', 'A::B::C::D', 'A-B.pm', './A-B-C-D.pm', 'separated with -, _, move deeper'],
         ['A::B::C::D', 'A::B', 'A-B-C-D.pm', './A-B.pm', 'separated with -, _, move lighter'],
+        ['A::B::C', 'D::E::F::G', 'A/B-C.pm', 'D/E-F-G.pm', 'separated with -, _, mixed with directory'],
     ) {
         my ($source_class_name, $destination_class_name, $input_file, $expected_file, $description) = @$case;
 
