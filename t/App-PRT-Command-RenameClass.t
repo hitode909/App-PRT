@@ -153,7 +153,7 @@ sub execute_test_more_style_test_file : Tests {
     $command->execute($file);
 
     is file($file)->slurp, <<'CODE', 'test replaced';
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use_ok 'My::Meal';
 require_ok 'My::Meal';

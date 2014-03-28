@@ -1,4 +1,4 @@
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use_ok 'My::Food';
 require_ok 'My::Food';
