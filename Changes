@@ -2,6 +2,10 @@ Revision history for Perl extension App-PRT
 
 {{$NEXT}}
 
+0.07 2014-03-28T08:44:39Z
+
+    - Fix a typo
+
 0.06 2014-03-28T07:21:49Z
 
     - Fix a bug

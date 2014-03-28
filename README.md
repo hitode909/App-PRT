@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/hitode909/App-PRT.png?branch=master)](https://travis-ci.org/hitode909/App-PRT) [![Coverage Status](https://coveralls.io/repos/hitode909/App-PRT/badge.png?branch=master)](https://coveralls.io/r/hitode909/App-PRT?branch=master)
 # NAME
 
-App::PRT - Command line Perl Refacoring Tool
+App::PRT - Command line Perl Refactoring Tool
 
 # SYNOPSIS
 
