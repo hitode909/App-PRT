@@ -226,9 +226,10 @@ sub _destination_file {
         $dir = $dir->subdir(@destination_dirs);
         $dir->file("$destination_basename.pm").q();
     } else {
+        my $fallback_delimiter = $delimiters[-1];
         my $dir = file($file)->dir;
         my $basename = $self->destination_class_name =~ s{::}{
-            shift @delimiters;
+            shift @delimiters // $fallback_delimiter;
         }gre;
         $dir->file("$basename.pm");
     }

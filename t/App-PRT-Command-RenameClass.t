@@ -33,6 +33,8 @@ sub _destination_file : Tests {
         ['Foo::Bar::Bazz', 'Foo::Bar', '/tmp/lib/Foo/Bar/Bazz.pm', '/tmp/lib/Foo/Bar.pm', 'absolute path'],
         ['Test::Foo', 'Test::Foo::Bar', 't/lib/Test/Foo.pm', 't/lib/Test/Foo/Bar.pm', 't/lib'],
         ['A::B::C', 'D::E::F', 'A-B_C.pm', './D-E_F.pm', 'separated with -, _'],
+        ['A::B', 'A::B::C::D', 'A-B.pm', './A-B-C-D.pm', 'separated with -, _, move deeper'],
+        ['A::B::C::D', 'A::B', 'A-B-C-D.pm', './A-B.pm', 'separated with -, _, move lighter'],
     ) {
         my ($source_class_name, $destination_class_name, $input_file, $expected_file, $description) = @$case;
 
