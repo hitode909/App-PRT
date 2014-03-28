@@ -153,7 +153,7 @@ sub _try_rename_parent_class {
 
     for my $statement (@$includes) {
         next unless defined $statement->pragma;
-        next unless $statement->pragma ~~ [qw(parent base)]; # only 'use parent' and 'use base' are supported
+        next unless $statement->pragma =~ /^parent|base$/; # only 'use parent' and 'use base' are supported
 
         # schild(2) is 'Foo' of use parent Foo
         my $parent = $statement->schild(2);
