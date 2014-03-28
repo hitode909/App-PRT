@@ -16,7 +16,7 @@ __END__
 
 =head1 NAME
 
-App::PRT - Command line Perl Refacoring Tool
+App::PRT - Command line Perl Refactoring Tool
 
 =head1 SYNOPSIS
 
