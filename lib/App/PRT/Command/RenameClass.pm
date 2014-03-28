@@ -212,28 +212,13 @@ sub _destination_file {
         ($file =~ $pattern);
     };
 
-    if (all { $_ eq '/' } @delimiters) {
-        my @source_dirs = split '::', $self->source_class_name;
-        pop @source_dirs;
-
-        my @destination_dirs = split '::', $self->destination_class_name;
-        my ($destination_basename) = pop @destination_dirs;
-
-        my $dir = file($file)->dir;
-
-        $dir = $dir->parent for @source_dirs;
-
-        $dir = $dir->subdir(@destination_dirs);
-        $dir->file("$destination_basename.pm").q();
-    } else {
-        my $fallback_delimiter = $delimiters[-1];
-        my $dir = file($file)->dir;
-        $dir = $dir->parent for grep { $_ eq '/' } @delimiters;
-        my $basename = $self->destination_class_name =~ s{::}{
-            shift @delimiters // $fallback_delimiter;
-        }gre;
-        $dir->file("$basename.pm");
-    }
+    my $fallback_delimiter = $delimiters[-1];
+    my $dir = file($file)->dir;
+    $dir = $dir->parent for grep { $_ eq '/' } @delimiters;
+    my $basename = $self->destination_class_name =~ s{::}{
+        shift @delimiters // $fallback_delimiter;
+    }gre;
+    $dir->file("$basename.pm");
 }
 
 1;
