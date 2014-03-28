@@ -207,7 +207,8 @@ sub _destination_file {
     my ($self, $file) = @_;
 
     my @delimiters = do {
-        my $pattern = $self->source_class_name =~ s{::}{(.+)}gr;
+        my $pattern = $self->source_class_name;
+        $pattern =~ s{::}{(.+)}g;
         ($file =~ qr/^(.*)$pattern(.*)$/);
     };
     my $prefix = shift @delimiters;
@@ -216,9 +217,10 @@ sub _destination_file {
     my $fallback_delimiter = $delimiters[-1];
     my $dir = file($file)->dir;
     $dir = $dir->parent for grep { $_ eq '/' } @delimiters;
-    my $basename = $self->destination_class_name =~ s{::}{
+    my $basename = $self->destination_class_name;
+    $basename =~ s{::}{
         shift @delimiters // $fallback_delimiter;
-    }gre;
+    }ge;
     $dir->file("$basename$suffix");
 }
 
