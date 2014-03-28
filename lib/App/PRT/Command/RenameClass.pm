@@ -209,8 +209,10 @@ sub _destination_file {
 
     my @delimiters = do {
         my $pattern = $self->source_class_name =~ s{::}{(.+)}gr;
-        ($file =~ $pattern);
+        ($file =~ qr/^(.*)$pattern(.*)$/);
     };
+    my $prefix = shift @delimiters;
+    my $suffix = pop @delimiters;
 
     my $fallback_delimiter = $delimiters[-1];
     my $dir = file($file)->dir;
@@ -218,7 +220,7 @@ sub _destination_file {
     my $basename = $self->destination_class_name =~ s{::}{
         shift @delimiters // $fallback_delimiter;
     }gre;
-    $dir->file("$basename.pm");
+    $dir->file("$basename$suffix");
 }
 
 1;
