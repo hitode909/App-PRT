@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use PPI;
 use Path::Class;
+use List::Util qw(all);
 
 sub new {
     my ($class) = @_;
@@ -206,18 +207,31 @@ sub _try_rename_tokens {
 sub _destination_file {
     my ($self, $file) = @_;
 
-    my @source_dirs = split '::', $self->source_class_name;
-    pop @source_dirs;
+    my @delimiters = do {
+        my $pattern = $self->source_class_name =~ s{::}{(.+)}gr;
+        ($file =~ $pattern);
+    };
 
-    my @destination_dirs = split '::', $self->destination_class_name;
-    my ($destination_basename) = pop @destination_dirs;
+    if (all { $_ eq '/' } @delimiters) {
+        my @source_dirs = split '::', $self->source_class_name;
+        pop @source_dirs;
 
-    my $dir = file($file)->dir;
+        my @destination_dirs = split '::', $self->destination_class_name;
+        my ($destination_basename) = pop @destination_dirs;
 
-    $dir = $dir->parent for @source_dirs;
+        my $dir = file($file)->dir;
 
-    $dir = $dir->subdir(@destination_dirs);
-    $dir->file("$destination_basename.pm").q();
+        $dir = $dir->parent for @source_dirs;
+
+        $dir = $dir->subdir(@destination_dirs);
+        $dir->file("$destination_basename.pm").q();
+    } else {
+        my $dir = file($file)->dir;
+        my $basename = $self->destination_class_name =~ s{::}{
+            shift @delimiters;
+        }gre;
+        $dir->file("$basename.pm");
+    }
 }
 
 1;
