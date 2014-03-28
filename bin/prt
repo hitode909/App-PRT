@@ -27,11 +27,11 @@ prt is the command line frontend of L<App::PRT>.
 
 =over 4
 
-=item * replace_tokens
+=item * replace_token
 
 Replace C<foo> token with C<bar>.
 
-    prt replace_tokens foo bar path/**/**.pm
+    prt replace_token foo bar path/**/**.pm
 
 =item * rename_class
 
