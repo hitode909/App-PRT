@@ -1,0 +1,18 @@
+package t::My::Food;
+use base qw(Test::Class);
+use Test::More;
+
+sub _load : Test(startup => 1) {
+    use_ok 'My::Food';
+}
+
+sub instantiate : Test(1) {
+    isa_ok My::Food->new('banana'), 'My::Food';
+}
+
+sub name : Test(1) {
+    my $food = My::Food->new('banana');
+    is $food->name, 'banana';
+}
+
+__PACKAGE__->runtests;

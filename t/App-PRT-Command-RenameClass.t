@@ -175,6 +175,42 @@ CODE
 
 }
 
+sub execute_test_class_style_test_file: Tests {
+    my $directory = t::test::prepare_test_code('dinner');
+
+    my $food_file = "$directory/t/My-Food._t";
+    my $meal_file = "$directory/t/My-Meal._t";
+
+    my $command1 = App::PRT::Command::RenameClass->new;
+    $command1->register('t::My::Food' => 't::My::Meal');
+    $command1->execute($food_file);
+
+    ok ! -f $food_file, "Food._t doesn't exists";
+    ok -e $meal_file, "Meal._t exists";
+
+    is file($meal_file)->slurp, <<'CODE', 'package statement replaced';
+package t::My::Meal;
+use base qw(Test::Class);
+use Test::More;
+
+sub _load : Test(startup => 1) {
+    use_ok 'My::Food';
+}
+
+sub instantiate : Test(1) {
+    isa_ok My::Food->new('banana'), 'My::Food';
+}
+
+sub name : Test(1) {
+    my $food = My::Food->new('banana');
+    is $food->name, 'banana';
+}
+
+__PACKAGE__->runtests;
+CODE
+
+}
+
 sub parse_arguments : Tests {
     subtest "when source and destination specified" => sub {
         my $command = App::PRT::Command::RenameClass->new;
