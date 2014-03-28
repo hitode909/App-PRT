@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use PPI;
 use Path::Class;
+use experimental qw(smartmatch);
 
 sub new {
     my ($class) = @_;
