@@ -3,7 +3,6 @@ use strict;
 use warnings;
 use PPI;
 use Path::Class;
-use List::Util qw(all);
 
 sub new {
     my ($class) = @_;

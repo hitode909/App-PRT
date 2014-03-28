@@ -3,7 +3,6 @@ requires 'Class::Load';
 requires 'Getopt::Long', '2.42';
 requires 'PPI';
 requires 'Path::Class';
-requires 'List::Util';
 
 on configure => sub {
     requires 'CPAN::Meta';
