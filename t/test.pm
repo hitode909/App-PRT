@@ -7,6 +7,8 @@ use utf8;
 use Path::Class;
 use lib file(__FILE__)->dir->parent->subdir('lib')->stringify;
 
+use FindBin;
+use File::Spec::Functions qw/catfile/;
 use File::Temp qw(tempdir);
 use File::Copy::Recursive;
 
@@ -49,7 +51,7 @@ sub import {
 sub prepare_test_code {
     my ($name) = @_;
 
-    my $base_directory = file(__FILE__)->dir->subdir('data', $name);
+    my $base_directory = catfile($FindBin::Bin, 'data', $name);
     my $tmpdir = tempdir;
 
     unless (-d $base_directory) {
