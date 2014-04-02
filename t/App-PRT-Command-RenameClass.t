@@ -138,6 +138,18 @@ package Child3 {
     use base 'Boss';
 };
 
+package Child4 {
+    use base 'Boss';
+};
+
+package Child5 {
+    use base 'Boss';
+};
+
+package Child6 {
+    use base 'Boss';
+};
+
 package GrandChild {
     use base 'Child';
 };
