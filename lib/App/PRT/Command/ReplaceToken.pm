@@ -8,6 +8,7 @@ sub new {
     bless {
         source_token      => undef,
         destination_token => undef,
+        statement_in      => undef,
     }, $class;
 }
 
@@ -25,6 +26,11 @@ sub parse_arguments {
 
     $self->register(shift @arguments => shift @arguments);
 
+    if (@arguments >= 2 && $arguments[0] eq '--in') {
+        shift @arguments;
+        $self->set_replace_only_statement_which_has_token(shift @arguments);
+    }
+
     @arguments;
 }
 
@@ -39,6 +45,18 @@ sub register {
 
     $self->{source_token} = $source;
     $self->{destination_token} = $destination;
+}
+
+sub set_replace_only_statement_which_has_token {
+    my ($self, $in) = @_;
+
+    $self->{statement_in} = $in;
+}
+
+sub replace_only_statement_which_has_token {
+    my ($self) = @_;
+
+    $self->{statement_in};
 }
 
 sub source_token {

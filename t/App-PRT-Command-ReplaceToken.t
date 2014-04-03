@@ -20,11 +20,16 @@ sub register_rules : Tests {
 
     is $command->source_token, undef;
     is $command->destination_token, undef;
+    is $command->replace_only_statement_which_has_token, undef;
 
     $command->register('print' => 'warn');
 
     is $command->source_token, 'print';
     is $command->destination_token, 'warn';
+    is $command->replace_only_statement_which_has_token, undef;
+
+    $command->set_replace_only_statement_which_has_token('$fh');
+    is $command->replace_only_statement_which_has_token, '$fh';
 }
 
 sub execute : Tests {
@@ -60,6 +65,23 @@ sub parse_arguments : Tests {
         cmp_deeply $command, methods(
             source_token => 'foo',
             destination_token => 'bar',
+            replace_only_statement_which_has_token => undef,
+        ), 'registered';
+
+        cmp_deeply \@args_after, [qw(a.pl lib/B.pm)], 'parse_arguments returns rest arguments';
+    };
+
+    subtest "when source, destination, and --in specified" => sub {
+        my $command = App::PRT::Command::ReplaceToken->new;
+        my @args = qw(foo bar --in bazz a.pl lib/B.pm);
+
+
+        my @args_after = $command->parse_arguments(@args);
+
+        cmp_deeply $command, methods(
+            source_token => 'foo',
+            destination_token => 'bar',
+            replace_only_statement_which_has_token => 'bazz',
         ), 'registered';
 
         cmp_deeply \@args_after, [qw(a.pl lib/B.pm)], 'parse_arguments returns rest arguments';
