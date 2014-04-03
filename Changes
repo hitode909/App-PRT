@@ -2,6 +2,12 @@ Revision history for Perl extension App-PRT
 
 {{$NEXT}}
 
+0.08 2014-04-03T02:47:03Z
+
+    - Slurp all of perl files if script executes with no file args (thanks moznion)
+    - Fix missing 'literal' method error while renaming class (thanks ishikawa)
+    - avoid warnings saying smartmatch is experimental (thanks miyagawa)
+
 0.07 2014-03-28T08:44:39Z
 
     - Fix a typo

@@ -45,6 +45,7 @@
       "runtime" : {
          "requires" : {
             "Class::Load" : "0",
+            "File::Find::Rule" : "0",
             "Getopt::Long" : "2.42",
             "PPI" : "0",
             "Path::Class" : "0",
@@ -77,9 +78,11 @@
          "web" : "https://github.com/hitode909/App-PRT"
       }
    },
-   "version" : "0.07",
+   "version" : "0.08",
    "x_contributors" : [
+      "Tatsuhiko Miyagawa <miyagawa@bulknews.net>",
       "moznion <moznion@gmail.com>",
+      "Takanori Ishikawa <takanori.ishikawa@gmail.com>",
       "hitode909 <hitode909@gmail.com>"
    ]
 }
