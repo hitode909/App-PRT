@@ -96,6 +96,8 @@ sub _replace_all {
 
     my $tokens = $document->find('PPI::Token');
 
+    return 0 unless $tokens;
+
     my $replaced = 0;
 
     for my $token (@$tokens) {
@@ -111,6 +113,8 @@ sub _replace_in_statement {
     my ($self, $document) = @_;
 
     my $statements = $document->find('PPI::Statement');
+
+    return 0 unless $statements;
 
     my $replaced = 0;
 
