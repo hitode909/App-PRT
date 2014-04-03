@@ -26,7 +26,7 @@ sub parse_arguments {
 
     $self->register(shift @arguments => shift @arguments);
 
-    if (@arguments >= 2 && $arguments[0] eq '--in') {
+    if (@arguments >= 2 && $arguments[0] eq '--in-statement') {
         shift @arguments;
         $self->set_replace_only_statement_which_has_token(shift @arguments);
     }

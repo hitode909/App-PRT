@@ -126,9 +126,9 @@ sub parse_arguments : Tests {
         cmp_deeply \@args_after, [qw(a.pl lib/B.pm)], 'parse_arguments returns rest arguments';
     };
 
-    subtest "when source, destination, and --in specified" => sub {
+    subtest "when source, destination, and --in-statement specified" => sub {
         my $command = App::PRT::Command::ReplaceToken->new;
-        my @args = qw(foo bar --in bazz a.pl lib/B.pm);
+        my @args = qw(foo bar --in-statement bazz a.pl lib/B.pm);
 
 
         my @args_after = $command->parse_arguments(@args);

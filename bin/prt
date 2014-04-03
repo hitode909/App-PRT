@@ -36,7 +36,7 @@ Replace C<foo> token with C<bar>.
 
 Replace C<foo> token with C<bar> but target statements must have C<bazz> token.
 
-    prt replace_token foo bar --in bazz
+    prt replace_token foo bar --in-statement bazz
 
 =item * rename_class
 
