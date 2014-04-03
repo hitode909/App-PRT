@@ -1,5 +1,7 @@
 package t::App::PRT::CLI;
 use t::test;
+use FindBin;
+use File::Basename ();
 
 sub _require : Test(startup => 1) {
     my ($self) = @_;
@@ -32,9 +34,8 @@ sub parse : Tests {
         cmp_deeply $cli->command, isa('App::PRT::Command::ReplaceToken') & methods(
             rules => {foo => 'bar'},
         ), 'ReplaceToken command loaded';
-        cmp_deeply $cli->collector, isa('App::PRT::Collector::Files') & methods(
-            collect => [],
-        ), 'Files collector loaded';
+        ok @{$cli->collector->collect};
+        isa_ok $cli->collector, 'App::PRT::Collector::Files'
     };
 
     subtest 'when source and destination specified' => sub {
@@ -43,9 +44,8 @@ sub parse : Tests {
         cmp_deeply $cli->command, isa('App::PRT::Command::ReplaceToken') & methods(
             rules => {foo => 'bar'},
         ), 'ReplaceToken command loaded and foo => bar registered';
-        cmp_deeply $cli->collector, isa('App::PRT::Collector::Files') & methods(
-            collect => [],
-        ), 'Files collector loaded';
+        ok @{$cli->collector->collect};
+        isa_ok $cli->collector, 'App::PRT::Collector::Files'
     };
 
     subtest 'when source, destination, target files specified' => sub {
