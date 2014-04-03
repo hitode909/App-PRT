@@ -18,14 +18,14 @@ sub handle_files : Tests {
 sub register_rules : Tests {
     my $command = App::PRT::Command::ReplaceToken->new;
 
-    is $command->source_token, undef;
-    is $command->destination_token, undef;
+    is $command->source_tokens, undef;
+    is $command->destination_tokens, undef;
     is $command->replace_only_statement_which_has_token, undef;
 
     $command->register('print' => 'warn');
 
-    is $command->source_token, 'print';
-    is $command->destination_token, 'warn';
+    is $command->source_tokens, 'print';
+    is $command->destination_tokens, 'warn';
     is $command->replace_only_statement_which_has_token, undef;
 
     $command->set_replace_only_statement_which_has_token('$fh');
@@ -118,8 +118,8 @@ sub parse_arguments : Tests {
         my @args_after = $command->parse_arguments(@args);
 
         cmp_deeply $command, methods(
-            source_token => 'foo',
-            destination_token => 'bar',
+            source_tokens => 'foo',
+            destination_tokens => 'bar',
             replace_only_statement_which_has_token => undef,
         ), 'registered';
 
@@ -134,8 +134,8 @@ sub parse_arguments : Tests {
         my @args_after = $command->parse_arguments(@args);
 
         cmp_deeply $command, methods(
-            source_token => 'foo',
-            destination_token => 'bar',
+            source_tokens => 'foo',
+            destination_tokens => 'bar',
             replace_only_statement_which_has_token => 'bazz',
         ), 'registered';
 
