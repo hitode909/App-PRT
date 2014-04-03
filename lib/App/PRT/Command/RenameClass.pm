@@ -158,7 +158,10 @@ sub _try_rename_parent_class {
         my $parent = $statement->schild(2);
 
         if ($parent->isa('PPI::Token::Quote')) {
-            if ($parent->literal eq $self->source_class_name) {
+            # The 'literal' method is not implemented by ::Quote::Double or ::Quote::Interpolate.
+            my $string = $parent->can('literal') ? $parent->literal : $parent->string;
+
+            if ($string eq $self->source_class_name) {
                 $parent->set_content("'@{[ $self->destination_class_name ]}'");
                 $replaced++;
             }
