@@ -51,7 +51,62 @@ CODE
 warn "Hello, World!\n";
 CODE
     };
+}
 
+sub execute_with_replace_only_statement_which_has_token : Tests {
+    my $directory = t::test::prepare_test_code('dinner');
+
+    subtest 'only statement with My::Food was replaced' => sub {
+        my $command = App::PRT::Command::ReplaceToken->new;
+        $command->register(new => 'new->bake');
+        $command->set_replace_only_statement_which_has_token('My::Food');
+
+        my $file = "$directory/dinner.pl";
+        $command->execute($file);
+        is file($file)->slurp, <<'CODE';
+use strict;
+use warnings;
+use lib 'lib';
+
+use My::Human;
+use My::Food;
+
+my $human = My::Human->new('Alice');
+my $food = My::Food->new->bake('Pizza');
+
+$human->eat($food);
+CODE
+    };
+
+    subtest 'only statement with My::Food was replaced' => sub {
+        my $command = App::PRT::Command::ReplaceToken->new;
+        $command->register('$class' => '$klass');
+        $command->set_replace_only_statement_which_has_token('@_');
+
+        my $file = "$directory/lib/My/Food.pm";
+        $command->execute($file);
+        is file($file)->slurp, <<'CODE', 'target is `my ($class, $name) = @_;`, not subroutine';
+package My::Food;
+use strict;
+use warnings;
+
+sub new {
+    my ($klass, $name) = @_;
+
+    bless {
+        name => $name,
+    }, $class;
+}
+
+sub name {
+    my ($self) = @_;
+
+    $self->{name};
+}
+
+1;
+CODE
+    };
 }
 
 sub parse_arguments : Tests {
