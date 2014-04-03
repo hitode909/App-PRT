@@ -6,7 +6,9 @@ use PPI;
 sub new {
     my ($class) = @_;
     bless {
-        rules => {},
+        source_token      => undef,
+        destination_token => undef,
+        statement_in      => undef,
     }, $class;
 }
 
@@ -24,38 +26,49 @@ sub parse_arguments {
 
     $self->register(shift @arguments => shift @arguments);
 
+    if (@arguments >= 2 && $arguments[0] eq '--in-statement') {
+        shift @arguments;
+        $self->set_replace_only_statement_which_has_token(shift @arguments);
+    }
+
     @arguments;
 }
 
 # register a replacing rule
 # arguments:
-#   $source: source token
-#   $dest:   destination token
+#   $source:      source token
+#   $destination: destinationination token
 # discussions:
 #   should consider utf-8 flag ?
 sub register {
-    my ($self, $source, $dest) = @_;
+    my ($self, $source, $destination) = @_;
 
-    $self->rules->{$source} = $dest;
+    $self->{source_token} = $source;
+    $self->{destination_token} = $destination;
 }
 
-# return replacing rules
-# returns:
-#  { source => destination }
-sub rules {
+sub set_replace_only_statement_which_has_token {
+    my ($self, $in) = @_;
+
+    $self->{statement_in} = $in;
+}
+
+sub replace_only_statement_which_has_token {
     my ($self) = @_;
 
-    $self->{rules};
+    $self->{statement_in};
 }
 
-# find a destination token for a source token
-# returns:
-#   destination token (when regstered)
-#   undef             (when not registered)
-sub rule {
-    my ($self, $source) = @_;
+sub source_token {
+    my ($self) = @_;
 
-    $self->rules->{$source};
+    $self->{source_token};
+}
+
+sub destination_token {
+    my ($self) = @_;
+
+    $self->{destination_token};
 }
 
 # refactor a file
@@ -64,17 +77,64 @@ sub rule {
 sub execute {
     my ($self, $file) = @_;
 
+    return unless defined $self->source_token;
+
     my $document = PPI::Document->new($file);
+
+    my $replaced = 0;
+    if (defined $self->replace_only_statement_which_has_token) {
+        $replaced += $self->_replace_in_statement($document);
+    } else {
+        $replaced += $self->_replace_all($document);
+    }
+
+    $document->save($file) if $replaced;
+}
+
+sub _replace_all {
+    my ($self, $document) = @_;
 
     my $tokens = $document->find('PPI::Token');
 
+    my $replaced = 0;
+
     for my $token (@$tokens) {
-        my $dest = $self->rule($token->content);
-        next unless defined $dest;
-        $token->set_content($dest);
+        next unless $token->content eq $self->source_token;
+        $token->set_content($self->destination_token);
+        $replaced++;
     }
 
-    $document->save($file);
+    $replaced;
+}
+
+sub _replace_in_statement {
+    my ($self, $document) = @_;
+
+    my $statements = $document->find('PPI::Statement');
+
+    my $replaced = 0;
+
+    for my $statement (@$statements) {
+        next if ref $statement eq 'PPI::Statement::Sub'; # should support in another option?
+
+        my $found = 0;
+        my $tokens = $statement->find('PPI::Token');
+        for my $token (@$tokens) {
+            if ($token->content eq $self->replace_only_statement_which_has_token) {
+                $found++;
+                last;
+            }
+        }
+        next unless $found;
+
+        for my $token (@$tokens) {
+            next unless $token->content eq $self->source_token;
+            $token->set_content($self->destination_token);
+            $replaced++;
+        }
+    }
+
+    $replaced;
 }
 
 1;

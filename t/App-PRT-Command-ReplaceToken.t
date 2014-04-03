@@ -18,30 +18,18 @@ sub handle_files : Tests {
 sub register_rules : Tests {
     my $command = App::PRT::Command::ReplaceToken->new;
 
-    is_deeply $command->rules, {}, 'empty';
-
-    is $command->rule('print'), undef, 'not registered';
+    is $command->source_token, undef;
+    is $command->destination_token, undef;
+    is $command->replace_only_statement_which_has_token, undef;
 
     $command->register('print' => 'warn');
 
-    is $command->rule('print'), 'warn', 'registered';
+    is $command->source_token, 'print';
+    is $command->destination_token, 'warn';
+    is $command->replace_only_statement_which_has_token, undef;
 
-    is_deeply $command->rules, {
-        'print' => 'warn',
-    }, 'registered';
-
-    $command->register('print' => 'say');
-
-    is_deeply $command->rules, {
-        'print' => 'say',
-    }, 'updated';
-
-    $command->register('say' => 'print');
-
-    is_deeply $command->rules, {
-        'print' => 'say',
-        'say' => 'print',
-    }, 'added';
+    $command->set_replace_only_statement_which_has_token('$fh');
+    is $command->replace_only_statement_which_has_token, '$fh';
 }
 
 sub execute : Tests {
@@ -63,23 +51,62 @@ CODE
 warn "Hello, World!\n";
 CODE
     };
-
 }
 
-sub execute_when_many_rules : Tests {
-    my $directory = t::test::prepare_test_code('hello_world');
-    my $command = App::PRT::Command::ReplaceToken->new;
-    my $file = "$directory/hello_world.pl";
+sub execute_with_replace_only_statement_which_has_token : Tests {
+    my $directory = t::test::prepare_test_code('dinner');
 
-    $command->register('print' => 'die');
-    $command->register('"Hello, World!\n"' => '"Bye!"');
+    subtest 'only statement with My::Food was replaced' => sub {
+        my $command = App::PRT::Command::ReplaceToken->new;
+        $command->register(new => 'new->bake');
+        $command->set_replace_only_statement_which_has_token('My::Food');
 
-    $command->execute($file);
-
+        my $file = "$directory/dinner.pl";
+        $command->execute($file);
         is file($file)->slurp, <<'CODE';
-die "Bye!";
-CODE
+use strict;
+use warnings;
+use lib 'lib';
 
+use My::Human;
+use My::Food;
+
+my $human = My::Human->new('Alice');
+my $food = My::Food->new->bake('Pizza');
+
+$human->eat($food);
+CODE
+    };
+
+    subtest 'only statement with My::Food was replaced' => sub {
+        my $command = App::PRT::Command::ReplaceToken->new;
+        $command->register('$class' => '$klass');
+        $command->set_replace_only_statement_which_has_token('@_');
+
+        my $file = "$directory/lib/My/Food.pm";
+        $command->execute($file);
+        is file($file)->slurp, <<'CODE', 'target is `my ($class, $name) = @_;`, not subroutine';
+package My::Food;
+use strict;
+use warnings;
+
+sub new {
+    my ($klass, $name) = @_;
+
+    bless {
+        name => $name,
+    }, $class;
+}
+
+sub name {
+    my ($self) = @_;
+
+    $self->{name};
+}
+
+1;
+CODE
+    };
 }
 
 sub parse_arguments : Tests {
@@ -90,9 +117,27 @@ sub parse_arguments : Tests {
 
         my @args_after = $command->parse_arguments(@args);
 
-        cmp_deeply $command->rules, {
-            foo => 'bar',
-        }, 'registered';
+        cmp_deeply $command, methods(
+            source_token => 'foo',
+            destination_token => 'bar',
+            replace_only_statement_which_has_token => undef,
+        ), 'registered';
+
+        cmp_deeply \@args_after, [qw(a.pl lib/B.pm)], 'parse_arguments returns rest arguments';
+    };
+
+    subtest "when source, destination, and --in-statement specified" => sub {
+        my $command = App::PRT::Command::ReplaceToken->new;
+        my @args = qw(foo bar --in-statement bazz a.pl lib/B.pm);
+
+
+        my @args_after = $command->parse_arguments(@args);
+
+        cmp_deeply $command, methods(
+            source_token => 'foo',
+            destination_token => 'bar',
+            replace_only_statement_which_has_token => 'bazz',
+        ), 'registered';
 
         cmp_deeply \@args_after, [qw(a.pl lib/B.pm)], 'parse_arguments returns rest arguments';
     };
