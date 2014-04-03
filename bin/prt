@@ -54,8 +54,8 @@ You can specify the target files to refactor.
 
     prt replace_token foo bar lib/**/**.pm t/*.t # Refactor Perl modules in lib/ and test files in t/
 
-Without target files, L<App::PRT> collects source codes in your project automatically.
-L<App::PRT> searches L<cpanfile> or L<.git> to detect project root directory.
+Without target files, C<App::PRT> collects source codes in your project automatically.
+C<App::PRT> searches C<cpanfile> or C<.git> to detect project root directory.
 
     prt replace_token foo bar                    # Refactor the project in current working directory
 
