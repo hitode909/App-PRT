@@ -43,9 +43,9 @@ sub collect_multi_files: Tests {
 sub collect_all_files: Tests {
     my $directory = t::test::prepare_test_code('contain_ignores');
 
-    my $original_cwd_getcwd = *Cwd::getcwd{CODE};
-    undef *Cwd::getcwd;
-    *Cwd::getcwd = sub { return $directory };
+    my $g = mock_guard 'Cwd' => {
+        getcwd => $directory,
+    };
 
     my $collector = App::PRT::Collector::Files->new();
     my $files = [
@@ -57,7 +57,4 @@ sub collect_all_files: Tests {
     ];
 
     cmp_bag $collector->collect, $files, 'all files are returned';
-
-    undef *Cwd::getcwd;
-    *Cwd::getcwd = $original_cwd_getcwd;
 }
