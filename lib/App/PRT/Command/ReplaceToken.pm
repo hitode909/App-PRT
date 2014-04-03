@@ -6,7 +6,8 @@ use PPI;
 sub new {
     my ($class) = @_;
     bless {
-        rules => {},
+        source_token      => undef,
+        destination_token => undef,
     }, $class;
 }
 
@@ -29,33 +30,27 @@ sub parse_arguments {
 
 # register a replacing rule
 # arguments:
-#   $source: source token
-#   $dest:   destination token
+#   $source:      source token
+#   $destination: destinationination token
 # discussions:
 #   should consider utf-8 flag ?
 sub register {
-    my ($self, $source, $dest) = @_;
+    my ($self, $source, $destination) = @_;
 
-    $self->rules->{$source} = $dest;
+    $self->{source_token} = $source;
+    $self->{destination_token} = $destination;
 }
 
-# return replacing rules
-# returns:
-#  { source => destination }
-sub rules {
+sub source_token {
     my ($self) = @_;
 
-    $self->{rules};
+    $self->{source_token};
 }
 
-# find a destination token for a source token
-# returns:
-#   destination token (when regstered)
-#   undef             (when not registered)
-sub rule {
-    my ($self, $source) = @_;
+sub destination_token {
+    my ($self) = @_;
 
-    $self->rules->{$source};
+    $self->{destination_token};
 }
 
 # refactor a file
@@ -64,17 +59,20 @@ sub rule {
 sub execute {
     my ($self, $file) = @_;
 
+    return unless defined $self->source_token;
+
     my $document = PPI::Document->new($file);
 
     my $tokens = $document->find('PPI::Token');
 
+    my $replaced = 0;
     for my $token (@$tokens) {
-        my $dest = $self->rule($token->content);
-        next unless defined $dest;
-        $token->set_content($dest);
+        next unless $token->content eq $self->source_token;
+        $token->set_content($self->destination_token);
+        $replaced++;
     }
 
-    $document->save($file);
+    $document->save($file) if $replaced;
 }
 
 1;

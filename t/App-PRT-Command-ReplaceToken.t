@@ -18,30 +18,13 @@ sub handle_files : Tests {
 sub register_rules : Tests {
     my $command = App::PRT::Command::ReplaceToken->new;
 
-    is_deeply $command->rules, {}, 'empty';
-
-    is $command->rule('print'), undef, 'not registered';
+    is $command->source_token, undef;
+    is $command->destination_token, undef;
 
     $command->register('print' => 'warn');
 
-    is $command->rule('print'), 'warn', 'registered';
-
-    is_deeply $command->rules, {
-        'print' => 'warn',
-    }, 'registered';
-
-    $command->register('print' => 'say');
-
-    is_deeply $command->rules, {
-        'print' => 'say',
-    }, 'updated';
-
-    $command->register('say' => 'print');
-
-    is_deeply $command->rules, {
-        'print' => 'say',
-        'say' => 'print',
-    }, 'added';
+    is $command->source_token, 'print';
+    is $command->destination_token, 'warn';
 }
 
 sub execute : Tests {
@@ -66,22 +49,6 @@ CODE
 
 }
 
-sub execute_when_many_rules : Tests {
-    my $directory = t::test::prepare_test_code('hello_world');
-    my $command = App::PRT::Command::ReplaceToken->new;
-    my $file = "$directory/hello_world.pl";
-
-    $command->register('print' => 'die');
-    $command->register('"Hello, World!\n"' => '"Bye!"');
-
-    $command->execute($file);
-
-        is file($file)->slurp, <<'CODE';
-die "Bye!";
-CODE
-
-}
-
 sub parse_arguments : Tests {
     subtest "when source and destination specified" => sub {
         my $command = App::PRT::Command::ReplaceToken->new;
@@ -90,9 +57,10 @@ sub parse_arguments : Tests {
 
         my @args_after = $command->parse_arguments(@args);
 
-        cmp_deeply $command->rules, {
-            foo => 'bar',
-        }, 'registered';
+        cmp_deeply $command, methods(
+            source_token => 'foo',
+            destination_token => 'bar',
+        ), 'registered';
 
         cmp_deeply \@args_after, [qw(a.pl lib/B.pm)], 'parse_arguments returns rest arguments';
     };
