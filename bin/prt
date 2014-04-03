@@ -17,6 +17,7 @@ prt - Command line frontend of App::PRT
 
 =head1 SYNOPSIS
 
+    $ prt <command> <args>
     $ prt <command> <args> <files>
 
 =head1 DESCRIPTION
@@ -31,21 +32,32 @@ prt is the command line frontend of L<App::PRT>.
 
 Replace C<foo> token with C<bar>.
 
-    prt replace_token foo bar path/**/**.pm
+    prt replace_token foo bar
 
 =item * rename_class
 
 Rename C<Foo> class to C<Bar> class.
 
-    prt rename_class Foo Bar lib/**/**.pm
+    prt rename_class Foo Bar
 
 =item * delete_method
 
 Delete C<eat> method from C<Food> class.
 
-    prt delete_method Food eat lib/**/**.pm
+    prt delete_method Food eat
 
 =back
+
+=head1 TARGET FILES
+
+You can specify the target files to refactor.
+
+    prt replace_token foo bar lib/**/**.pm t/*.t # Refactor Perl modules in lib/ and test files in t/
+
+Without target files, L<App::PRT> collects source codes in your project automatically.
+L<App::PRT> searches L<cpanfile> or L<.git> to detect project root directory.
+
+    prt replace_token foo bar                    # Refactor the project in current working directory
 
 =head1 LICENSE
 
