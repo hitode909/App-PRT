@@ -28,6 +28,18 @@ sub register_rules : Tests {
         is_deeply $command->destination_tokens, [ 'warn' ];
     };
 
+    subtest 'multi tokens' => sub {
+        my $command = App::PRT::Command::ReplaceToken->new;
+
+        is $command->source_tokens, undef;
+        is $command->destination_tokens, undef;
+
+        $command->register('$foo->bar' => '$bar->baz->qux');
+
+        is_deeply $command->source_tokens, [ '$foo', '->', 'bar' ];
+        is_deeply $command->destination_tokens, [ '$bar', '->', 'baz', '->', 'qux' ];
+    };
+
     subtest 'replace_only_statement_which_has_token' => sub {
         my $command = App::PRT::Command::ReplaceToken->new;
         is $command->replace_only_statement_which_has_token, undef;

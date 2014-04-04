@@ -43,8 +43,18 @@ sub parse_arguments {
 sub register {
     my ($self, $source, $destination) = @_;
 
-    $self->{source_tokens} = [ $source ];
-    $self->{destination_tokens} = [ $destination ];
+    my $source_tokens = do {
+        my $document = PPI::Document::Fragment->new(\$source);
+        [ map { $_->content } @{ $document->find('PPI::Token') } ];
+    };
+
+    my $destination_tokens = do {
+        my $document = PPI::Document::Fragment->new(\$destination);
+        [ map { $_->content } @{ $document->find('PPI::Token') } ];
+    };
+
+    $self->{source_tokens} = $source_tokens;
+    $self->{destination_tokens} = $destination_tokens;
 }
 
 sub set_replace_only_statement_which_has_token {
@@ -133,7 +143,7 @@ sub _replace_in_statement {
 
         for my $token (@$tokens) {
             next unless $token->content eq $self->source_tokens->[0];
-            $token->set_content($self->destination_tokens->[0]);
+            $token->set_content(join '', @{$self->destination_tokens});
             $replaced++;
         }
     }
