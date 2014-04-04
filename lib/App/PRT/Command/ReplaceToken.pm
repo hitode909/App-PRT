@@ -123,7 +123,7 @@ sub _try_replace {
     return 0 unless @matched;
     my $first = shift @matched;
     $first->set_content(join '', @{$self->destination_tokens});
-    $_->remove for @matched;
+    $_->set_content('') for @matched; # removing `(` will delete (...). So set empty content.
     1;
 }
 
@@ -135,7 +135,7 @@ sub _match {
     for my $source (@{$self->source_tokens}) {
         if ($token->content eq $source) {
             push @matched, $token;
-            $token = $token->next_sibling;
+            $token = $token->next_token;
         } else {
             return;
         }
@@ -166,9 +166,7 @@ sub _replace_in_statement {
         next unless $found;
 
         for my $token (@$tokens) {
-            next unless $token->content eq $self->source_tokens->[0];
-            $token->set_content(join '', @{$self->destination_tokens});
-            $replaced++;
+            $replaced += $self->_try_replace($token);
         }
     }
 

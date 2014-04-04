@@ -147,6 +147,29 @@ $human->eat($food);
 CODE
 }
 
+sub execute_replace_token_sequences_in_statement : Tests {
+    my $directory = t::test::prepare_test_code('dinner');
+    my $command = App::PRT::Command::ReplaceToken->new;
+    $command->register('new(' => 'new->bake('); # `new` and `(`
+    $command->set_replace_only_statement_which_has_token('My::Food');
+
+    my $file = "$directory/dinner.pl";
+    $command->execute($file);
+    is file($file)->slurp, <<'CODE', 'new( in statement with My::Food was replaced';
+use strict;
+use warnings;
+use lib 'lib';
+
+use My::Human;
+use My::Food;
+
+my $human = My::Human->new('Alice');
+my $food = My::Food->new->bake('Pizza');
+
+$human->eat($food);
+CODE
+}
+
 sub parse_arguments : Tests {
     subtest "when source and destination specified" => sub {
         my $command = App::PRT::Command::ReplaceToken->new;
