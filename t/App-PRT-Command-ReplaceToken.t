@@ -16,20 +16,36 @@ sub handle_files : Tests {
 }
 
 sub register_rules : Tests {
-    my $command = App::PRT::Command::ReplaceToken->new;
+    subtest 'single token' => sub {
+        my $command = App::PRT::Command::ReplaceToken->new;
 
-    is $command->source_token, undef;
-    is $command->destination_token, undef;
-    is $command->replace_only_statement_which_has_token, undef;
+        is $command->source_tokens, undef;
+        is $command->destination_tokens, undef;
 
-    $command->register('print' => 'warn');
+        $command->register('print' => 'warn');
 
-    is $command->source_token, 'print';
-    is $command->destination_token, 'warn';
-    is $command->replace_only_statement_which_has_token, undef;
+        is_deeply $command->source_tokens, [ 'print' ];
+        is_deeply $command->destination_tokens, [ 'warn' ];
+    };
 
-    $command->set_replace_only_statement_which_has_token('$fh');
-    is $command->replace_only_statement_which_has_token, '$fh';
+    subtest 'multi tokens' => sub {
+        my $command = App::PRT::Command::ReplaceToken->new;
+
+        is $command->source_tokens, undef;
+        is $command->destination_tokens, undef;
+
+        $command->register('$foo->bar' => '$bar->baz->qux');
+
+        is_deeply $command->source_tokens, [ '$foo', '->', 'bar' ];
+        is_deeply $command->destination_tokens, [ '$bar', '->', 'baz', '->', 'qux' ];
+    };
+
+    subtest 'replace_only_statement_which_has_token' => sub {
+        my $command = App::PRT::Command::ReplaceToken->new;
+        is $command->replace_only_statement_which_has_token, undef;
+        $command->set_replace_only_statement_which_has_token('$fh');
+        is $command->replace_only_statement_which_has_token, '$fh';
+    };
 }
 
 sub execute : Tests {
@@ -109,6 +125,51 @@ CODE
     };
 }
 
+sub execute_replace_token_sequences : Tests {
+    my $directory = t::test::prepare_test_code('dinner');
+    my $command = App::PRT::Command::ReplaceToken->new;
+    $command->register('My::Human->new' => 'NewHuman');
+
+    my $file = "$directory/dinner.pl";
+    $command->execute($file);
+    is file($file)->slurp, <<'CODE';
+use strict;
+use warnings;
+use lib 'lib';
+
+use My::Human;
+use My::Food;
+
+my $human = NewHuman('Alice');
+my $food = My::Food->new('Pizza');
+
+$human->eat($food);
+CODE
+}
+
+sub execute_replace_token_sequences_in_statement : Tests {
+    my $directory = t::test::prepare_test_code('dinner');
+    my $command = App::PRT::Command::ReplaceToken->new;
+    $command->register('new(' => 'new->bake('); # `new` and `(`
+    $command->set_replace_only_statement_which_has_token('My::Food');
+
+    my $file = "$directory/dinner.pl";
+    $command->execute($file);
+    is file($file)->slurp, <<'CODE', 'new( in statement with My::Food was replaced';
+use strict;
+use warnings;
+use lib 'lib';
+
+use My::Human;
+use My::Food;
+
+my $human = My::Human->new('Alice');
+my $food = My::Food->new->bake('Pizza');
+
+$human->eat($food);
+CODE
+}
+
 sub parse_arguments : Tests {
     subtest "when source and destination specified" => sub {
         my $command = App::PRT::Command::ReplaceToken->new;
@@ -118,8 +179,8 @@ sub parse_arguments : Tests {
         my @args_after = $command->parse_arguments(@args);
 
         cmp_deeply $command, methods(
-            source_token => 'foo',
-            destination_token => 'bar',
+            source_tokens => [ 'foo' ],
+            destination_tokens => [ 'bar' ],
             replace_only_statement_which_has_token => undef,
         ), 'registered';
 
@@ -134,8 +195,8 @@ sub parse_arguments : Tests {
         my @args_after = $command->parse_arguments(@args);
 
         cmp_deeply $command, methods(
-            source_token => 'foo',
-            destination_token => 'bar',
+            source_tokens => [ 'foo' ],
+            destination_tokens => [ 'bar' ],
             replace_only_statement_which_has_token => 'bazz',
         ), 'registered';
 

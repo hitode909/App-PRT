@@ -6,8 +6,8 @@ use PPI;
 sub new {
     my ($class) = @_;
     bless {
-        source_token      => undef,
-        destination_token => undef,
+        source_tokens      => undef,
+        destination_tokens => undef,
         statement_in      => undef,
     }, $class;
 }
@@ -43,8 +43,18 @@ sub parse_arguments {
 sub register {
     my ($self, $source, $destination) = @_;
 
-    $self->{source_token} = $source;
-    $self->{destination_token} = $destination;
+    my $source_tokens = do {
+        my $document = PPI::Document::Fragment->new(\$source);
+        [ map { $_->content } @{ $document->find('PPI::Token') } ];
+    };
+
+    my $destination_tokens = do {
+        my $document = PPI::Document::Fragment->new(\$destination);
+        [ map { $_->content } @{ $document->find('PPI::Token') } ];
+    };
+
+    $self->{source_tokens} = $source_tokens;
+    $self->{destination_tokens} = $destination_tokens;
 }
 
 sub set_replace_only_statement_which_has_token {
@@ -59,16 +69,16 @@ sub replace_only_statement_which_has_token {
     $self->{statement_in};
 }
 
-sub source_token {
+sub source_tokens {
     my ($self) = @_;
 
-    $self->{source_token};
+    $self->{source_tokens};
 }
 
-sub destination_token {
+sub destination_tokens {
     my ($self) = @_;
 
-    $self->{destination_token};
+    $self->{destination_tokens};
 }
 
 # refactor a file
@@ -77,7 +87,7 @@ sub destination_token {
 sub execute {
     my ($self, $file) = @_;
 
-    return unless defined $self->source_token;
+    return unless defined $self->source_tokens;
 
     my $document = PPI::Document->new($file);
 
@@ -101,12 +111,36 @@ sub _replace_all {
     my $replaced = 0;
 
     for my $token (@$tokens) {
-        next unless $token->content eq $self->source_token;
-        $token->set_content($self->destination_token);
-        $replaced++;
+        $replaced += $self->_try_replace($token);
     }
 
     $replaced;
+}
+
+sub _try_replace {
+    my ($self, $token) = @_;
+    my @matched = $self->_match($token);
+    return 0 unless @matched;
+    my $first = shift @matched;
+    $first->set_content(join '', @{$self->destination_tokens});
+    $_->set_content('') for @matched; # removing `(` will delete (...). So set empty content.
+    1;
+}
+
+sub _match {
+    my ($self, $token) = @_;
+
+    my @matched;
+
+    for my $source (@{$self->source_tokens}) {
+        if ($token->content eq $source) {
+            push @matched, $token;
+            $token = $token->next_token;
+        } else {
+            return;
+        }
+    }
+    return @matched;
 }
 
 sub _replace_in_statement {
@@ -132,9 +166,7 @@ sub _replace_in_statement {
         next unless $found;
 
         for my $token (@$tokens) {
-            next unless $token->content eq $self->source_token;
-            $token->set_content($self->destination_token);
-            $replaced++;
+            $replaced += $self->_try_replace($token);
         }
     }
 
