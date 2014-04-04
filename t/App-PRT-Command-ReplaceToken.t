@@ -24,8 +24,8 @@ sub register_rules : Tests {
 
     $command->register('print' => 'warn');
 
-    is $command->source_tokens, 'print';
-    is $command->destination_tokens, 'warn';
+    is_deeply $command->source_tokens, [ 'print' ];
+    is_deeply $command->destination_tokens, [ 'warn' ];
     is $command->replace_only_statement_which_has_token, undef;
 
     $command->set_replace_only_statement_which_has_token('$fh');
@@ -118,8 +118,8 @@ sub parse_arguments : Tests {
         my @args_after = $command->parse_arguments(@args);
 
         cmp_deeply $command, methods(
-            source_tokens => 'foo',
-            destination_tokens => 'bar',
+            source_tokens => [ 'foo' ],
+            destination_tokens => [ 'bar' ],
             replace_only_statement_which_has_token => undef,
         ), 'registered';
 
@@ -134,8 +134,8 @@ sub parse_arguments : Tests {
         my @args_after = $command->parse_arguments(@args);
 
         cmp_deeply $command, methods(
-            source_tokens => 'foo',
-            destination_tokens => 'bar',
+            source_tokens => [ 'foo' ],
+            destination_tokens => [ 'bar' ],
             replace_only_statement_which_has_token => 'bazz',
         ), 'registered';
 

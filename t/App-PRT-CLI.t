@@ -32,8 +32,8 @@ sub parse : Tests {
         my $cli = App::PRT::CLI->new;
         $cli->parse(qw{replace_token foo bar});
         cmp_deeply $cli->command, isa('App::PRT::Command::ReplaceToken') & methods(
-            source_tokens => 'foo',
-            destination_tokens => 'bar',
+            source_tokens => [ 'foo' ],
+            destination_tokens => [ 'bar' ],
         ), 'ReplaceToken command loaded';
         ok @{$cli->collector->collect};
         isa_ok $cli->collector, 'App::PRT::Collector::Files'
@@ -43,8 +43,8 @@ sub parse : Tests {
         my $cli = App::PRT::CLI->new;
         $cli->parse(qw{replace_token foo bar});
         cmp_deeply $cli->command, isa('App::PRT::Command::ReplaceToken') & methods(
-            source_tokens => 'foo',
-            destination_tokens => 'bar',
+            source_tokens => [ 'foo' ],
+            destination_tokens => [ 'bar' ],
         ), 'ReplaceToken command loaded and foo => bar registered';
         ok @{$cli->collector->collect};
         isa_ok $cli->collector, 'App::PRT::Collector::Files'
@@ -60,8 +60,8 @@ sub parse : Tests {
             qq{$directory/lib/My/Human.pm}
         );
         cmp_deeply $cli->command, isa('App::PRT::Command::ReplaceToken') & methods(
-            source_tokens => 'foo',
-            destination_tokens => 'bar',
+            source_tokens => [ 'foo' ],
+            destination_tokens => [ 'bar' ],
         ), 'ReplaceToken command loaded and foo => bar registered';
         cmp_deeply $cli->collector, isa('App::PRT::Collector::Files') & methods(
             collect => [

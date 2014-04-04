@@ -43,8 +43,8 @@ sub parse_arguments {
 sub register {
     my ($self, $source, $destination) = @_;
 
-    $self->{source_tokens} = $source;
-    $self->{destination_tokens} = $destination;
+    $self->{source_tokens} = [ $source ];
+    $self->{destination_tokens} = [ $destination ];
 }
 
 sub set_replace_only_statement_which_has_token {
@@ -101,8 +101,8 @@ sub _replace_all {
     my $replaced = 0;
 
     for my $token (@$tokens) {
-        next unless $token->content eq $self->source_tokens;
-        $token->set_content($self->destination_tokens);
+        next unless $token->content eq $self->source_tokens->[0];
+        $token->set_content($self->destination_tokens->[0]);
         $replaced++;
     }
 
@@ -132,8 +132,8 @@ sub _replace_in_statement {
         next unless $found;
 
         for my $token (@$tokens) {
-            next unless $token->content eq $self->source_tokens;
-            $token->set_content($self->destination_tokens);
+            next unless $token->content eq $self->source_tokens->[0];
+            $token->set_content($self->destination_tokens->[0]);
             $replaced++;
         }
     }
