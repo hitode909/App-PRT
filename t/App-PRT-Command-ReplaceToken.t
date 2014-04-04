@@ -16,20 +16,24 @@ sub handle_files : Tests {
 }
 
 sub register_rules : Tests {
-    my $command = App::PRT::Command::ReplaceToken->new;
+    subtest 'single token' => sub {
+        my $command = App::PRT::Command::ReplaceToken->new;
 
-    is $command->source_tokens, undef;
-    is $command->destination_tokens, undef;
-    is $command->replace_only_statement_which_has_token, undef;
+        is $command->source_tokens, undef;
+        is $command->destination_tokens, undef;
 
-    $command->register('print' => 'warn');
+        $command->register('print' => 'warn');
 
-    is_deeply $command->source_tokens, [ 'print' ];
-    is_deeply $command->destination_tokens, [ 'warn' ];
-    is $command->replace_only_statement_which_has_token, undef;
+        is_deeply $command->source_tokens, [ 'print' ];
+        is_deeply $command->destination_tokens, [ 'warn' ];
+    };
 
-    $command->set_replace_only_statement_which_has_token('$fh');
-    is $command->replace_only_statement_which_has_token, '$fh';
+    subtest 'replace_only_statement_which_has_token' => sub {
+        my $command = App::PRT::Command::ReplaceToken->new;
+        is $command->replace_only_statement_which_has_token, undef;
+        $command->set_replace_only_statement_which_has_token('$fh');
+        is $command->replace_only_statement_which_has_token, '$fh';
+    };
 }
 
 sub execute : Tests {
