@@ -111,12 +111,36 @@ sub _replace_all {
     my $replaced = 0;
 
     for my $token (@$tokens) {
-        next unless $token->content eq $self->source_tokens->[0];
-        $token->set_content($self->destination_tokens->[0]);
-        $replaced++;
+        $replaced += $self->_try_replace($token);
     }
 
     $replaced;
+}
+
+sub _try_replace {
+    my ($self, $token) = @_;
+    my @matched = $self->_match($token);
+    return 0 unless @matched;
+    my $first = shift @matched;
+    $first->set_content(join '', @{$self->destination_tokens});
+    $_->remove for @matched;
+    1;
+}
+
+sub _match {
+    my ($self, $token) = @_;
+
+    my @matched;
+
+    for my $source (@{$self->source_tokens}) {
+        if ($token->content eq $source) {
+            push @matched, $token;
+            $token = $token->next_sibling;
+        } else {
+            return;
+        }
+    }
+    return @matched;
 }
 
 sub _replace_in_statement {

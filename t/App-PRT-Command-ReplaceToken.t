@@ -125,6 +125,28 @@ CODE
     };
 }
 
+sub execute_replace_token_sequences : Tests {
+    my $directory = t::test::prepare_test_code('dinner');
+    my $command = App::PRT::Command::ReplaceToken->new;
+    $command->register('My::Human->new' => 'NewHuman');
+
+    my $file = "$directory/dinner.pl";
+    $command->execute($file);
+    is file($file)->slurp, <<'CODE';
+use strict;
+use warnings;
+use lib 'lib';
+
+use My::Human;
+use My::Food;
+
+my $human = NewHuman('Alice');
+my $food = My::Food->new('Pizza');
+
+$human->eat($food);
+CODE
+}
+
 sub parse_arguments : Tests {
     subtest "when source and destination specified" => sub {
         my $command = App::PRT::Command::ReplaceToken->new;
