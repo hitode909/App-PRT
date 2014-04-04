@@ -43,11 +43,6 @@ sub collect_multi_files: Tests {
 sub collect_all_files: Tests {
     my $directory = t::test::prepare_test_code('contain_ignores');
 
-    my $g = mock_guard 'Cwd' => {
-        getcwd => $directory,
-    };
-
-    my $collector = App::PRT::Collector::Files->new();
     my $files = [
         "$directory/app.psgi",
         "$directory/eg/eg.pl",
@@ -56,5 +51,33 @@ sub collect_all_files: Tests {
         "$directory/t/test.t",
     ];
 
-    cmp_bag $collector->collect, $files, 'all files are returned';
+    subtest 'from project root directory' => sub {
+        my $g = mock_guard 'Cwd' => {
+            getcwd => $directory,
+        };
+
+        my $collector = App::PRT::Collector::Files->new();
+        cmp_bag $collector->collect, $files, 'all files are returned';
+    };
+
+    subtest 'from sub directory' => sub {
+        my $g = mock_guard 'Cwd' => {
+            getcwd => "$directory/lib",
+        };
+
+        my $collector = App::PRT::Collector::Files->new();
+        cmp_bag $collector->collect, $files, 'all files are returned';
+    };
+}
+
+sub collect_all_files_when_project_not_decided: Tests {
+    my $directory = t::test::prepare_test_code('dinner');
+
+    my $g = mock_guard 'Cwd' => {
+        getcwd => $directory,
+    };
+
+    ok exception {
+        App::PRT::Collector::Files->new();
+    }, 'project root not found';
 }
