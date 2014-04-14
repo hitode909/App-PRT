@@ -5,6 +5,7 @@ use warnings;
 use Class::Load qw(load_class);
 use Getopt::Long qw(GetOptionsFromArray);
 use App::PRT::Collector::Files;
+use App::PRT::Collector::AllFiles;
 
 sub new {
     my ($class) = @_;
@@ -24,7 +25,11 @@ sub parse {
     my @rest_args = $self->{command}->parse_arguments(@args);
 
     if ($self->{command}->handle_files) {
-        $self->{collector} = App::PRT::Collector::Files->new(@rest_args);
+        if (@rest_args) {
+            $self->{collector} = App::PRT::Collector::Files->new(@rest_args);
+        } else {
+            $self->{collector} = App::PRT::Collector::AllFiles->new;
+        }
     }
 
     1;

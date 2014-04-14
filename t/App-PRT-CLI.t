@@ -36,7 +36,7 @@ sub parse : Tests {
             destination_tokens => [ 'bar' ],
         ), 'ReplaceToken command loaded';
         ok @{$cli->collector->collect};
-        isa_ok $cli->collector, 'App::PRT::Collector::Files'
+        isa_ok $cli->collector, 'App::PRT::Collector::AllFiles'
     };
 
     subtest 'when source and destination specified' => sub {
@@ -47,7 +47,7 @@ sub parse : Tests {
             destination_tokens => [ 'bar' ],
         ), 'ReplaceToken command loaded and foo => bar registered';
         ok @{$cli->collector->collect};
-        isa_ok $cli->collector, 'App::PRT::Collector::Files'
+        isa_ok $cli->collector, 'App::PRT::Collector::AllFiles'
     };
 
     subtest 'when source, destination, target files specified' => sub {
