@@ -153,7 +153,9 @@ sub _replace_in_statement {
     my $replaced = 0;
 
     for my $statement (@$statements) {
-        next if ref $statement eq 'PPI::Statement::Sub'; # should support in another option?
+        next if ref $statement eq 'PPI::Statement::Sub';
+        next if ref $statement eq 'PPI::Statement::Compound';
+        next if $statement->schild(0)->content eq 'do';
 
         my $found = 0;
         my $tokens = $statement->find('PPI::Token');
