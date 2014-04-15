@@ -41,7 +41,7 @@ sub register_rule : Tests {
     };
 }
 
-sub execute : Tests {
+sub execute_client_script : Tests {
     my $directory = t::test::prepare_test_code('greeting');
 
     my $command = App::PRT::Command::MoveClassMethod->new;
