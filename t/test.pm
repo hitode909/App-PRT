@@ -62,4 +62,11 @@ sub prepare_test_code {
     $tmpdir;
 }
 
+sub prepare_as_git_repository {
+    my ($directory) = @_;
+
+    # TODO: replace with https://metacpan.org/pod/Test::Git
+    system "cd $directory && git init --quiet && git config user.email 'test at example.com' &&  git config user.name 'Tester' && git add * && git commit --quiet -m 'init'";
+}
+
 1;
