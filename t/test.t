@@ -17,3 +17,11 @@ sub _prepare_test_code : Tests {
         }, 'dies when specified code is not prepared'
     };
 }
+
+sub _prepare_as_git_repository : Tests {
+    my $directory = t::test::prepare_test_code('hello_world');
+
+    t::test::prepare_as_git_repository($directory);
+
+    ok -d "$directory/.git", '.git directory exists';
+}

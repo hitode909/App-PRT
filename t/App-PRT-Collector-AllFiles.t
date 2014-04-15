@@ -8,7 +8,29 @@ sub _require : Test(startup => 1) {
 }
 
 sub instantiate : Tests {
-    isa_ok App::PRT::Collector::AllFiles->new, 'App::PRT::Collector::AllFiles';
+    my $collector = App::PRT::Collector::AllFiles->new('foo/');
+    isa_ok $collector, 'App::PRT::Collector::AllFiles';
+    is $collector->directory, 'foo/';
+}
+
+sub find_project_root_directory: Tests {
+    subtest 'directory without cpanfile' => sub {
+        my $directory = t::test::prepare_test_code('hello_world');
+        is App::PRT::Collector::AllFiles->find_project_root_directory($directory), undef, 'not found';
+    };
+
+    subtest 'directory with cpanfile' => sub {
+        my $directory = t::test::prepare_test_code('contain_ignores');
+
+        is App::PRT::Collector::AllFiles->find_project_root_directory($directory), $directory, 'found from root directory';
+        is App::PRT::Collector::AllFiles->find_project_root_directory("$directory/lib"), $directory, 'found from sub directory';
+    };
+
+    subtest 'not existing directory' => sub {
+        ok exception {
+            App::PRT::Collector::AllFiles->find_project_root_directory('/not/existing/directory');
+        };
+    };
 }
 
 sub collect: Tests {
@@ -22,33 +44,13 @@ sub collect: Tests {
         "$directory/t/test.t",
     ];
 
-    subtest 'from project root directory' => sub {
-        my $g = mock_guard 'Cwd' => {
-            getcwd => $directory,
+    my $collector = App::PRT::Collector::AllFiles->new($directory);
+    cmp_bag $collector->collect, $files, 'all files are returned';
+
+    subtest 'not existing directory' => sub {
+        my $collector = App::PRT::Collector::AllFiles->new('/not/existing/directory');
+        ok exception {
+            $collector->collect;
         };
-
-        my $collector = App::PRT::Collector::AllFiles->new();
-        cmp_bag $collector->collect, $files, 'all files are returned';
     };
-
-    subtest 'from sub directory' => sub {
-        my $g = mock_guard 'Cwd' => {
-            getcwd => "$directory/lib",
-        };
-
-        my $collector = App::PRT::Collector::AllFiles->new();
-        cmp_bag $collector->collect, $files, 'all files are returned';
-    };
-}
-
-sub collect_when_project_not_decided: Tests {
-    my $directory = t::test::prepare_test_code('dinner');
-
-    my $g = mock_guard 'Cwd' => {
-        getcwd => $directory,
-    };
-
-    ok exception {
-        App::PRT::Collector::AllFiles->new();
-    }, 'project root not found';
 }

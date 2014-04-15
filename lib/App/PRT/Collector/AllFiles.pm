@@ -1,56 +1,61 @@
 package App::PRT::Collector::AllFiles;
 use strict;
 use warnings;
-use Cwd ();
-use File::Basename ();
-use File::Spec ();
 use File::Find::Rule;
+use Path::Class;
+
+# find project root directory from specified directory path
+# If exists cpanfile on path, it is a project root.
+#
+# returns:
+#   directory path (when found)
+#   undef          (when not found)
+sub find_project_root_directory {
+    my ($class, $directory) = @_;
+
+    die "$directory does not exist" unless -d $directory;
+
+    my $current = dir($directory);
+    while (1) {
+        if (-e $current->file('cpanfile')) {
+            return $current->stringify;
+        }
+
+        if ($current eq $current->parent) {
+            # not found
+            return;
+        }
+
+        $current = $current->parent;
+    }
+}
 
 sub new {
-    my ($class) = @_;
-
-    my @files = $class->_retrieve_all_perl_files;
+    my ($class, $directory) = @_;
 
     bless {
-        files => [@files],
+        directory => $directory,
     }, $class;
+}
+
+sub directory {
+    my ($self) = @_;
+
+    $self->{directory};
 }
 
 sub collect {
     my ($self) = @_;
 
-    for my $file (@{$self->{files}}) {
-        die "$file does not exist" unless -f $file;
-    }
+    die "directory @{[ $self->directory ]} does not exist" unless -d $self->directory;
 
-    $self->{files};
+    my @files = $self->_retrieve_all_perl_files;
+
+    \@files;
 }
 
 sub _retrieve_all_perl_files {
-    my ($class) = @_;
-
-    my $current_path = Cwd::getcwd;
-
-    my %breadcrumb;
-    my $project_root_path;
-    while (1) {
-        if ($breadcrumb{$current_path}++) {
-            die "Cannot decide project root";
-        }
-
-        # Decide project root path
-        # If exists .git or cpanfile on path, it is a project root.
-        my @files = glob(
-            File::Spec->catfile($current_path, '*') . " " .
-            File::Spec->catfile($current_path, '.*')
-        );
-        if (grep { File::Basename::basename($_) =~ /\A(?:cpanfile|\.git)\Z/ } @files) {
-            $project_root_path = $current_path;
-            last;
-        }
-
-        $current_path = File::Basename::dirname($current_path);
-    }
+    my ($self) = @_;
 
     my @ignore_directories = qw(share fatlib _build .git blib local);
 
@@ -63,7 +68,7 @@ sub _retrieve_all_perl_files {
                       $rule->new);
     my @files = $rule->file
                      ->name(qr/\.(?:pl|pm|psgi|t)\Z/)
-                     ->in($project_root_path);
+                     ->in($self->directory);
 
     return @files;
 }
