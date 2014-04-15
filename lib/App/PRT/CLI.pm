@@ -27,17 +27,11 @@ sub parse {
     my @rest_args = $self->{command}->parse_arguments(@args);
 
     if ($self->{command}->handle_files) {
-        if (@rest_args) {
-            $self->{collector} = App::PRT::Collector::Files->new(@rest_args);
-        } else {
-            my $cwd = Cwd::getcwd;
-            my $git_root_directory = App::PRT::Collector::GitDirectory->find_git_root_directory($cwd);
-            if ($git_root_directory) {
-                $self->{collector} = App::PRT::Collector::GitDirectory->new($git_root_directory);
-            } else {
-                $self->{collector} = App::PRT::Collector::AllFiles->new($cwd);
-            }
+        my $collector = $self->_prepare_collector(@rest_args);
+        unless ($collector) {
+            die 'Cannot decide target files';
         }
+        $self->{collector} = $collector;
     }
 
     1;
@@ -52,6 +46,31 @@ sub run {
         # just run
         $self->command->execute;
     }
+}
+
+sub _prepare_collector {
+    my ($class, @args) = @_;
+
+    # target files specified?
+    if (@args) {
+        return App::PRT::Collector::Files->new(@args);
+    }
+
+    my $cwd = Cwd::getcwd;
+
+    # git directory?
+    my $git_root_directory = App::PRT::Collector::GitDirectory->find_git_root_directory($cwd);
+    if ($git_root_directory) {
+        return App::PRT::Collector::GitDirectory->new($git_root_directory);
+    }
+
+    # seems perl project?
+    my $project_root_directory = App::PRT::Collector::AllFiles->find_project_root_directory($cwd);
+    if ($project_root_directory) {
+        return App::PRT::Collector::AllFiles->new($project_root_directory);
+    }
+
+    return undef;
 }
 
 sub _run_for_each_files {
