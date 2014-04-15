@@ -223,6 +223,16 @@ CODE
 
 }
 
+sub execute_for_not_perl_file: Tests {
+    my $directory = t::test::prepare_test_code('readme');
+    my $readme = "$directory/README.md";
+
+    my $command = App::PRT::Command::RenameClass->new;
+    $command->register('Alice' => 'Bob');
+    $command->execute($readme);
+    ok -f $readme, 'README exists';
+}
+
 sub parse_arguments : Tests {
     subtest "when source and destination specified" => sub {
         my $command = App::PRT::Command::RenameClass->new;

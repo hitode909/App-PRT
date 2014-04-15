@@ -65,6 +65,9 @@ sub execute {
 
     my $document = PPI::Document->new($file);
 
+    # When parse failed
+    return unless $document;
+
     my $package_statement_renamed = $self->_try_rename_package_statement($document);
 
     $replaced += $self->_try_rename_includes($document);
