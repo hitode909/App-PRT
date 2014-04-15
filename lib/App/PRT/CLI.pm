@@ -30,12 +30,12 @@ sub parse {
         if (@rest_args) {
             $self->{collector} = App::PRT::Collector::Files->new(@rest_args);
         } else {
-            my $git_root_directory = App::PRT::Collector::GitDirectory->find_git_root_directory(Cwd::getcwd);
+            my $cwd = Cwd::getcwd;
+            my $git_root_directory = App::PRT::Collector::GitDirectory->find_git_root_directory($cwd);
             if ($git_root_directory) {
                 $self->{collector} = App::PRT::Collector::GitDirectory->new($git_root_directory);
             } else {
-                # TODO: pass cwd
-                $self->{collector} = App::PRT::Collector::AllFiles->new;
+                $self->{collector} = App::PRT::Collector::AllFiles->new($cwd);
             }
         }
     }

@@ -8,7 +8,7 @@ sub _require : Test(startup => 1) {
 }
 
 sub instantiate : Tests {
-    isa_ok App::PRT::Collector::AllFiles->new, 'App::PRT::Collector::AllFiles';
+    isa_ok App::PRT::Collector::AllFiles->new('.'), 'App::PRT::Collector::AllFiles';
 }
 
 sub collect: Tests {
@@ -23,20 +23,12 @@ sub collect: Tests {
     ];
 
     subtest 'from project root directory' => sub {
-        my $g = mock_guard 'Cwd' => {
-            getcwd => $directory,
-        };
-
-        my $collector = App::PRT::Collector::AllFiles->new();
+        my $collector = App::PRT::Collector::AllFiles->new($directory);
         cmp_bag $collector->collect, $files, 'all files are returned';
     };
 
     subtest 'from sub directory' => sub {
-        my $g = mock_guard 'Cwd' => {
-            getcwd => "$directory/lib",
-        };
-
-        my $collector = App::PRT::Collector::AllFiles->new();
+        my $collector = App::PRT::Collector::AllFiles->new("$directory/lib");
         cmp_bag $collector->collect, $files, 'all files are returned';
     };
 }
@@ -44,11 +36,7 @@ sub collect: Tests {
 sub collect_when_project_not_decided: Tests {
     my $directory = t::test::prepare_test_code('dinner');
 
-    my $g = mock_guard 'Cwd' => {
-        getcwd => $directory,
-    };
-
     ok exception {
-        App::PRT::Collector::AllFiles->new();
+        App::PRT::Collector::AllFiles->new($directory);
     }, 'project root not found';
 }

@@ -1,15 +1,14 @@
 package App::PRT::Collector::AllFiles;
 use strict;
 use warnings;
-use Cwd ();
 use File::Basename ();
 use File::Spec ();
 use File::Find::Rule;
 
 sub new {
-    my ($class) = @_;
+    my ($class, $directory) = @_;
 
-    my @files = $class->_retrieve_all_perl_files;
+    my @files = $class->_retrieve_all_perl_files($directory);
 
     bless {
         files => [@files],
@@ -27,9 +26,9 @@ sub collect {
 }
 
 sub _retrieve_all_perl_files {
-    my ($class) = @_;
+    my ($class, $directory) = @_;
 
-    my $current_path = Cwd::getcwd;
+    my $current_path = $directory;
 
     my %breadcrumb;
     my $project_root_path;
