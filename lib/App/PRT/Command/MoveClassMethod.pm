@@ -4,6 +4,7 @@ use warnings;
 use PPI;
 use Path::Class;
 use App::PRT::Command::ReplaceToken;
+use App::PRT::Command::AddUse;
 
 sub new {
     my ($class) = @_;
@@ -81,7 +82,6 @@ sub execute {
 
     # TODO:
     # - move definition of method
-    # - copy use and require
     # - decide destination class location
     # - When destination class is not exists
     # - move test case?
@@ -114,33 +114,9 @@ sub _try_replace_tokens {
 sub _try_add_use {
     my ($self, $file) = @_;
 
-    my $document = PPI::Document->new($file);
-    return unless $document;
-
-    my $used = 0;               # whether destination class is included
-    my $original_use;           # reference to include statement of source class
-    my $last_use;               # reference to last use statement
-    my $include_statements = $document->find('PPI::Statement::Include');
-
-    if ($include_statements) {
-        for my $statement (@$include_statements) {
-            next unless defined $statement->module;
-            if ($statement->module eq $self->destination_class_name) {
-                $used++;
-            }
-            if ($statement->module eq $self->source_class_name) {
-                $original_use = $statement;
-            }
-            $last_use = $statement;
-        }
-    }
-    return if $used;
-
-    my $insert_to = $original_use || $last_use || $document->find_first('PPI::Statement::Package') || $document->find_first('PPI::Statement');
-
-    my $tokens_to_insert = PPI::Document->new(\"\nuse @{[ $self->destination_class_name ]};");
-    $insert_to->add_element($tokens_to_insert);
-    $document->save($file);
+    my $command = App::PRT::Command::AddUse->new;
+    $command->register($self->destination_class_name);
+    $command->execute($file);
 }
 
 1;
