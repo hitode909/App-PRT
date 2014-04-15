@@ -41,16 +41,9 @@ sub parse : Tests {
             destination_tokens => [ 'bar' ],
         ), 'ReplaceToken command loaded';
 
-        isa_ok $cli->collector, 'App::PRT::Collector::AllFiles';
-
-        # TODO: test $collector->root_directory
-        cmp_bag $cli->collector->collect, [
-            "$directory/app.psgi",
-            "$directory/eg/eg.pl",
-            "$directory/lib/Foo.pm",
-            "$directory/lib/Foo/Bar.pm",
-            "$directory/t/test.t",
-        ];
+        cmp_deeply $cli->collector, isa('App::PRT::Collector::AllFiles') & methods(
+            directory => $directory,
+        );
     };
 
     subtest 'when command specified, git directory' => sub {
@@ -67,16 +60,9 @@ sub parse : Tests {
             destination_tokens => [ 'bar' ],
         ), 'ReplaceToken command loaded';
 
-        isa_ok $cli->collector, 'App::PRT::Collector::GitDirectory';
-
-        # TODO: test $collector->root_directory
-        cmp_bag $cli->collector->collect, [
-            "$directory/dinner.pl",
-            "$directory/lib/My/Food.pm",
-            "$directory/lib/My/Human.pm",
-            "$directory/t/001-my-food._t",
-            "$directory/t/My-Food._t",
-        ];
+        cmp_deeply $cli->collector, isa('App::PRT::Collector::GitDirectory') & methods(
+            directory => $directory,
+        );
     };
 
     subtest 'when source, destination, target files specified' => sub {
