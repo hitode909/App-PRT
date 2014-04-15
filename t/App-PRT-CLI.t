@@ -39,17 +39,6 @@ sub parse : Tests {
         isa_ok $cli->collector, 'App::PRT::Collector::AllFiles'
     };
 
-    subtest 'when source and destination specified' => sub {
-        my $cli = App::PRT::CLI->new;
-        $cli->parse(qw{replace_token foo bar});
-        cmp_deeply $cli->command, isa('App::PRT::Command::ReplaceToken') & methods(
-            source_tokens => [ 'foo' ],
-            destination_tokens => [ 'bar' ],
-        ), 'ReplaceToken command loaded and foo => bar registered';
-        ok @{$cli->collector->collect};
-        isa_ok $cli->collector, 'App::PRT::Collector::AllFiles'
-    };
-
     subtest 'when source, destination, target files specified' => sub {
         my $cli = App::PRT::CLI->new;
         my $directory = t::test::prepare_test_code('dinner');
