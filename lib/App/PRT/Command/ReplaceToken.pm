@@ -91,6 +91,9 @@ sub execute {
 
     my $document = PPI::Document->new($file);
 
+    # When parse failed
+    return unless $document;
+
     my $replaced = 0;
     if (defined $self->replace_only_statement_which_has_token) {
         $replaced += $self->_replace_in_statement($document);

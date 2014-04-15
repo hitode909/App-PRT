@@ -170,6 +170,16 @@ $human->eat($food);
 CODE
 }
 
+sub execute_for_not_perl_file: Tests {
+    my $directory = t::test::prepare_test_code('readme');
+    my $readme = "$directory/README.md";
+
+    my $command = App::PRT::Command::ReplaceToken->new;
+    $command->register('alice' => 'bob');
+    $command->execute($readme);
+    ok -f $readme, 'README exists';
+}
+
 sub parse_arguments : Tests {
     subtest "when source and destination specified" => sub {
         my $command = App::PRT::Command::ReplaceToken->new;
