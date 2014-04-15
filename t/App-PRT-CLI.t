@@ -28,15 +28,55 @@ sub parse : Tests {
         ok ! $cli->collector;
     };
 
-    subtest 'when command specified' => sub {
+    subtest 'when command specified, not a git directory' => sub {
+        my $directory = t::test::prepare_test_code('contain_ignores');
+        my $g = mock_guard 'Cwd' => {
+            getcwd => "$directory",
+        };
+
         my $cli = App::PRT::CLI->new;
         $cli->parse(qw{replace_token foo bar});
         cmp_deeply $cli->command, isa('App::PRT::Command::ReplaceToken') & methods(
             source_tokens => [ 'foo' ],
             destination_tokens => [ 'bar' ],
         ), 'ReplaceToken command loaded';
-        ok @{$cli->collector->collect};
-        isa_ok $cli->collector, 'App::PRT::Collector::AllFiles'
+
+        isa_ok $cli->collector, 'App::PRT::Collector::AllFiles';
+
+        # TODO: test $collector->root_directory
+        cmp_bag $cli->collector->collect, [
+            "$directory/app.psgi",
+            "$directory/eg/eg.pl",
+            "$directory/lib/Foo.pm",
+            "$directory/lib/Foo/Bar.pm",
+            "$directory/t/test.t",
+        ];
+    };
+
+    subtest 'when command specified, git directory' => sub {
+        my $directory = t::test::prepare_test_code('dinner');
+        t::test::prepare_as_git_repository($directory);
+        my $g = mock_guard 'Cwd' => {
+            getcwd => "$directory",
+        };
+
+        my $cli = App::PRT::CLI->new;
+        $cli->parse(qw{replace_token foo bar});
+        cmp_deeply $cli->command, isa('App::PRT::Command::ReplaceToken') & methods(
+            source_tokens => [ 'foo' ],
+            destination_tokens => [ 'bar' ],
+        ), 'ReplaceToken command loaded';
+
+        isa_ok $cli->collector, 'App::PRT::Collector::GitDirectory';
+
+        # TODO: test $collector->root_directory
+        cmp_bag $cli->collector->collect, [
+            "$directory/dinner.pl",
+            "$directory/lib/My/Food.pm",
+            "$directory/lib/My/Human.pm",
+            "$directory/t/001-my-food._t",
+            "$directory/t/My-Food._t",
+        ];
     };
 
     subtest 'when source, destination, target files specified' => sub {

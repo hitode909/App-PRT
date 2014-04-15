@@ -4,8 +4,10 @@ use warnings;
 
 use Class::Load qw(load_class);
 use Getopt::Long qw(GetOptionsFromArray);
+use Cwd ();
 use App::PRT::Collector::Files;
 use App::PRT::Collector::AllFiles;
+use App::PRT::Collector::GitDirectory;
 
 sub new {
     my ($class) = @_;
@@ -28,7 +30,13 @@ sub parse {
         if (@rest_args) {
             $self->{collector} = App::PRT::Collector::Files->new(@rest_args);
         } else {
-            $self->{collector} = App::PRT::Collector::AllFiles->new;
+            my $git_root_directory = App::PRT::Collector::GitDirectory->find_git_root_directory(Cwd::getcwd);
+            if ($git_root_directory) {
+                $self->{collector} = App::PRT::Collector::GitDirectory->new($git_root_directory);
+            } else {
+                # TODO: pass cwd
+                $self->{collector} = App::PRT::Collector::AllFiles->new;
+            }
         }
     }
 
