@@ -21,7 +21,15 @@ sub parse {
     my $command = shift @args || 'help';
 
     my $command_class = $self->_command_name_to_command_class($command);
-    load_class $command_class;
+
+    eval {
+        load_class $command_class;
+    };
+
+    if ($@) {
+        die "Command $command not found ($@)";
+    }
+
     $self->{command} = $command_class->new;
 
     my @rest_args = $self->{command}->parse_arguments(@args);

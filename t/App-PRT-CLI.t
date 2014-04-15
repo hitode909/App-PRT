@@ -118,9 +118,9 @@ sub parse : Tests {
 
     subtest 'when invalid command specified' => sub {
         my $cli = App::PRT::CLI->new;
-        ok exception {
-            $cli->parse('invalid_comand');
-        };
+        like exception {
+            $cli->parse('invalid_command');
+        }, qr/Command invalid_command not found/;
     }
 }
 
