@@ -119,25 +119,23 @@ sub _try_add_use {
     my $used = 0;               # whether destination class is included
     my $original_use;           # reference to include statement of source class
     my $last_use;               # reference to last use statement
-    my $statements = $document->find('PPI::Statement::Include');
-    return 0 unless $statements;
+    my $include_statements = $document->find('PPI::Statement::Include');
 
-    for my $statement (@$statements) {
-        next unless defined $statement->module;
-        if ($statement->module eq $self->destination_class_name) {
-            $used++;
-            last;
+    if ($include_statements) {
+        for my $statement (@$include_statements) {
+            next unless defined $statement->module;
+            if ($statement->module eq $self->destination_class_name) {
+                $used++;
+            }
+            if ($statement->module eq $self->source_class_name) {
+                $original_use = $statement;
+            }
+            $last_use = $statement;
         }
-        if ($statement->module eq $self->source_class_name) {
-            $original_use = $statement;
-            last;
-        }
-        $last_use = $statement;
     }
     return if $used;
 
-    my $insert_to = $original_use || $last_use;
-    die 'Cannot detect the position to insert' unless $insert_to; # TODO: there is no use
+    my $insert_to = $original_use || $last_use || $document->find_first('PPI::Statement::Package') || $document->find_first('PPI::Statement');
 
     my $tokens_to_insert = PPI::Document->new(\"\nuse @{[ $self->destination_class_name ]};");
     $insert_to->add_element($tokens_to_insert);

@@ -48,8 +48,8 @@ sub execute : Tests {
 
     $command->register('Greeting#hi' => 'Hi#hello');
 
-    subtest 'client' => sub {
-        my $file = "$directory/greeting.pl";
+    subtest 'client script with use Greeting' => sub {
+        my $file = "$directory/use_greeting.pl";
         $command->execute($file);
 
         ok -f $file, 'File exists';
@@ -59,6 +59,54 @@ use warnings;
 use lib 'lib';
 
 use Greeting;
+use Hi;
+
+print Hi->hello('Alice');
+print Greeting->bye('Bob');
+CODE
+    };
+
+    subtest 'client script with use Greeting and Hi' => sub {
+        my $file = "$directory/use_greeting_and_hi.pl";
+        $command->execute($file);
+
+        ok -f $file, 'File exists';
+        is file($file)->slurp, <<'CODE', 'calling Greeting#hi was rewritten, Hi was not added';
+use strict;
+use warnings;
+use lib 'lib';
+
+use Greeting;
+use Hi;
+
+print Hi->hello('Alice');
+print Greeting->bye('Bob');
+CODE
+    };
+
+    subtest 'client script without Greeting or Hi' => sub {
+        my $file = "$directory/no_use.pl";
+        $command->execute($file);
+
+        ok -f $file, 'File exists';
+        is file($file)->slurp, <<'CODE', 'calling Greeting#hi was rewritten, Hi was added after last use';
+use strict;
+use warnings;
+use lib 'lib';
+use Hi;
+
+print Hi->hello('Alice');
+print Greeting->bye('Bob');
+CODE
+    };
+
+    subtest 'client script without Greeting or Hi, with package statement' => sub {
+        my $file = "$directory/no_use_but_package.pl";
+        $command->execute($file);
+
+        ok -f $file, 'File exists';
+        is file($file)->slurp, <<'CODE', 'calling Greeting#hi was rewritten, Hi was added after package statement';
+package Main;
 use Hi;
 
 print Hi->hello('Alice');
