@@ -74,8 +74,6 @@ sub new {
     }, $class;
 }
 
-
-
 sub eat {
     my ($self, $food) = @_;
 

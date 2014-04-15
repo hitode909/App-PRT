@@ -51,8 +51,6 @@ sub target_method_name {
 # refactor a file
 # argumensts:
 #   $file: filename for refactoring
-# todo:
-#   - normalize new-lines, eg. \n\n\n to \n
 sub execute {
     my ($self, $file) = @_;
 
@@ -68,7 +66,14 @@ sub execute {
     my $replaced = 0;
     for my $sub (@$subs) {
         next unless $sub->name eq $self->target_method_name;
-        $sub->remove;
+        my @garbages;
+        push @garbages, $sub;
+        my $cursor = $sub->last_token->next_token;
+        while (defined $cursor && ref $cursor eq 'PPI::Token::Whitespace') {
+            push @garbages, $cursor;
+            $cursor = $cursor->next_token;
+        }
+        $_->remove for @garbages;
         $replaced++;
     }
 
