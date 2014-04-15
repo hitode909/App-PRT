@@ -7,6 +7,22 @@ sub _require : Test(startup => 1) {
     use_ok 'App::PRT::Collector::GitDirectory';
 }
 
+sub find_git_root_directory : Tests {
+    my $directory = t::test::prepare_test_code('dinner');
+
+    is App::PRT::Collector::GitDirectory->find_git_root_directory($directory), undef, 'not a git directory';
+
+    t::test::prepare_as_git_repository($directory);
+
+    is App::PRT::Collector::GitDirectory->find_git_root_directory($directory), $directory, 'find from root directory';
+
+    is App::PRT::Collector::GitDirectory->find_git_root_directory("$directory/lib"), $directory, 'find from sub directory';
+
+    ok exception {
+        App::PRT::Collector::GitDirectory->find_git_root_directory('/not/existing/directory');
+    }, 'dies when not existing directory';
+}
+
 sub instantiate : Tests {
     my $directory = t::test::prepare_test_code('hello_world');
 

@@ -1,6 +1,27 @@
 package App::PRT::Collector::GitDirectory;
 use strict;
 use warnings;
+use Path::Class;
+
+# find git directory from specified directory path
+# returns:
+#   directory path (when found)
+#   undef          (when not found)
+sub find_git_root_directory {
+    my ($class, $directory) = @_;
+
+    die "$directory does not exist" unless -d $directory;
+
+    my $current = dir($directory);
+    while (1) {
+        if (-d $current->subdir('.git')) {
+            return $current->stringify;
+        }
+
+        return undef if $current eq $current->parent;
+        $current = $current->parent;
+    }
+}
 
 sub new {
     my ($class, $directory) = @_;
