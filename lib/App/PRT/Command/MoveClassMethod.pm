@@ -85,6 +85,7 @@ sub execute {
     # - decide destination class location
     # - When destination class is not exists
     # - move test case?
+    # - replace $class->$source_method_name to $destination_class_name->$destination_method_name
 
     my $replaced = 0;
 
