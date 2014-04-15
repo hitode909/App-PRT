@@ -54,16 +54,16 @@ sub execute : Tests {
     my $file = "$directory/hello_world.pl";
 
     subtest 'nothing happen when no rules are specified' => sub {
-        $command->execute($file);
-        is file($file)->slurp, <<'CODE';
+        ok ! $command->execute($file), 'fails';
+        is file($file)->slurp, <<'CODE', 'nothing changed';
 print "Hello, World!\n";
 CODE
     };
 
     subtest 'tokens will be replaced when a rules is specified' => sub {
         $command->register('print' => 'warn');
-        $command->execute($file);
-        is file($file)->slurp, <<'CODE';
+        ok $command->execute($file), 'success';
+        is file($file)->slurp, <<'CODE', 'changed';
 warn "Hello, World!\n";
 CODE
     };
