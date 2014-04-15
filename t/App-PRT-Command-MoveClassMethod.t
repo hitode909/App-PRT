@@ -41,6 +41,44 @@ sub register_rule : Tests {
     };
 }
 
+sub execute_method_body : Tests {
+    my $directory = t::test::prepare_test_code('greeting');
+
+    my $command = App::PRT::Command::MoveClassMethod->new;
+
+    $command->register('Greeting#hi' => 'Hi#hello');
+
+    subtest 'client script with use Greeting' => sub {
+        my $file = "$directory/lib/Greeting.pm";
+        $command->execute($file);
+
+        ok -f $file, 'File exists';
+        is file($file)->slurp, <<'CODE', 'hi method was removed';
+package Greeting;
+use strict;
+use warnings;
+
+sub bye {
+    my ($class, $name) = @_;
+
+    "Bye, $name\n";
+}
+
+1;
+CODE
+        my $method = <<'METHOD';
+sub hi {
+    my ($class, $name) = @_;
+
+    "Hi, $name\n";
+}
+METHOD
+        chomp($method);
+        is $command->{source_method_body}, $method, 'method body stored';
+    };
+
+}
+
 sub execute_client_script : Tests {
     my $directory = t::test::prepare_test_code('greeting');
 
