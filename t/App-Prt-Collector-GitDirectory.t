@@ -34,10 +34,6 @@ sub instantiate : Tests {
         App::PRT::Collector::GitDirectory->new('not_exist_directory');
     }, 'existing directory required';
 
-    ok exception {
-        App::PRT::Collector::GitDirectory->new($directory);
-    }, 'git directory required';
-
     t::test::prepare_as_git_repository($directory);
 
     subtest 'can initialize with git repository' => sub {
@@ -61,4 +57,12 @@ sub collect : Tests {
         "$directory/t/001-my-food._t",
         "$directory/t/My-Food._t",
     ], 'all files in directory are returned';
+
+    subtest 'when not a git directory' => sub {
+        my $directory = t::test::prepare_test_code('hello_world');
+        my $collector = App::PRT::Collector::GitDirectory->new($directory);
+        ok exception {
+            $collector->collect;
+        };
+    };
 }
