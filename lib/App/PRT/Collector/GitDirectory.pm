@@ -18,7 +18,10 @@ sub find_git_root_directory {
             return $current->stringify;
         }
 
-        return undef if $current eq $current->parent;
+        if ($current eq $current->parent) {
+            # not found
+            return;
+        }
         $current = $current->parent;
     }
 }

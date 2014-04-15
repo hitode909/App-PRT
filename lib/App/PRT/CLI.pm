@@ -78,7 +78,7 @@ sub _prepare_collector {
         return App::PRT::Collector::AllFiles->new($project_root_directory);
     }
 
-    return undef;
+    return;
 }
 
 sub _run_for_each_files {
