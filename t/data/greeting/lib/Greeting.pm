@@ -1,6 +1,8 @@
 package Greeting;
 use strict;
 use warnings;
+use Hello;
+use GoodAfternoon;
 
 sub hi {
     my ($class, $name) = @_;

@@ -57,6 +57,8 @@ sub execute_method_body : Tests {
 package Greeting;
 use strict;
 use warnings;
+use Hello;
+use GoodAfternoon;
 
 sub bye {
     my ($class, $name) = @_;
@@ -95,6 +97,7 @@ METHOD
 package Hi;
 use strict;
 use warnings;
+use Hello;
 
 sub good_morning {
     my ($class, $name) = @_;

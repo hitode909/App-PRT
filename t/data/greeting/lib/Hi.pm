@@ -1,6 +1,7 @@
 package Hi;
 use strict;
 use warnings;
+use Hello;
 
 sub good_morning {
     my ($class, $name) = @_;
