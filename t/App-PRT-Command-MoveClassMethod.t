@@ -66,15 +66,51 @@ sub bye {
 
 1;
 CODE
-        my $method = <<'METHOD';
+        my $source_method = <<'METHOD';
 sub hi {
     my ($class, $name) = @_;
 
     "Hi, $name\n";
 }
 METHOD
-        chomp($method);
-        is $command->source_method_body, $method, 'method body stored';
+
+        chomp($source_method);
+        is $command->source_method_body, $source_method, 'method body stored';
+
+        my $destination_method = <<'METHOD';
+sub hello {
+    my ($class, $name) = @_;
+
+    "Hi, $name\n";
+}
+METHOD
+
+        chomp($destination_method);
+        is $command->destination_method_body, $destination_method, 'destination method prepared';
+
+        my $destination_file = "$directory/lib/Hi.pm";
+        ok -f $destination_file, 'destination file exists';
+
+        is file($destination_file)->slurp, <<'CODE', 'hi method was added';
+package Hi;
+use strict;
+use warnings;
+
+sub good_morning {
+    my ($class, $name) = @_;
+
+    "Good morning, $name\n";
+}
+
+sub hello {
+    my ($class, $name) = @_;
+
+    "Hi, $name\n";
+}
+
+1;
+CODE
+
     };
 
 }

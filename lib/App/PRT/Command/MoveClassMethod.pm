@@ -5,7 +5,9 @@ use PPI;
 use Path::Class;
 use App::PRT::Command::ReplaceToken;
 use App::PRT::Command::AddUse;
+use App::PRT::Command::AddMethod;
 use App::PRT::Command::DeleteMethod;
+use App::PRT::Util::DestinationFile;
 
 sub new {
     my ($class) = @_;
@@ -79,6 +81,15 @@ sub source_method_body {
     $self->{source_method_body};
 }
 
+sub destination_method_body {
+    my ($self) = @_;
+
+    my $document = PPI::Document->new(\$self->{source_method_body});
+    my $sub = $document->find_first('PPI::Statement::Sub');
+    $sub->schild(1)->set_content($self->destination_method_name);
+    $sub->content;
+}
+
 # refactor a file
 # argumensts:
 #   $file: filename for refactoring
@@ -106,6 +117,18 @@ sub execute {
         $self->{source_method_body} = $method_body;
         $self->_try_delete_method($file);
         $document = PPI::Document->new($file);
+        my $destination_file = App::PRT::Util::DestinationFile::destination_file(
+            $self->source_class_name,
+            $self->destination_class_name,
+            $file
+        );
+        # TODO: check including packages
+
+        if (-e $destination_file) {
+            my $command = App::PRT::Command::AddMethod->new;
+            $command->register($self->destination_method_body);
+            $command->execute($destination_file);
+        }
     }
 
     return unless $replaced;
