@@ -41,19 +41,18 @@ sub register_rule : Tests {
     };
 }
 
-sub execute_method_body : Tests {
+sub execute_method_body_when_destination_file_exists : Tests {
     my $directory = t::test::prepare_test_code('greeting');
 
     my $command = App::PRT::Command::MoveClassMethod->new;
 
     $command->register('Greeting#hi' => 'Hi#hello');
 
-    subtest 'client script with use Greeting' => sub {
-        my $file = "$directory/lib/Greeting.pm";
-        $command->execute($file);
+    my $file = "$directory/lib/Greeting.pm";
+    $command->execute($file);
 
-        ok -f $file, 'File exists';
-        is file($file)->slurp, <<'CODE', 'hi method was removed';
+    ok -f $file, 'File exists';
+    is file($file)->slurp, <<'CODE', 'hi method was removed';
 package Greeting;
 use strict;
 use warnings;
@@ -68,7 +67,7 @@ sub bye {
 
 1;
 CODE
-        my $source_method = <<'METHOD';
+    my $source_method = <<'METHOD';
 sub hi {
     my ($class, $name) = @_;
 
@@ -76,10 +75,10 @@ sub hi {
 }
 METHOD
 
-        chomp($source_method);
-        is $command->source_method_body, $source_method, 'method body stored';
+    chomp($source_method);
+    is $command->source_method_body, $source_method, 'method body stored';
 
-        my $destination_method = <<'METHOD';
+    my $destination_method = <<'METHOD';
 sub hello {
     my ($class, $name) = @_;
 
@@ -87,13 +86,13 @@ sub hello {
 }
 METHOD
 
-        chomp($destination_method);
-        is $command->destination_method_body, $destination_method, 'destination method prepared';
+    chomp($destination_method);
+    is $command->destination_method_body, $destination_method, 'destination method prepared';
 
-        my $destination_file = "$directory/lib/Hi.pm";
-        ok -f $destination_file, 'destination file exists';
+    my $destination_file = "$directory/lib/Hi.pm";
+    ok -f $destination_file, 'destination file exists';
 
-        is file($destination_file)->slurp, <<'CODE', 'hello method was added, use GoodAfternoon was added because it may be necessary';
+    is file($destination_file)->slurp, <<'CODE', 'hello method was added, use GoodAfternoon was added because it may be necessary';
 package Hi;
 use strict;
 use warnings;
@@ -115,8 +114,65 @@ sub hello {
 1;
 CODE
 
-    };
+}
 
+sub execute_method_body_when_destination_file_not_exists : Tests {
+    my $directory = t::test::prepare_test_code('greeting');
+
+    my $command = App::PRT::Command::MoveClassMethod->new;
+
+    $command->register('Greeting#hi' => 'Salutation#hello');
+
+    my $file = "$directory/lib/Greeting.pm";
+    $command->execute($file);
+    ok -f $file, 'source file exists';
+
+    my $destination_file = "$directory/lib/Salutation.pm";
+    ok -f $destination_file, 'destination file exists';
+
+        is file($destination_file)->slurp, <<'CODE', 'hello was added, uses are copied';
+package Salutation;
+use strict;
+use warnings;
+use Hello;
+use GoodAfternoon;
+
+sub hello {
+    my ($class, $name) = @_;
+
+    "Hi, $name\n";
+}
+
+1;
+CODE
+}
+
+sub execute_call_as_class_method : Tests {
+    my $directory = t::test::prepare_test_code('greeting');
+
+    my $command = App::PRT::Command::MoveClassMethod->new;
+
+    $command->register('Bye#good' => 'Good#very_good');
+
+    my $file = "$directory/lib/Bye.pm";
+    $command->execute($file);
+    ok -f $file, 'source file exists';
+
+    is file($file)->slurp, <<'CODE', 'use was Added, $class->good was replaced';
+package Bye;
+use strict;
+use warnings;
+use Hello;
+use Good;
+
+sub good_bye {
+    my ($class, $name) = @_;
+
+    Good->very_good("bye, $name\n");
+}
+
+1;
+CODE
 }
 
 sub execute_client_script : Tests {

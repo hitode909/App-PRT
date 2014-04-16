@@ -96,14 +96,12 @@ sub destination_method_body {
 sub execute {
     my ($self, $file) = @_;
 
-    $self->_try_replace_tokens($file);
+    my $replaced = $self->_try_replace_tokens($file);
 
     # TODO:
     # - Copy use
     # - When destination class is not exists
     # - replace $class->$source_method_name to $destination_class_name->$destination_method_name
-
-    my $replaced = 0;
 
     my $document = PPI::Document->new($file);
 
@@ -112,6 +110,9 @@ sub execute {
 
     my $method_body = $self->_try_exract_method_body($document);
     if ($method_body) {
+        # replace $class->$method
+        $self->_try_replace_tokens_in_target_class($file);
+
         $self->{source_method_body} = $method_body;
         $self->_try_delete_method($file);
         $document = PPI::Document->new($file);
@@ -121,7 +122,18 @@ sub execute {
             $file
         );
 
-        if (-e $destination_file) {
+        unless (-e $destination_file) {
+            # prepare destination file
+            my $fh = file($destination_file)->open('w');
+            print $fh <<CODE;
+package @{[ $self->destination_class_name ]};
+
+1;
+CODE
+            $fh->close;
+        }
+
+        {
             # move method
             my $command = App::PRT::Command::AddMethod->new;
             $command->register($self->destination_method_body);
@@ -135,10 +147,10 @@ sub execute {
             $command->register($package);
             $command->execute($destination_file);
         }
+        1;
     }
 
-    return unless $replaced;
-    $document->save($file);
+    $replaced;
 }
 
 sub _try_replace_tokens {
@@ -147,6 +159,19 @@ sub _try_replace_tokens {
     my $command = App::PRT::Command::ReplaceToken->new;
     $command->register(
         "@{[ $self->source_class_name ]}->@{[ $self->source_method_name ]}",
+        "@{[ $self->destination_class_name ]}->@{[ $self->destination_method_name ]}"
+    );
+    if ($command->execute($file)) {
+        $self->_try_add_use($file);
+    }
+}
+
+sub _try_replace_tokens_in_target_class {
+    my ($self, $file) = @_;
+
+    my $command = App::PRT::Command::ReplaceToken->new;
+    $command->register(
+        "\$class->@{[ $self->source_method_name ]}",
         "@{[ $self->destination_class_name ]}->@{[ $self->destination_method_name ]}"
     );
     if ($command->execute($file)) {
