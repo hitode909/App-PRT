@@ -56,6 +56,8 @@ sub execute {
 
     my $document = PPI::Document->new($file);
 
+    return unless $document;
+
     my $package = $document->find_first('PPI::Statement::Package');
 
     return unless $package;
