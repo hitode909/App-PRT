@@ -99,9 +99,9 @@ sub execute {
     my $replaced = $self->_try_replace_tokens($file);
 
     # TODO:
-    # - Copy use
-    # - When destination class is not exists
-    # - replace $class->$source_method_name to $destination_class_name->$destination_method_name
+    # - Move comment before method?
+    # - Move pod?
+    # - Move test code?
 
     my $document = PPI::Document->new($file);
 
