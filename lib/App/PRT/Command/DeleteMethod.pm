@@ -48,6 +48,12 @@ sub target_method_name {
     $self->{target_method_name};
 }
 
+sub deleted_code {
+    my ($self) = @_;
+
+    $self->{deleted_code};
+}
+
 # refactor a file
 # argumensts:
 #   $file: filename for refactoring
@@ -75,6 +81,7 @@ sub execute {
             push @garbages, $cursor;
             $cursor = $cursor->next_token;
         }
+        $self->{deleted_code} = join '', @garbages;
         $_->remove for @garbages;
         $replaced++;
     }

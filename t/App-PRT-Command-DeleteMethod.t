@@ -59,7 +59,7 @@ sub execute : Tests {
     my $food_file  = "$directory/lib/My/Food.pm";
 
     subtest 'target file' => sub {
-        $command->execute($human_file);
+        ok $command->execute($human_file);
 
         is file($human_file)->slurp, <<'CODE', 'name removed';
 package My::Human;
@@ -83,12 +83,21 @@ sub eat {
 1;
 CODE
 
+        is $command->deleted_code, <<'CODE', 'deleted code stored';
+sub name {
+    my ($self) = @_;
+
+    $self->{name};
+}
+
+CODE
+
      };
 
 
     subtest 'another file' => sub {
         my $before = file($food_file)->slurp;
-        $command->execute($food_file);
+        ok ! $command->execute($food_file);
         is file($food_file)->slurp, $before, 'nothing happen';
     };
 
