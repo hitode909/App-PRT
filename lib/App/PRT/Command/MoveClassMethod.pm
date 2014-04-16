@@ -120,11 +120,19 @@ sub execute {
             $self->destination_class_name,
             $file
         );
-        # TODO: check including packages
 
         if (-e $destination_file) {
+            # move method
             my $command = App::PRT::Command::AddMethod->new;
             $command->register($self->destination_method_body);
+            $command->execute($destination_file);
+        }
+
+        # copy including modules
+        my $packages_in_source = [ map { $_->module } @{ $document->find('PPI::Statement::Include') } ];
+        for my $package (@$packages_in_source) {
+            my $command = App::PRT::Command::AddUse->new;
+            $command->register($package);
             $command->execute($destination_file);
         }
     }

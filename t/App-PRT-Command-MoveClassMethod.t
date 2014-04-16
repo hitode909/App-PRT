@@ -93,11 +93,12 @@ METHOD
         my $destination_file = "$directory/lib/Hi.pm";
         ok -f $destination_file, 'destination file exists';
 
-        is file($destination_file)->slurp, <<'CODE', 'hi method was added';
+        is file($destination_file)->slurp, <<'CODE', 'hello method was added, use GoodAfternoon was added because it may be necessary';
 package Hi;
 use strict;
 use warnings;
 use Hello;
+use GoodAfternoon;
 
 sub good_morning {
     my ($class, $name) = @_;
