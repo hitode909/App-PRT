@@ -14,7 +14,7 @@ sub new {
         source_method_name      => undef,
         destination_class_name  => undef,
         destination_method_name => undef,
-    };
+    }, $class;
 }
 
 sub handle_files { 1 }
