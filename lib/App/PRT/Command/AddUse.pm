@@ -14,11 +14,6 @@ sub new {
 
 sub handle_files { 1 }
 
-sub parse_arguments {
-    # because internal
-    die 'not implemented';
-}
-
 # register a method
 # arguments:
 #   $namespace: package name to use
