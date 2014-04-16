@@ -99,10 +99,8 @@ sub execute {
     $self->_try_replace_tokens($file);
 
     # TODO:
-    # - move definition of method
-    # - decide destination class location
+    # - Copy use
     # - When destination class is not exists
-    # - move test case?
     # - replace $class->$source_method_name to $destination_class_name->$destination_method_name
 
     my $replaced = 0;
