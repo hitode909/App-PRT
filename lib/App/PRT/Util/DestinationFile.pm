@@ -22,7 +22,7 @@ sub destination_file {
     $basename =~ s{::}{
         shift @delimiters // $fallback_delimiter;
     }ge;
-    $dir->file("$basename$suffix");
+    $dir->file("$basename$suffix")->stringify;
 }
 
 1;
