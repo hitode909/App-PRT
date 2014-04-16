@@ -74,7 +74,7 @@ sub hi {
 }
 METHOD
         chomp($method);
-        is $command->{source_method_body}, $method, 'method body stored';
+        is $command->source_method_body, $method, 'method body stored';
     };
 
 }

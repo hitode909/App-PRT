@@ -73,6 +73,12 @@ sub destination_method_name {
     $self->{destination_method_name};
 }
 
+sub source_method_body {
+    my ($self) = @_;
+
+    $self->{source_method_body};
+}
+
 # refactor a file
 # argumensts:
 #   $file: filename for refactoring
