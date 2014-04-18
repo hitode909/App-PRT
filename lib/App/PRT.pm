@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use 5.010001;
 
-our $VERSION = "0.09";
+our $VERSION = "0.10";
 
 sub welcome {
     'welcome!!!!';

@@ -2,6 +2,11 @@ Revision history for Perl extension App-PRT
 
 {{$NEXT}}
 
+0.10 2014-04-18T03:29:09Z
+
+    - Collect target files with git ls-files in Git repository
+    - Implement move_class_method command
+
 0.09 2014-04-03T02:53:51Z
 
     - Fix a document
