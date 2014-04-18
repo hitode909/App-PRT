@@ -87,7 +87,7 @@ sub destination_method_body {
     my $document = PPI::Document->new(\$self->{source_method_body});
     my $sub = $document->find_first('PPI::Statement::Sub');
     $sub->schild(1)->set_content($self->destination_method_name);
-    $sub->content;
+    $document->content;
 }
 
 # refactor a file
@@ -108,13 +108,13 @@ sub execute {
     # When parse failed
     return unless $document;
 
-    my $method_body = $self->_try_exract_method_body($document);
+    my $method_body = $self->_try_delete_method_and_get_deleted_code($file);
     if ($method_body) {
+        $self->{source_method_body} = $method_body;
+
         # replace $class->$method
         $self->_try_replace_tokens_in_target_class($file);
 
-        $self->{source_method_body} = $method_body;
-        $self->_try_delete_method($file);
         $document = PPI::Document->new($file);
         my $destination_file = App::PRT::Util::DestinationFile::destination_file(
             $self->source_class_name,
@@ -187,34 +187,14 @@ sub _try_add_use {
     $command->execute($file);
 }
 
-sub _try_exract_method_body {
-    my ($self, $document) = @_;
-
-    my $package = $document->find_first('PPI::Statement::Package');
-
-    return unless $package;
-    return unless $package->namespace eq $self->source_class_name;
-
-    my $subs = $document->find('PPI::Statement::Sub');
-    return unless $subs;
-
-    my $sub;
-    for (@$subs) {
-        $sub = $_ if $_->name eq $self->source_method_name;
-    }
-
-    return unless $sub;
-
-    # store method content
-    return $sub->content;
-}
-
-sub _try_delete_method {
+sub _try_delete_method_and_get_deleted_code {
     my ($self, $file) = @_;
 
     my $command = App::PRT::Command::DeleteMethod->new;
     $command->register($self->source_class_name, $self->source_method_name);
-    $command->execute($file);
+    if ($command->execute($file)) {
+        return $command->deleted_code;
+    }
 }
 
 1;

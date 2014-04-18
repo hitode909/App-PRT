@@ -73,9 +73,9 @@ sub hi {
 
     "Hi, $name\n";
 }
+
 METHOD
 
-    chomp($source_method);
     is $command->source_method_body, $source_method, 'method body stored';
 
     my $destination_method = <<'METHOD';
@@ -84,9 +84,9 @@ sub hello {
 
     "Hi, $name\n";
 }
+
 METHOD
 
-    chomp($destination_method);
     is $command->destination_method_body, $destination_method, 'destination method prepared';
 
     my $destination_file = "$directory/lib/Hi.pm";
@@ -141,6 +141,38 @@ sub hello {
     my ($class, $name) = @_;
 
     "Hi, $name\n";
+}
+
+1;
+CODE
+}
+
+sub execute_method_move_comment_too : Tests {
+    my $directory = t::test::prepare_test_code('method_with_comment');
+
+    my $command = App::PRT::Command::MoveClassMethod->new;
+
+    $command->register('FoodWithComment#new' => 'AnotherClass#another_new');
+
+    my $file = "$directory/FoodWithComment.pm";
+    $command->execute($file);
+
+    my $destination_file = "$directory/AnotherClass.pm";
+    ok -f $destination_file, 'destination file exists';
+
+    is file($destination_file)->slurp, <<'CODE', 'method and comment was added';
+package AnotherClass;
+use strict;
+use warnings;
+
+# create a new food
+# You can use when you want to create a new instance
+sub another_new {
+    my ($class, $name) = @_;
+
+    bless {
+        name => $name,
+    }, $class;
 }
 
 1;
