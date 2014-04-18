@@ -45,10 +45,11 @@ sub register {
     my ($self, $source, $destination) = @_;
 
     die 'invalid format' unless $source =~ qr/\A[^#]+#[^#]+\Z/;
-    die 'invalid format' unless $destination =~ qr/\A[^#]+#[^#]+\Z/;
+    die 'invalid format' unless $destination;
 
     ($self->{source_class_name}, $self->{source_method_name}) = split '#', $source;
     ($self->{destination_class_name}, $self->{destination_method_name}) = split '#', $destination;
+    $self->{destination_method_name} //= $self->{source_method_name};
 }
 
 sub source_class_name {

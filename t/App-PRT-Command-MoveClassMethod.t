@@ -27,13 +27,20 @@ sub register_rule : Tests {
         is $command->destination_method_name, 'dest';
     };
 
+    subtest 'when destination method name is same' => sub {
+        my $command = App::PRT::Command::MoveClassMethod->new;
+        $command->register('Source#source' => 'Dest');
+
+        is $command->source_class_name, 'Source';
+        is $command->source_method_name, 'source';
+        is $command->destination_class_name, 'Dest';
+        is $command->destination_method_name, 'source';
+    };
+
     subtest 'invalid syntax' => sub {
         my $command = App::PRT::Command::MoveClassMethod->new;
         ok exception {
-            $command->register('Source#source' => 'Dest');
-        }, qr/invalid format/;
-        ok exception {
-            $command->register('Source#sou#rce' => 'Dest');
+            $command->register('Source' => 'Dest');
         }, qr/invalid format/;
         ok exception {
             $command->register('Source' => 'Dest#dest');
