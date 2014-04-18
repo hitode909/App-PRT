@@ -50,6 +50,13 @@ Delete C<eat> method from C<Food> class.
 
     prt delete_method Food eat
 
+=item * move_class_method
+
+Move C<method> method in C<Class> class to C<another_method> method in C<AnotherClass>.
+C<Class>'s including packages are copied to C<AnotherClass>.
+
+    prt move_class_method 'Class#method' 'AnotherClass#another_method'
+
 =back
 
 =head1 TARGET FILES
@@ -59,7 +66,8 @@ You can specify the target files to refactor.
     prt replace_token foo bar lib/**/**.pm t/*.t # Refactor Perl modules in lib/ and test files in t/
 
 Without target files, C<App::PRT> collects source codes in your project automatically.
-C<App::PRT> searches C<cpanfile> or C<.git> to detect project root directory.
+C<App::PRT> searches C<cpanfile> to detect project root directory.
+When executed in git repository, All files in the repository are used.
 
     prt replace_token foo bar                    # Refactor the project in current working directory
 
