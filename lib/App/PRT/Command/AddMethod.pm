@@ -44,6 +44,19 @@ sub execute {
     my $code_document = PPI::Document->new(\$self->code);
     my $code_statement = $code_document->find_first('PPI::Statement::Sub');
 
+    my @comments;
+    my $cursor = $code_statement->first_token->previous_token;
+    while (defined $cursor && (ref $cursor eq 'PPI::Token::Comment' || ref $cursor eq 'PPI::Token::Whitespace')) {
+        unshift @comments, $cursor;
+        $cursor = $cursor->previous_token;
+    }
+
+    while (ref $comments[0] eq 'PPI::Token::Whitespace') {
+        shift @comments;
+    }
+
+    $after->insert_before($_) for @comments;
+
     $after->insert_before($code_statement);
 
     my $whitespaces_document = PPI::Document->new(\"\n\n");

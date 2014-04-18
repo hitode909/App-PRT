@@ -48,6 +48,12 @@ sub target_method_name {
     $self->{target_method_name};
 }
 
+sub deleted_code {
+    my ($self) = @_;
+
+    $self->{deleted_code};
+}
+
 # refactor a file
 # argumensts:
 #   $file: filename for refactoring
@@ -69,12 +75,26 @@ sub execute {
     for my $sub (@$subs) {
         next unless $sub->name eq $self->target_method_name;
         my @garbages;
+
+        # comment before method
+        my $cursor = $sub->first_token->previous_token;
+        while (defined $cursor && ref $cursor eq 'PPI::Token::Comment') {
+            unshift @garbages, $cursor;
+            $cursor = $cursor->previous_token;
+        }
+
+        # method body
         push @garbages, $sub;
-        my $cursor = $sub->last_token->next_token;
+
+        # whitespace after method
+        $cursor = $sub->last_token->next_token;
         while (defined $cursor && ref $cursor eq 'PPI::Token::Whitespace') {
             push @garbages, $cursor;
             $cursor = $cursor->next_token;
         }
+
+        $self->{deleted_code} = join '', @garbages;
+
         $_->remove for @garbages;
         $replaced++;
     }

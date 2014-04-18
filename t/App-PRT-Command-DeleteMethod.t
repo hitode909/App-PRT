@@ -59,7 +59,7 @@ sub execute : Tests {
     my $food_file  = "$directory/lib/My/Food.pm";
 
     subtest 'target file' => sub {
-        $command->execute($human_file);
+        ok $command->execute($human_file);
 
         is file($human_file)->slurp, <<'CODE', 'name removed';
 package My::Human;
@@ -83,14 +83,60 @@ sub eat {
 1;
 CODE
 
+        is $command->deleted_code, <<'CODE', 'deleted code stored';
+sub name {
+    my ($self) = @_;
+
+    $self->{name};
+}
+
+CODE
+
      };
 
 
     subtest 'another file' => sub {
         my $before = file($food_file)->slurp;
-        $command->execute($food_file);
+        ok ! $command->execute($food_file);
         is file($food_file)->slurp, $before, 'nothing happen';
     };
+
+}
+
+sub execute_delete_method_and_comment : Tests {
+    my $directory = t::test::prepare_test_code('method_with_comment');
+
+    my $command = App::PRT::Command::DeleteMethod->new;
+
+    $command->register('FoodWithComment' => 'new');
+
+    my $file = "$directory/FoodWithComment.pm";
+
+    $command->execute($file);
+
+    is $command->deleted_code, <<'CODE', 'comment before method was deleted';
+# create a new food
+# You can use when you want to create a new instance
+sub new {
+    my ($class, $name) = @_;
+
+    bless {
+        name => $name,
+    }, $class;
+}
+
+CODE
+
+    $command->register('FoodWithComment' => 'name');
+    $command->execute($file);
+    is $command->deleted_code, <<'CODE', 'another comment was not deleted because previous token of sub name is whitespace';
+sub name {
+    my ($self) = @_;
+
+    $self->{name};
+}
+
+CODE
 
 }
 
