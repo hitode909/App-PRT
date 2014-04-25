@@ -143,6 +143,7 @@ sub _match {
             # ignore white spaces of source
             push @matched, $token;
             $token = $token->next_token;
+            redo;
         } else {
             return;
         }
