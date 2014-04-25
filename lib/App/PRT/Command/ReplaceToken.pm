@@ -139,6 +139,10 @@ sub _match {
         if ($token->content eq $source) {
             push @matched, $token;
             $token = $token->next_token;
+        } elsif (@matched && $token->next_token && ref $token eq 'PPI::Token::Whitespace') {
+            # ignore white spaces of source
+            push @matched, $token;
+            $token = $token->next_token;
         } else {
             return;
         }

@@ -170,6 +170,20 @@ $human->eat($food);
 CODE
 }
 
+sub execute_with_whitespace : Tests {
+    my $directory = t::test::prepare_test_code('method_call_with_whitespace');
+    my $command = App::PRT::Command::ReplaceToken->new;
+    $command->register("hello('World')"  => "hello('Work')");
+
+    my $file = "$directory/hello.pl";
+    $command->execute($file);
+    is file($file)->slurp, <<'CODE', 'all hello are replaced';
+hello('Work');
+hello('Work');
+hello('Work');
+CODE
+}
+
 sub execute_for_not_perl_file: Tests {
     my $directory = t::test::prepare_test_code('readme');
     my $readme = "$directory/README.md";
