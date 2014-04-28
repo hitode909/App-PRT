@@ -2,6 +2,9 @@ Revision history for Perl extension App-PRT
 
 {{$NEXT}}
 
+0.11 2014-04-28T10:21:50Z
+    - Implement rename_name_space command
+
 0.10 2014-04-18T03:29:09Z
 
     - Collect target files with git ls-files in Git repository
