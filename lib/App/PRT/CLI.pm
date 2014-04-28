@@ -87,8 +87,12 @@ sub _run_for_each_files {
     my $collector = $self->collector;
     my $command = $self->command;
 
-    for my $file (@{$collector->collect}) {
-        $command->execute($file);
+    if ($command->can('execute_files')) { # TODO: create a base class for command?
+        $command->execute_files($collector->collect);
+    } else {
+        for my $file (@{$collector->collect}) {
+            $command->execute($file);
+        }
     }
 }
 
