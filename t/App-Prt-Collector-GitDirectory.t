@@ -54,6 +54,7 @@ sub collect : Tests {
         "$directory/dinner.pl",
         "$directory/lib/My/Food.pm",
         "$directory/lib/My/Human.pm",
+        "$directory/lib/Your/Food.pm",
         "$directory/t/001-my-food._t",
         "$directory/t/My-Food._t",
     ], 'all files in directory are returned';
