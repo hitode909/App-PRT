@@ -35,7 +35,7 @@ sub execute : Tests {
         my $food_file = "$directory/lib/My/Food.pm";
         my $meal_file = "$directory/lib/My/Meal.pm";
 
-        $command->execute($food_file);
+        is $command->execute($food_file), $meal_file, 'returns destination file when success';
 
         ok ! -f $food_file, "Food.pm doesn't exists";
         ok -e $meal_file, "Meal.pm exists";
@@ -66,7 +66,8 @@ CODE
 
     subtest 'client file' => sub {
         my $dinner_file = "$directory/dinner.pl";
-        $command->execute($dinner_file);
+
+        is $command->execute($dinner_file), $dinner_file, 'returns source file when success and not moved';
 
         ok -f $dinner_file, 'dinner.pl exists';
 

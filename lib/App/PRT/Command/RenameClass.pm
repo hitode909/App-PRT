@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use PPI;
 use App::PRT::Util::DestinationFile;
+use Path::Class;
 
 sub new {
     my ($class) = @_;
@@ -79,11 +80,16 @@ sub execute {
     $replaced += $self->_try_rename_tokens($document);
 
     if ($package_statement_renamed) {
-        $document->save(App::PRT::Util::DestinationFile::destination_file($self->source_class_name, $self->destination_class_name, $file));
+        my $dest_file = App::PRT::Util::DestinationFile::destination_file($self->source_class_name, $self->destination_class_name, $file);
+        my $dest_dir = file($dest_file)->dir;
+        mkdir($dest_dir) unless -d $dest_dir;
+        $document->save($dest_file);
         unlink($file);
+        $dest_file;
     } else {
         return unless $replaced;
         $document->save($file);
+        $file;
     }
 }
 

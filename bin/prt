@@ -44,6 +44,12 @@ Rename C<Foo> class to C<Bar> class.
 
     prt rename_class Foo Bar
 
+=item * rename_name_space
+
+Rename C<Foo> and C<Foo::*> classeds to C<Bar> and C<Bar::*> classes.
+
+    prt rename_name_space Foo Bar
+
 =item * delete_method
 
 Delete C<eat> method from C<Food> class.
