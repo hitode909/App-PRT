@@ -61,13 +61,16 @@ sub execute_files {
 
     my $target_classes = $self->_collect_target_classes($files);
 
+    my $knowns = { map { $_ => 1 } @$target_classes };
+
     for my $target_class (@$target_classes) {
         my $rename_command = App::PRT::Command::RenameClass->new;
         $rename_command->register($target_class => $self->_destination_class_name($target_class));
         for my $file (@$files) {
             next unless -f $file;
             my $file_after = $rename_command->execute($file);
-            if ($file_after && $file_after ne $file) {
+            if ($file_after && $file_after ne $file && !$knowns->{$file_after}) {
+                $knowns->{$file_after}++;
                 push @$files, $file_after;
             }
         }
