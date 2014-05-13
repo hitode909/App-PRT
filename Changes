@@ -2,6 +2,9 @@ Revision history for Perl extension App-PRT
 
 {{$NEXT}}
 
+0.13 2014-05-13T08:35:25Z
+    - Support function to rename symbols on RenameClass command
+
 0.12 2014-04-28T10:26:59Z
     - I forgot to git pull
 
