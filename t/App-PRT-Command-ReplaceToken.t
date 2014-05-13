@@ -87,6 +87,9 @@ use lib 'lib';
 use My::Human;
 use My::Food;
 
+undef *My::Food::new;
+undef *My::Food::Foo::new;
+
 my $human = My::Human->new('Alice');
 my $food = My::Food->new->bake('Pizza');
 
@@ -105,6 +108,8 @@ CODE
 package My::Food;
 use strict;
 use warnings;
+$My::Food::VERSION = '0.01';
+$My::Food::Foo::GLOBAL_VAR = 'foobar';
 
 sub new {
     my ($klass, $name) = @_;
@@ -140,6 +145,9 @@ use lib 'lib';
 use My::Human;
 use My::Food;
 
+undef *My::Food::new;
+undef *My::Food::Foo::new;
+
 my $human = NewHuman('Alice');
 my $food = My::Food->new('Pizza');
 
@@ -162,6 +170,9 @@ use lib 'lib';
 
 use My::Human;
 use My::Food;
+
+undef *My::Food::new;
+undef *My::Food::Foo::new;
 
 my $human = My::Human->new('Alice');
 my $food = My::Food->new->bake('Pizza');

@@ -44,6 +44,8 @@ sub execute : Tests {
 package My::Meal;
 use strict;
 use warnings;
+$My::Meal::VERSION = '0.01';
+$My::Food::Foo::GLOBAL_VAR = 'foobar';
 
 sub new {
     my ($class, $name) = @_;
@@ -78,6 +80,9 @@ use lib 'lib';
 
 use My::Human;
 use My::Meal;
+
+undef *My::Meal::new;
+undef *My::Food::Foo::new;
 
 my $human = My::Human->new('Alice');
 my $food = My::Meal->new('Pizza');
