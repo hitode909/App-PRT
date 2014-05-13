@@ -116,7 +116,7 @@ CODE
 package Our::Food;
 use strict;
 use warnings;
-$Our::Food::VERSION = '0.01';
+$Our::Food::SOME_MAGIC_NUMBER = '0.01';
 $My::Food::Foo::GLOBAL_VAR = 'foobar';
 
 sub new {

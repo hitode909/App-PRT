@@ -44,7 +44,7 @@ sub execute : Tests {
 package My::Meal;
 use strict;
 use warnings;
-$My::Meal::VERSION = '0.01';
+$My::Meal::SOME_MAGIC_NUMBER = '0.01';
 $My::Food::Foo::GLOBAL_VAR = 'foobar';
 
 sub new {
