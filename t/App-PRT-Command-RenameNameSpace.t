@@ -98,6 +98,9 @@ use lib 'lib';
 use Our::Human;
 use Our::Food;
 
+undef *Our::Food::new;
+undef *My::Food::Foo::new;
+
 my $human = Our::Human->new('Alice');
 my $food = Our::Food->new('Pizza');
 
@@ -113,6 +116,8 @@ CODE
 package Our::Food;
 use strict;
 use warnings;
+$Our::Food::VERSION = '0.01';
+$My::Food::Foo::GLOBAL_VAR = 'foobar';
 
 sub new {
     my ($class, $name) = @_;

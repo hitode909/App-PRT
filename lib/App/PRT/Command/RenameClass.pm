@@ -79,6 +79,8 @@ sub execute {
 
     $replaced += $self->_try_rename_tokens($document);
 
+    $replaced += $self->_try_rename_symbols($document);
+
     if ($package_statement_renamed) {
         my $dest_file = App::PRT::Util::DestinationFile::destination_file($self->source_class_name, $self->destination_class_name, $file);
         my $dest_dir = file($dest_file)->dir;
@@ -215,4 +217,34 @@ sub _try_rename_tokens {
     $replaced;
 }
 
+# e.g.
+#     $Foo::Bar::GLOBAL_VAR
+#      ~~~~~~~~ Rename here
+#
+#     $Foo::Bar::Buz::GLOBAL_VAR <= Don't rename because it's not the same class
+sub _try_rename_symbols {
+    my ($self, $document) = @_;
+
+    my $replaced = 0;
+
+    my $symbols = $document->find('PPI::Token::Symbol');
+    return 0 unless $symbols;
+
+    my $source_class_name      = $self->source_class_name;
+    my $destination_class_name = $self->destination_class_name;
+
+    for my $symbol (@$symbols) {
+        my $content = $symbol->content;
+        my $sigil   = substr $content, 0, 1, '';
+
+        if ($content =~ s/\A${source_class_name}::// && scalar(split /::/, $content) == 1) {
+            $symbol->set_content($sigil . $destination_class_name . '::' . $content);
+            $replaced++;
+        }
+    }
+
+    $replaced;
+}
+
 1;
+
