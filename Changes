@@ -2,6 +2,10 @@ Revision history for Perl extension App-PRT
 
 {{$NEXT}}
 
+0.14 2014-08-01T10:14:51Z
+    - Fixed a bug of directory preparation
+    - Support renaming packages in script
+
 0.13 2014-05-13T08:35:25Z
     - Support function to rename symbols on RenameClass command
 
