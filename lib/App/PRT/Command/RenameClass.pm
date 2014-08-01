@@ -56,9 +56,6 @@ sub destination_class_name {
 # refactor a file
 # argumensts:
 #   $file: filename for refactoring
-# todo:
-#   - support package block syntax
-#   - multi packages in one file
 sub execute {
     my ($self, $file) = @_;
 
