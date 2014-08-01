@@ -234,6 +234,80 @@ sub execute_rename_to_deeper_directory : Tests {
     };
 }
 
+sub execute_rename_package_in_block_statement : Tests {
+    my $directory = t::test::prepare_test_code('package_in_block');
+
+    my $command = App::PRT::Command::RenameClass->new;
+
+    $command->register('Hello' => 'Greeting');
+
+    subtest '{ package } style' => sub {
+        my $script = "$directory/package_in_block.pl";
+
+        is $command->execute($script), $script, 'success';
+
+        ok -e $script, "script exists";
+
+        is file($script)->slurp, <<'CODE', 'package statement replaced';
+use strict;
+use warnings;
+
+{
+    package Greeting;
+
+    sub hello { "hello!" }
+};
+
+print Greeting->hello;
+CODE
+
+    };
+
+    subtest 'package { } style' => sub {
+        my $script = "$directory/package_block_statement.pl";
+
+        is $command->execute($script), $script, 'success';
+
+        ok -e $script, "script exists";
+
+        is file($script)->slurp, <<'CODE', 'package statement replaced';
+use strict;
+use warnings;
+
+package Greeting {
+    sub hello { "hello" }
+};
+
+print Greeting->hello;
+CODE
+
+    };
+
+    subtest 'multi packages' => sub {
+        my $script = "$directory/multi_packages.pl";
+
+        is $command->execute($script), $script, 'success';
+
+        ok -e $script, "script exists";
+
+        is file($script)->slurp, <<'CODE', 'package statement replaced';
+use strict;
+use warnings;
+
+package Bye {
+    sub bye { "bye" }
+};
+
+package Greeting {
+    sub hello { "hello" }
+};
+
+print Greeting->hello;
+CODE
+
+    };
+}
+
 sub parse_arguments : Tests {
     subtest "when source and destination specified" => sub {
         my $command = App::PRT::Command::RenameClass->new;
