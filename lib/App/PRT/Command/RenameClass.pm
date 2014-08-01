@@ -84,7 +84,7 @@ sub execute {
     if ($package_statement_renamed) {
         my $dest_file = App::PRT::Util::DestinationFile::destination_file($self->source_class_name, $self->destination_class_name, $file);
         my $dest_dir = file($dest_file)->dir;
-        mkdir($dest_dir) unless -d $dest_dir;
+        $dest_dir->mkpath;
         $document->save($dest_file);
         unlink($file);
         $dest_file;
