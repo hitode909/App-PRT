@@ -282,6 +282,30 @@ print Greeting->hello;
 CODE
 
     };
+
+    subtest 'multi packages' => sub {
+        my $script = "$directory/multi_packages.pl";
+
+        is $command->execute($script), $script, 'success';
+
+        ok -e $script, "script exists";
+
+        is file($script)->slurp, <<'CODE', 'package statement replaced';
+use strict;
+use warnings;
+
+package Bye {
+    sub bye { "bye" }
+};
+
+package Greeting {
+    sub hello { "hello" }
+};
+
+print Greeting->hello;
+CODE
+
+    };
 }
 
 sub parse_arguments : Tests {
