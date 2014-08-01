@@ -69,7 +69,7 @@ sub execute {
     # When parse failed
     return unless $document;
 
-    my $package_statement_renamed = $self->_try_rename_package_statement($document);
+    my $should_rename = $self->_try_rename_package_statement($document);
 
     $replaced += $self->_try_rename_includes($document);
 
@@ -81,7 +81,7 @@ sub execute {
 
     $replaced += $self->_try_rename_symbols($document);
 
-    if ($package_statement_renamed) {
+    if ($should_rename) {
         my $dest_file = App::PRT::Util::DestinationFile::destination_file($self->source_class_name, $self->destination_class_name, $file);
         my $dest_dir = file($dest_file)->dir;
         $dest_dir->mkpath;
@@ -95,6 +95,7 @@ sub execute {
     }
 }
 
+# returns: should rename this document?
 sub _try_rename_package_statement {
     my ($self, $document) = @_;
 
@@ -108,7 +109,9 @@ sub _try_rename_package_statement {
     return unless $namespace->isa('PPI::Token::Word');
 
     $namespace->set_content($self->destination_class_name);
-    1;
+
+    # rename this file when the first token is package (heuristic)
+    return $document->find_first('PPI::Token') eq 'package';
 }
 
 sub _try_rename_includes {
