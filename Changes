@@ -2,6 +2,9 @@ Revision history for Perl extension App-PRT
 
 {{$NEXT}}
 
+0.15 2014-08-01T10:16:21Z
+    - Version 0.14 was released from wrong branch
+
 0.14 2014-08-01T10:14:51Z
     - Fixed a bug of directory preparation
     - Support renaming packages in script
