@@ -31,6 +31,13 @@ Examples:
     replace tokens with content 'foo' with 'bar' in *.pm.
   prt rename_class Foo Bar lib/*.pm
     Rename Foo class to Bar. This command will rename lib/Foo.pm to lib/Bar.pm.
+  prt rename_name_space Foo Bar
+    Rename Foo and Foo::* classes to Bar and Bar::* classes.
+  prt delete_method Food eat
+    Delete eat method from Food class
+  prt move_class_method 'Class#method' 'AnotherClass#another_method'
+   Move Class#method to AnotherClass#another_method
+
 HELP
 }
 
