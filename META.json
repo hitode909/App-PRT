@@ -78,11 +78,12 @@
          "web" : "https://github.com/hitode909/App-PRT"
       }
    },
-   "version" : "0.15",
+   "version" : "0.16",
    "x_contributors" : [
       "Tatsuhiko Miyagawa <miyagawa@bulknews.net>",
       "Takanori Ishikawa <takanori.ishikawa@gmail.com>",
       "moznion <moznion@gmail.com>",
+      "Syohei YOSHIDA <syohex@gmail.com>",
       "hitode909 <hitode909@gmail.com>"
    ]
 }
