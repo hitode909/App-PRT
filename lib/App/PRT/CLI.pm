@@ -18,7 +18,7 @@ sub new {
 sub parse {
     my ($self, @args) = @_;
 
-    my $command = shift @args || 'help';
+    my $command = shift @args or die 'prt <command> <args>';
 
     my $command_class = $self->_command_name_to_command_class($command);
 

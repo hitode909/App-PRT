@@ -23,9 +23,9 @@ sub _command_name_to_command_class : Tests {
 sub parse : Tests {
     subtest 'when empty input' => sub {
         my $cli = App::PRT::CLI->new;
-        ok $cli->parse;
-        isa_ok $cli->command, 'App::PRT::Command::Help', 'default command is help';
-        ok ! $cli->collector;
+        like exception {
+            $cli->parse();
+        }, qr/prt <command> <args>/;
     };
 
     subtest 'when command specified, not a git directory' => sub {
