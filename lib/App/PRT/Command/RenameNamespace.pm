@@ -1,4 +1,4 @@
-package App::PRT::Command::RenameNameSpace;
+package App::PRT::Command::RenameNamespace;
 use strict;
 use warnings;
 use PPI;

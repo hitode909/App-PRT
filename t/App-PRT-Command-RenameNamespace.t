@@ -1,22 +1,22 @@
-package t::App::PRT::Command::RenameNameSpace;
+package t::App::PRT::Command::RenameNamespace;
 use t::test;
 
 sub _require : Test(startup => 1) {
     my ($self) = @_;
 
-    use_ok 'App::PRT::Command::RenameNameSpace';
+    use_ok 'App::PRT::Command::RenameNamespace';
 }
 
 sub instantiate : Tests {
-    isa_ok App::PRT::Command::RenameNameSpace->new, 'App::PRT::Command::RenameNameSpace';
+    isa_ok App::PRT::Command::RenameNamespace->new, 'App::PRT::Command::RenameNamespace';
 }
 
 sub handle_files : Tests {
-    ok App::PRT::Command::RenameNameSpace->handle_files, 'RenameNameSpace handles files';
+    ok App::PRT::Command::RenameNamespace->handle_files, 'RenameNameSpace handles files';
 }
 
 sub register_rule : Tests {
-    my $command = App::PRT::Command::RenameNameSpace->new;
+    my $command = App::PRT::Command::RenameNamespace->new;
 
     $command->register('Foo' => 'Bar');
 
@@ -26,7 +26,7 @@ sub register_rule : Tests {
 
 sub parse_arguments : Tests {
     subtest "when source and destination specified" => sub {
-        my $command = App::PRT::Command::RenameNameSpace->new;
+        my $command = App::PRT::Command::RenameNamespace->new;
         my @args = qw(From To a.pl lib/B.pm);
 
 
@@ -49,7 +49,7 @@ sub parse_arguments : Tests {
 }
 
 sub _collect_target_classes : Tests {
-    my $command = App::PRT::Command::RenameNameSpace->new;
+    my $command = App::PRT::Command::RenameNamespace->new;
     $command->register('My' => 'Our');
 
     my $directory = t::test::prepare_test_code('dinner');
@@ -65,7 +65,7 @@ sub _collect_target_classes : Tests {
 }
 
 sub _destination_class_name : Tests {
-    my $command = App::PRT::Command::RenameNameSpace->new;
+    my $command = App::PRT::Command::RenameNamespace->new;
     $command->register('My' => 'Our');
 
     is $command->_destination_class_name('My::Food'), 'Our::Food', 'converted';
@@ -76,7 +76,7 @@ sub _destination_class_name : Tests {
 sub execute : Tests {
     my $directory = t::test::prepare_test_code('dinner');
 
-    my $command = App::PRT::Command::RenameNameSpace->new;
+    my $command = App::PRT::Command::RenameNamespace->new;
     $command->register('My' => 'Our');
 
     $command->execute_files([
