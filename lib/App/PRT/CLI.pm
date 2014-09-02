@@ -100,6 +100,11 @@ sub _command_name_to_command_class {
 
     my $command_class = join '', map { ucfirst } split '_', $name;
 
+    # XXX: Super hack to fix typo
+    if ($command_class eq 'RenameNamespace') {
+        $command_class = 'RenameNameSpace';
+    }
+
     'App::PRT::Command::' . $command_class;
 }
 
