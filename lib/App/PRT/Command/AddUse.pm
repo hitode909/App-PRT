@@ -12,8 +12,6 @@ sub new {
     }, $class;
 }
 
-sub handle_files { 1 }
-
 # register a method
 # arguments:
 #   $namespace: package name to use

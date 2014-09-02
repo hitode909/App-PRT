@@ -11,10 +11,6 @@ sub instantiate : Tests {
     isa_ok App::PRT::Command::RenameNamespace->new, 'App::PRT::Command::RenameNamespace';
 }
 
-sub handle_files : Tests {
-    ok App::PRT::Command::RenameNamespace->handle_files, 'RenameNameSpace handles files';
-}
-
 sub register_rule : Tests {
     my $command = App::PRT::Command::RenameNamespace->new;
 

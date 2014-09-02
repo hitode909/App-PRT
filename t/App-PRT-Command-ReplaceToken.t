@@ -11,10 +11,6 @@ sub instantiate : Tests {
     isa_ok App::PRT::Command::ReplaceToken->new, 'App::PRT::Command::ReplaceToken';
 }
 
-sub handle_files : Tests {
-    ok App::PRT::Command::ReplaceToken->handle_files, 'ReplaceToken handles files';
-}
-
 sub register_rules : Tests {
     subtest 'single token' => sub {
         my $command = App::PRT::Command::ReplaceToken->new;

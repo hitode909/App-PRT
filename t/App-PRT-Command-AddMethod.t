@@ -11,10 +11,6 @@ sub instantiate : Tests {
     isa_ok App::PRT::Command::AddMethod->new, 'App::PRT::Command::AddMethod';
 }
 
-sub handle_files : Tests {
-    ok App::PRT::Command::AddMethod->handle_files, 'AddMethod handles files';
-}
-
 sub register : Tests {
     my $command = App::PRT::Command::AddMethod->new;
 
