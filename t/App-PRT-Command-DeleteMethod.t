@@ -11,10 +11,6 @@ sub instantiate : Tests {
     isa_ok App::PRT::Command::DeleteMethod->new, 'App::PRT::Command::DeleteMethod';
 }
 
-sub handle_files : Tests {
-    ok App::PRT::Command::DeleteMethod->handle_files, 'DeleteMethod handles files';
-}
-
 sub register : Tests {
     my $command = App::PRT::Command::DeleteMethod->new;
 

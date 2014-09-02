@@ -11,10 +11,6 @@ sub instantiate : Tests {
     isa_ok App::PRT::Command::AddUse->new, 'App::PRT::Command::AddUse';
 }
 
-sub handle_files : Tests {
-    ok App::PRT::Command::AddUse->handle_files, 'AddUse handles files';
-}
-
 sub register : Tests {
     subtest 'package' => sub {
         my $command = App::PRT::Command::AddUse->new;

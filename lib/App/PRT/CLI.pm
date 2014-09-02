@@ -18,7 +18,7 @@ sub new {
 sub parse {
     my ($self, @args) = @_;
 
-    my $command = shift @args || 'help';
+    my $command = shift @args or die 'prt <command> <args>';
 
     my $command_class = $self->_command_name_to_command_class($command);
 
@@ -34,13 +34,11 @@ sub parse {
 
     my @rest_args = $self->{command}->parse_arguments(@args);
 
-    if ($self->{command}->handle_files) {
-        my $collector = $self->_prepare_collector(@rest_args);
-        unless ($collector) {
-            die 'Cannot decide target files';
-        }
-        $self->{collector} = $collector;
+    my $collector = $self->_prepare_collector(@rest_args);
+    unless ($collector) {
+        die 'Cannot decide target files';
     }
+    $self->{collector} = $collector;
 
     1;
 }
@@ -48,11 +46,15 @@ sub parse {
 sub run {
     my ($self) = @_;
 
-    if ($self->command->handle_files) {
-        $self->_run_for_each_files;
+    my $collector = $self->collector;
+    my $command = $self->command;
+
+    if ($command->can('execute_files')) { # TODO: create a base class for command?
+        $command->execute_files($collector->collect);
     } else {
-        # just run
-        $self->command->execute;
+        for my $file (@{$collector->collect}) {
+            $command->execute($file);
+        }
     }
 }
 
@@ -79,21 +81,6 @@ sub _prepare_collector {
     }
 
     return;
-}
-
-sub _run_for_each_files {
-    my ($self) = @_;
-
-    my $collector = $self->collector;
-    my $command = $self->command;
-
-    if ($command->can('execute_files')) { # TODO: create a base class for command?
-        $command->execute_files($collector->collect);
-    } else {
-        for my $file (@{$collector->collect}) {
-            $command->execute($file);
-        }
-    }
 }
 
 sub command {

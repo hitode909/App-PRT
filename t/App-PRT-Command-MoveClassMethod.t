@@ -11,10 +11,6 @@ sub instantiate : Tests {
     isa_ok App::PRT::Command::MoveClassMethod->new, 'App::PRT::Command::MoveClassMethod';
 }
 
-sub handle_files : Tests {
-    ok App::PRT::Command::MoveClassMethod->handle_files, 'MoveClassMethod handles files';
-}
-
 sub register_rule : Tests {
 
     subtest 'valid rule' => sub {

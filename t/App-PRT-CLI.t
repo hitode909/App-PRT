@@ -23,9 +23,9 @@ sub _command_name_to_command_class : Tests {
 sub parse : Tests {
     subtest 'when empty input' => sub {
         my $cli = App::PRT::CLI->new;
-        ok $cli->parse;
-        isa_ok $cli->command, 'App::PRT::Command::Help', 'default command is help';
-        ok ! $cli->collector;
+        like exception {
+            $cli->parse();
+        }, qr/prt <command> <args>/;
     };
 
     subtest 'when command specified, not a git directory' => sub {
@@ -125,20 +125,7 @@ sub parse : Tests {
 }
 
 sub run : Tests {
-    subtest "command which doesn't handle files" => sub {
-        my $cli = App::PRT::CLI->new;
-        my $g = mock_guard 'App::PRT::Command::Help' => {
-            execute => sub {
-                1;
-            },
-        };
-        $cli->parse('help');
-        $cli->run;
-
-        is $g->call_count('App::PRT::Command::Help', 'execute'), 1, 'execute called';
-    };
-
-    subtest 'command which handles files(execute)' => sub {
+    subtest 'command which can execute' => sub {
         my $directory = t::test::prepare_test_code('hello_world');
 
         my $cli = App::PRT::CLI->new;
@@ -157,7 +144,7 @@ sub run : Tests {
         is $file, "$directory/hello_world.pl", 'called with file'
     };
 
-    subtest 'command which handles files(execute_files)' => sub {
+    subtest 'command which can execute_files' => sub {
         my $directory = t::test::prepare_test_code('dinner');
 
         my $cli = App::PRT::CLI->new;
