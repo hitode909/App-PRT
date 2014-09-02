@@ -44,11 +44,11 @@ Rename C<Foo> class to C<Bar> class.
 
     prt rename_class Foo Bar
 
-=item * rename_namespace
+=item * rename_name_space
 
 Rename C<Foo> and C<Foo::*> classes to C<Bar> and C<Bar::*> classes.
 
-    prt rename_namespace Foo Bar
+    prt rename_name_space Foo Bar
 
 =item * delete_method
 

@@ -148,10 +148,10 @@ sub run : Tests {
         my $directory = t::test::prepare_test_code('dinner');
 
         my $cli = App::PRT::CLI->new;
-        $cli->parse(qw(rename_namespace My Our), "$directory/lib/My/Food.pm", "$directory/lib/My/Human.pm");
+        $cli->parse(qw(rename_name_space My Our), "$directory/lib/My/Food.pm", "$directory/lib/My/Human.pm");
 
         my $files;
-        my $g = mock_guard 'App::PRT::Command::RenameNamespace' => {
+        my $g = mock_guard 'App::PRT::Command::RenameNameSpace' => {
             execute_files => sub {
                 (undef, $files) = @_;
             },
@@ -159,7 +159,7 @@ sub run : Tests {
 
         $cli->run;
 
-        is $g->call_count('App::PRT::Command::RenameNamespace', 'execute_files'), 1, 'execute_files called';
+        is $g->call_count('App::PRT::Command::RenameNameSpace', 'execute_files'), 1, 'execute_files called';
         cmp_deeply $files, ["$directory/lib/My/Food.pm", "$directory/lib/My/Human.pm"], 'called with files';
     };
 }
