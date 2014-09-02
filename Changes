@@ -2,6 +2,10 @@ Revision history for Perl extension App-PRT
 
 {{$NEXT}}
 
+0.17 2014-09-02T01:01:32Z
+    - Rename rename_name_space to rename_namespace (thanks miyagawa)
+    - Delete help command for DRY. You can use perldoc prt instead.
+
 0.16 2014-08-31T10:35:30Z
     - Fix typo, add documentation (thanks syohex)
 
