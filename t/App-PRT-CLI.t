@@ -152,7 +152,7 @@ sub run : Tests {
         my $directory = t::test::prepare_test_code('dinner');
 
         my $cli = App::PRT::CLI->new;
-        $cli->parse(qw(rename_name_space My Our), "$directory/lib/My/Food.pm", "$directory/lib/My/Human.pm");
+        $cli->parse(qw(rename_namespace My Our), "$directory/lib/My/Food.pm", "$directory/lib/My/Human.pm");
 
         my $files;
         my $g = mock_guard 'App::PRT::Command::RenameNameSpace' => {
