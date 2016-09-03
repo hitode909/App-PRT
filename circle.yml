@@ -25,4 +25,4 @@ test:
     - cover -test
 
   post:
-    - cover -report codecov
+    - cover
