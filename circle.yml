@@ -17,7 +17,12 @@ dependencies:
         ~/perl-install 5.20.3 ~/perl-5.20
       fi
     - cpanm --quiet --installdeps --notest .
-
+    - cpanm --quiet --notest --skip-satisfied Devel::Cover
 test:
   override:
-    - perl Build.PL && ./Build test
+    - perl Build.PL
+    - ./Build build
+    - cover -test
+
+  post:
+    - cover -report codecov
