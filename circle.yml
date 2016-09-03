@@ -1,3 +1,7 @@
+general:
+  artifacts:
+    - cover_db/
+
 machine:
   environment:
     PATH: ~/perl-5.20/bin:$PATH
