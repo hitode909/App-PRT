@@ -66,6 +66,16 @@ C<Class>'s including packages are copied to C<AnotherClass>.
 
 =back
 
+=item * introduce_variables
+
+Print the variables in the source code. This command accepts input from C<STDIN>.
+
+    prt introduce_variables a.pl
+    cat a.pl | prt introduce_variables
+    pbpaste | prt introduce_variables
+
+=back
+
 =head1 TARGET FILES
 
 You can specify the target files to refactor.
