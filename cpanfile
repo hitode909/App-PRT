@@ -5,6 +5,7 @@ requires 'PPI';
 requires 'Path::Class';
 requires 'File::Find::Rule';
 requires 'File::Temp';
+requires 'IO::Interactive';
 
 on configure => sub {
     requires 'CPAN::Meta';

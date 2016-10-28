@@ -4,6 +4,7 @@ use warnings;
 
 use Class::Load qw(load_class);
 use Getopt::Long qw(GetOptionsFromArray);
+use IO::Interactive qw(is_interactive);
 use Cwd ();
 use App::PRT::Collector::FileHandle;
 use App::PRT::Collector::Files;
@@ -98,7 +99,7 @@ sub _prepare_collector {
 # -t  Filehandle is opened to a tty.
 sub _input_is_pipe {
     my ($self) = @_;
-    $self->{input} && ! -t $self->{input};
+    $self->{input} && ! is_interactive($self->{input});
 }
 
 sub command {

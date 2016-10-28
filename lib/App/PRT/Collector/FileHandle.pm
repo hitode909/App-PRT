@@ -8,7 +8,7 @@ sub new {
 
     bless {
         input_fh => $input_fh,
-    };
+    }, $class;
 }
 
 sub collect {

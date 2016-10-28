@@ -50,6 +50,7 @@
             "File::Find::Rule" : "0",
             "File::Temp" : "0",
             "Getopt::Long" : "2.42",
+            "IO::Interactive" : "0",
             "PPI" : "0",
             "Path::Class" : "0",
             "perl" : "5.010001"
