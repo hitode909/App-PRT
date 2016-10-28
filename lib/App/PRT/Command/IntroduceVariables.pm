@@ -10,6 +10,7 @@ sub new {
 
 sub parse_arguments {
     my ($self, @arguments) = @_;
+    use Data::Dumper;
     @arguments;
 }
 
@@ -29,6 +30,7 @@ sub collect_variables {
     my $knowns = {};
     my $variables = [];
     my $tokens = $document->find('PPI::Token::Symbol');
+    return [] unless $tokens;
 
     for my $token (@$tokens) {
         next if $knowns->{$token}++;
