@@ -57,10 +57,10 @@ sub run {
     my $command = $self->command;
 
     if ($command->can('execute_files')) { # TODO: create a base class for command?
-        $command->execute_files($collector->collect, *STDOUT);
+        $command->execute_files($collector->collect, $self->{output});
     } else {
         for my $file (@{$collector->collect}) {
-            $command->execute($file, *STDOUT);
+            $command->execute($file, $self->{output});
         }
     }
 }
