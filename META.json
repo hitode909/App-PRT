@@ -4,7 +4,7 @@
       "This library is free software; you can redistribute it and/or modify"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v2.1.1, CPAN::Meta::Converter version 2.142060",
+   "generated_by" : "Minilla/v3.0.4, CPAN::Meta::Converter version 2.150005",
    "license" : [
       "perl_5"
    ],
@@ -30,7 +30,8 @@
          "requires" : {
             "CPAN::Meta" : "0",
             "CPAN::Meta::Prereqs" : "0",
-            "Module::Build" : "0.38"
+            "Module::Build" : "0",
+            "Module::Build::Tiny" : "0.035"
          }
       },
       "develop" : {
@@ -86,5 +87,6 @@
       "moznion <moznion@gmail.com>",
       "Syohei YOSHIDA <syohex@gmail.com>",
       "hitode909 <hitode909@gmail.com>"
-   ]
+   ],
+   "x_serialization_backend" : "JSON::PP version 2.27300"
 }
