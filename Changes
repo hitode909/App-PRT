@@ -2,6 +2,9 @@ Revision history for Perl extension App-PRT
 
 {{$NEXT}}
 
+0.20 2016-10-28T06:14:32Z
+    - Implement introduce_variables
+
 0.19 2014-09-02T02:20:48Z
     - Rename rename_name_space to rename_namespace
 
