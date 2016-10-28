@@ -5,6 +5,7 @@ use warnings;
 use App::PRT::CLI;
 
 my $cli = App::PRT::CLI->new;
+$cli->set_io(*STDIN, *STDOUT);
 $cli->parse(@ARGV);
 $cli->run;
 __END__

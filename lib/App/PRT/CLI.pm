@@ -5,6 +5,7 @@ use warnings;
 use Class::Load qw(load_class);
 use Getopt::Long qw(GetOptionsFromArray);
 use Cwd ();
+use App::PRT::Collector::FileHandle;
 use App::PRT::Collector::Files;
 use App::PRT::Collector::AllFiles;
 use App::PRT::Collector::GitDirectory;
@@ -65,11 +66,16 @@ sub run {
 }
 
 sub _prepare_collector {
-    my ($class, @args) = @_;
+    my ($self, @args) = @_;
 
     # target files specified?
     if (@args) {
         return App::PRT::Collector::Files->new(@args);
+    }
+
+    # STDIN from pipe?
+    if ($self->{input} && ! -t $self->{input}) {
+        return App::PRT::Collector::FileHandle->new($self->{input});
     }
 
     my $cwd = Cwd::getcwd;
