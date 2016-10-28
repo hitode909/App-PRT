@@ -4,6 +4,7 @@ requires 'Getopt::Long', '2.42';
 requires 'PPI';
 requires 'Path::Class';
 requires 'File::Find::Rule';
+requires 'File::Temp';
 
 on configure => sub {
     requires 'CPAN::Meta';
@@ -18,7 +19,6 @@ on 'test' => sub {
     requires 'Test::Deep';
     requires 'Test::Mock::Guard';
     requires 'Path::Class';
-    requires 'File::Temp';
     requires 'File::Copy::Recursive';
     requires 'parent';
 };

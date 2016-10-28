@@ -5,6 +5,7 @@ use warnings;
 use Class::Load qw(load_class);
 use Getopt::Long qw(GetOptionsFromArray);
 use Cwd ();
+use App::PRT::Collector::FileHandle;
 use App::PRT::Collector::Files;
 use App::PRT::Collector::AllFiles;
 use App::PRT::Collector::GitDirectory;
@@ -13,6 +14,12 @@ sub new {
     my ($class) = @_;
 
     bless {}, $class;
+}
+
+sub set_io {
+    my ($self, $stdin, $stdout) = @_;
+    $self->{input} = $stdin;
+    $self->{output} = $stdout;
 }
 
 sub parse {
@@ -50,20 +57,25 @@ sub run {
     my $command = $self->command;
 
     if ($command->can('execute_files')) { # TODO: create a base class for command?
-        $command->execute_files($collector->collect);
+        $command->execute_files($collector->collect, $self->{output});
     } else {
         for my $file (@{$collector->collect}) {
-            $command->execute($file);
+            $command->execute($file, $self->{output});
         }
     }
 }
 
 sub _prepare_collector {
-    my ($class, @args) = @_;
+    my ($self, @args) = @_;
 
     # target files specified?
     if (@args) {
         return App::PRT::Collector::Files->new(@args);
+    }
+
+    # STDIN from pipe?
+    if ($self->_input_is_pipe) {
+        return App::PRT::Collector::FileHandle->new($self->{input});
     }
 
     my $cwd = Cwd::getcwd;
@@ -81,6 +93,12 @@ sub _prepare_collector {
     }
 
     return;
+}
+
+# -t  Filehandle is opened to a tty.
+sub _input_is_pipe {
+    my ($self) = @_;
+    $self->{input} && ! -t $self->{input};
 }
 
 sub command {

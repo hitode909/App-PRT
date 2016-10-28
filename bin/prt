@@ -5,6 +5,7 @@ use warnings;
 use App::PRT::CLI;
 
 my $cli = App::PRT::CLI->new;
+$cli->set_io(*STDIN, *STDOUT);
 $cli->parse(@ARGV);
 $cli->run;
 __END__
@@ -62,6 +63,16 @@ Move C<method> method in C<Class> class to C<another_method> method in C<Another
 C<Class>'s including packages are copied to C<AnotherClass>.
 
     prt move_class_method 'Class#method' 'AnotherClass#another_method'
+
+=back
+
+=item * introduce_variables
+
+Print the variables in the source code. This command accepts input from C<STDIN>.
+
+    prt introduce_variables a.pl
+    cat a.pl | prt introduce_variables
+    pbpaste | prt introduce_variables
 
 =back
 

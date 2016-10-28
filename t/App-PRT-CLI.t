@@ -24,6 +24,14 @@ sub _command_name_to_command_class : Tests {
     };
 }
 
+sub set_io : Tests {
+    my $cli = App::PRT::CLI->new;
+    $cli->set_io(*STDIN, *STDOUT);
+
+    is $cli->{input}, *STDIN;
+    is $cli->{output}, *STDOUT;
+}
+
 sub parse : Tests {
     subtest 'when empty input' => sub {
         my $cli = App::PRT::CLI->new;
@@ -125,7 +133,16 @@ sub parse : Tests {
         like exception {
             $cli->parse('invalid_command');
         }, qr/Command invalid_command not found/;
-    }
+    };
+
+    subtest 'when input is the pipe' => sub {
+        my $cli = App::PRT::CLI->new;
+        my $g = mock_guard 'App::PRT::CLI', { _input_is_pipe => 1 };
+        $cli->parse('introduce_variables');
+        cmp_deeply $cli->collector, isa('App::PRT::Collector::FileHandle');
+    };
+
+
 }
 
 sub run : Tests {
