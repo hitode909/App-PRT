@@ -74,7 +74,7 @@ sub _prepare_collector {
     }
 
     # STDIN from pipe?
-    if ($self->{input} && ! -t $self->{input}) {
+    if ($self->_input_is_pipe) {
         return App::PRT::Collector::FileHandle->new($self->{input});
     }
 
@@ -93,6 +93,12 @@ sub _prepare_collector {
     }
 
     return;
+}
+
+# -t  Filehandle is opened to a tty.
+sub _input_is_pipe {
+    my ($self) = @_;
+    $self->{input} && ! -t $self->{input};
 }
 
 sub command {

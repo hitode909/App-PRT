@@ -133,7 +133,16 @@ sub parse : Tests {
         like exception {
             $cli->parse('invalid_command');
         }, qr/Command invalid_command not found/;
-    }
+    };
+
+    subtest 'when input is the pipe' => sub {
+        my $cli = App::PRT::CLI->new;
+        my $g = mock_guard 'App::PRT::CLI', { _input_is_pipe => 1 };
+        $cli->parse('introduce_variables');
+        cmp_deeply $cli->collector, isa('App::PRT::Collector::FileHandle');
+    };
+
+
 }
 
 sub run : Tests {
