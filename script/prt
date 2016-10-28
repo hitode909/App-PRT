@@ -64,8 +64,6 @@ C<Class>'s including packages are copied to C<AnotherClass>.
 
     prt move_class_method 'Class#method' 'AnotherClass#another_method'
 
-=back
-
 =item * introduce_variables
 
 Print the variables in the source code. This command accepts input from C<STDIN>.
