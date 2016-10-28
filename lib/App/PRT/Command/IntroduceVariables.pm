@@ -8,11 +8,35 @@ sub new {
     bless {}, $class;
 }
 
-sub collect_variables {
-    my ($self, $source) = @_;
+sub parse_arguments {
+    my ($self, @arguments) = @_;
+    @arguments;
+}
 
-    my @matched = $source =~ m{(\$[a-z]+)}g; # TODO
-    \@matched;
+sub execute {
+    my ($self, $file, $out) = @_;
+
+    my $variables = $self->collect_variables($file);
+    for my $variable (@$variables) {
+        say $out $variable;
+    }
+}
+
+sub collect_variables {
+    my ($self, $file) = @_;
+    my $document = PPI::Document->new($file);
+
+    my $knowns = {};
+    my $variables = [];
+    my $tokens = $document->find('PPI::Token::Symbol');
+
+    for my $token (@$tokens) {
+        next if $knowns->{$token}++;
+
+        push @$variables, $token->content;
+    }
+
+    $variables;
 }
 
 1;
