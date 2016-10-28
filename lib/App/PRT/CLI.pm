@@ -15,6 +15,12 @@ sub new {
     bless {}, $class;
 }
 
+sub set_io {
+    my ($self, $stdin, $stdout) = @_;
+    $self->{input} = $stdin;
+    $self->{output} = $stdout;
+}
+
 sub parse {
     my ($self, @args) = @_;
 

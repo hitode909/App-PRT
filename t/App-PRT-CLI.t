@@ -24,6 +24,14 @@ sub _command_name_to_command_class : Tests {
     };
 }
 
+sub set_io : Tests {
+    my $cli = App::PRT::CLI->new;
+    $cli->set_io(*STDIN, *STDOUT);
+
+    is $cli->{input}, *STDIN;
+    is $cli->{output}, *STDOUT;
+}
+
 sub parse : Tests {
     subtest 'when empty input' => sub {
         my $cli = App::PRT::CLI->new;
