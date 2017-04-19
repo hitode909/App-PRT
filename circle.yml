@@ -1,0 +1,32 @@
+general:
+  artifacts:
+    - cover_db/
+
+machine:
+  environment:
+    PATH: ~/perl-5.20/bin:$PATH
+  timezone:
+    Asia/Tokyo
+
+dependencies:
+  cache_directories:
+    - ~/perl-5.20
+    - local
+  pre:
+    - |
+      mkdir -p ~/perl-5.20
+      if [ -z "$(ls -A ~/perl-5.20/)" ]; then
+        wget https://raw.githubusercontent.com/tagomoris/xbuild/master/perl-install -O ~/perl-install
+        chmod +x ~/perl-install
+        ~/perl-install 5.20.3 ~/perl-5.20
+      fi
+    - cpanm --quiet --installdeps --notest .
+    - cpanm --quiet --notest --skip-satisfied Devel::Cover
+test:
+  override:
+    - perl Build.PL
+    - ./Build build
+    - cover -test
+
+  post:
+    - cover
