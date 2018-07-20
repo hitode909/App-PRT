@@ -7,11 +7,8 @@ use Path::Class;
 sub destination_file {
     my ($source_class_name, $destination_class_name, $input_file) = @_;
 
-    my @delimiters = do {
-        my $pattern = $source_class_name;
-        $pattern =~ s{::}{(.+)}g;
-        ($input_file =~ qr/^(.*)$pattern(.*)$/);
-    };
+    my @delimiters = _delimiters($source_class_name, $destination_class_name, $input_file);
+
     my $prefix = shift @delimiters;
     my $suffix = pop @delimiters;
 
@@ -23,6 +20,14 @@ sub destination_file {
         shift @delimiters // $fallback_delimiter;
     }ge;
     $dir->file("$basename$suffix")->stringify;
+}
+
+sub _delimiters {
+    my ($source_class_name, $destination_class_name, $input_file) = @_;
+
+    my $pattern = $source_class_name;
+    $pattern =~ s{::}{(.+)}g;
+    ($input_file =~ qr/^(.*)$pattern(.*)$/);
 }
 
 1;
