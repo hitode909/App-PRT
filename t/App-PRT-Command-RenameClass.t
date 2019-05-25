@@ -33,7 +33,7 @@ sub execute : Tests {
 
         is $command->execute($food_file), $meal_file, 'returns destination file when success';
 
-        ok ! -f $food_file, "Food.pm doesn't exists";
+        ok ! -f $food_file, "Food.pm doesn't exist";
         ok -e $meal_file, "Meal.pm exists";
 
         is file($meal_file)->slurp, <<'CODE', 'package statement was rewritten';
@@ -89,6 +89,66 @@ CODE
      };
 }
 
+sub execute_package_with_comment_first : Tests {
+    my $directory = t::test::prepare_test_code('tokens_before_package');
+
+    my $command = App::PRT::Command::RenameClass->new;
+
+    $command->register('My::Commented' => 'My::Commented2');
+
+    my $file_in = "$directory/lib/My/Commented.pm";
+    my $file_out = "$directory/lib/My/Commented2.pm";
+
+    is $command->execute($file_in), $file_out, 'returns destination file when success';
+
+    ok ! -f $file_in, "$file_in doesn't exist";
+    ok -e $file_out, "$file_out exists";
+
+    is file($file_out)->slurp, <<'CODE', 'package statement was rewritten';
+# A package with a comment before the `package` statement
+package My::Commented2;
+use strict;
+use warnings;
+
+sub new { bless {}, shift; }
+
+1;
+CODE
+
+}
+
+sub execute_package_with_pod_first : Tests {
+    my $directory = t::test::prepare_test_code('tokens_before_package');
+
+    my $command = App::PRT::Command::RenameClass->new;
+
+    $command->register('My::POD' => 'My::POD2');
+
+    my $file_in = "$directory/lib/My/POD.pm";
+    my $file_out = "$directory/lib/My/POD2.pm";
+
+    is $command->execute($file_in), $file_out, 'returns destination file when success';
+
+    ok ! -f $file_in, "$file_in doesn't exist";
+    ok -e $file_out, "$file_out exists";
+
+    is file($file_out)->slurp, <<'CODE', 'package statement was rewritten';
+=head1 NAME
+
+My::POD - A package with POD before the `package` statement
+
+=cut
+
+package My::POD2;
+use strict;
+use warnings;
+
+sub new { bless {}, shift; }
+
+1;
+CODE
+
+}
 sub execute_with_inherit : Tests {
     my $directory = t::test::prepare_test_code('inherit');
 
@@ -176,7 +236,7 @@ sub execute_test_class_style_test_file: Tests {
     $command1->register('t::My::Food' => 't::My::Meal');
     $command1->execute($food_file);
 
-    ok ! -f $food_file, "Food._t doesn't exists";
+    ok ! -f $food_file, "Food._t doesn't exist";
     ok -e $meal_file, "Meal._t exists";
 
     is file($meal_file)->slurp, <<'CODE', 'package statement replaced';
@@ -225,7 +285,7 @@ sub execute_rename_to_deeper_directory : Tests {
 
         is $command->execute($food_file), $special_food_file, 'success';
 
-        ok ! -f $food_file, "Food.pm doesn't exists";
+        ok ! -f $food_file, "Food.pm doesn't exist";
         ok -e $special_food_file, "Special::Great::Food.pm exists";
     };
 }
