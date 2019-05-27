@@ -2,6 +2,9 @@ Revision history for Perl extension App-PRT
 
 {{$NEXT}}
 
+0.21 2019-05-27T06:10:22Z
+    - Rename package files starting with comments or POD (thanks cxw42)
+
 0.20 2016-10-28T06:14:32Z
     - Implement introduce_variables
 

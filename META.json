@@ -1,7 +1,7 @@
 {
    "abstract" : "Command line Perl Refactoring Tool",
    "author" : [
-      "This library is free software; you can redistribute it and/or modify"
+      "-2019 hitode909 and contributors."
    ],
    "dynamic_config" : 0,
    "generated_by" : "Minilla/v2.4.1, CPAN::Meta::Converter version 2.142690",
@@ -50,7 +50,7 @@
             "File::Temp" : "0",
             "Getopt::Long" : "2.42",
             "IO::Interactive" : "0",
-            "PPI" : "0",
+            "PPI" : "0.844",
             "Path::Class" : "0",
             "perl" : "5.010001"
          }
@@ -80,12 +80,13 @@
          "web" : "https://github.com/hitode909/App-PRT"
       }
    },
-   "version" : "0.20",
+   "version" : "0.21",
    "x_contributors" : [
       "Tatsuhiko Miyagawa <miyagawa@bulknews.net>",
       "Takanori Ishikawa <takanori.ishikawa@gmail.com>",
       "moznion <moznion@gmail.com>",
       "Syohei YOSHIDA <syohex@gmail.com>",
+      "Chris White <cxwembedded@gmail.com>",
       "hitode909 <hitode909@gmail.com>"
    ]
 }

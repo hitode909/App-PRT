@@ -14,13 +14,25 @@ App::PRT - Command line Perl Refactoring Tool
 
 App::PRT is command line tools for Refactoring Perl.
 
+# CONTRIBUTING
+
+App::PRT uses [Minilla](https://metacpan.org/pod/Minilla) for development.  The tests assume `.` is in the
+Perl library path.  On Perl 5.26+, before running `minil test`, add `.`
+to the path.  For example, in `bash`:
+
+    export PERL5LIB="$PERL5LIB":.
+
+Each command in the [prt](https://metacpan.org/pod/prt) tool is implemented by a corresponding class
+under `App::PRT::Command`.  For example, `rename_class` is implemented
+by [App::PRT::Command::RenameClass](https://metacpan.org/pod/App::PRT::Command::RenameClass).
+
 # SEE ALSO
 
-[prt](https://metacpan.org/pod/prt)
+[prt](https://metacpan.org/pod/prt) for command-line usage.
 
 # LICENSE
 
-Copyright (C) hitode909.
+Copyright (C) 2014-2019 hitode909 and contributors.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
