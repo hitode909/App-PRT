@@ -1,7 +1,7 @@
 requires 'perl', '5.010001';
 requires 'Class::Load';
 requires 'Getopt::Long', '2.42';
-requires 'PPI';
+requires 'PPI', '0.844';    # for schild bugfix
 requires 'Path::Class';
 requires 'File::Find::Rule';
 requires 'File::Temp';
