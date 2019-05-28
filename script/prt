@@ -72,19 +72,34 @@ Print the variables in the source code. This command accepts input from C<STDIN>
     cat a.pl | prt introduce_variables
     pbpaste | prt introduce_variables
 
+=item * list_files
+
+List the files that C<App::PRT> would process.  This can be used, for example,
+to search the contents of the Perl sources in a project:
+
+    grep "some_regex" `prt list_files`
+
+The C<-0> argument causes outputs to be separated by C<\0> instead of the
+default C<\n>.  For example:
+
+    prt list_files -0 | xargs -0 grep "some_regex"
+
 =back
 
 =head1 TARGET FILES
 
-You can specify the target files to refactor.
+You can specify the target files to refactor.  For example:
 
-    prt replace_token foo bar lib/**/**.pm t/*.t # Refactor Perl modules in lib/ and test files in t/
+    prt replace_token foo bar lib/**/*.pm t/*.t # Refactor Perl modules in lib/ and test files in t/
 
-Without target files, C<App::PRT> collects source codes in your project automatically.
-C<App::PRT> searches C<cpanfile> to detect project root directory.
-When executed in git repository, All files in the repository are used.
+NOTE: C<App::PRT> does not glob (expand wildcards).  In the above command,
+the shell must expand the C<**/*.pm> and C<*.t>.
 
-    prt replace_token foo bar                    # Refactor the project in current working directory
+Without target files, C<App::PRT> detects source files in your project automatically.
+C<App::PRT> looks for a C<cpanfile> to detect the project's root directory.
+When executed in a git repository, all files in the repository are used.
+
+    prt replace_token foo bar   # Refactor the project in current working directory
 
 =head1 LICENSE
 

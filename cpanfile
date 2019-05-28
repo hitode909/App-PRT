@@ -22,6 +22,8 @@ on 'test' => sub {
     requires 'Path::Class';
     requires 'File::Copy::Recursive';
     requires 'parent';
+    requires 'Capture::Tiny', '0.39';
+    requires 'File::pushd', '1.013';
 };
 
 on develop => sub {
