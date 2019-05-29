@@ -57,7 +57,9 @@
       },
       "test" : {
          "requires" : {
+            "Capture::Tiny" : "0.39",
             "File::Copy::Recursive" : "0",
+            "File::pushd" : "1.013",
             "Path::Class" : "0",
             "Test::Class" : "0",
             "Test::Deep" : "0",
@@ -80,13 +82,14 @@
          "web" : "https://github.com/hitode909/App-PRT"
       }
    },
-   "version" : "0.21",
+   "version" : "0.22",
    "x_contributors" : [
       "Tatsuhiko Miyagawa <miyagawa@bulknews.net>",
       "Takanori Ishikawa <takanori.ishikawa@gmail.com>",
       "moznion <moznion@gmail.com>",
       "Syohei YOSHIDA <syohex@gmail.com>",
       "Chris White <cxwembedded@gmail.com>",
+      "Chris White <chrisw@leehayes.com>",
       "hitode909 <hitode909@gmail.com>"
    ]
 }
