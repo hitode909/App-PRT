@@ -1,7 +1,13 @@
 package t::App::PRT::CLI;
+use 5.010001;
 use t::test;
-use FindBin;
+
+use Capture::Tiny qw(capture);
 use File::Basename ();
+use File::pushd;
+use FindBin;
+use List::Util qw(first);
+use Path::Class;
 
 sub _require : Test(startup => 1) {
     my ($self) = @_;
@@ -32,19 +38,90 @@ sub set_io : Tests {
     is $cli->{output}, *STDOUT;
 }
 
-sub parse : Tests {
+# Test global options and script/prt invocation.
+sub script_prt_invocation : Tests {
+
+    # Check if we are running under cover(1) from Devel::Cover
+    my $is_covering = !!(eval 'Devel::Cover::get_coverage()');
+    diag $is_covering ? 'Devel::Cover running' : 'Devel::Cover not covering';
+
+    # Find the right script/prt for this test run.
+    my $running_in_blib = defined first { /\bblib\b/ } @INC;
+    my $dir = dir(File::Basename::dirname(__FILE__));
+    my $script = $dir->parent->file(
+                    ($running_in_blib ? qw(blib) : ()), qw(script prt)
+                )->absolute;
+
+    # Make the command to run script/prt.
+    my @cmd = ($^X, $is_covering ? ('-MDevel::Cover=-silent,1') : ());
+
+    push @cmd, (map { "-I$_" } @INC);
+        # brute-force our @INC down to the other perl invocation
+        # so that we can run tests with -Ilib.
+
+    push @cmd, $script;
+    diag "Testing script/prt with command line:\n", join ' ', @cmd;
+
+    # Run the tests
+
     subtest 'when empty input' => sub {
-        my $cli = App::PRT::CLI->new;
-        like exception {
-            $cli->parse();
-        }, qr/prt <command> <args>/;
+        my ($stdout, $stderr, $exit) = capture {
+            return system(@cmd);
+        };
+        cmp_ok $exit>>8, '==', 2, 'exit code';
     };
 
+    subtest 'invalid option' => sub {
+        my ($stdout, $stderr, $exit) = capture {
+            return system(@cmd, '-~');
+        };
+        cmp_ok $exit>>8, '>', 0, 'exit code';
+    };
+
+    subtest 'normal invocation' => sub {
+        # This is for coverage of the last line of script/prt.
+        my ($stdout, $stderr, $exit) = capture {
+            return system(@cmd, 'list_files');
+        };
+        cmp_ok $exit>>8, '==', 0, 'exit code';
+        like $stdout, qr/./, 'Nonempty stdout';
+    };
+
+    subtest 'command-line help' => sub {
+
+        for my $flag (qw(-h -? --help)) {
+            my ($stdout, $stderr, $exit) = capture {
+                return system(@cmd, $flag);
+            };
+            cmp_ok $exit>>8, '==', 0, "$flag exit code";
+            like $stdout, qr/^Usage:/m, "$flag text";
+        }
+
+        my ($stdout, $stderr, $exit) = capture {
+            return system(@cmd, '--man');
+        };
+        cmp_ok $exit>>8, '==', 0, '--man exit code';
+        like $stdout,
+            qr{(?:\e[^A-Z]+)?(?:SYNOPSIS|S.SY.YN.NO.OP.PS.SI.IS.S)\b}m,
+            '--man text';
+            # \e[A-Z]+:     'SYNOPSIS' may be preceded by an ANSI escape code.
+            # S.SY.Y...S.S: 'SYNOPSIS' may be boldfaced by double-striking.
+
+        # prt -h <foo> ignores <foo>.
+        ($stdout, $stderr, $exit) = capture {
+            return system(@cmd, qw(-h list_files));
+        };
+        cmp_ok $exit>>8, '==', 0, '-h exit code (command ignored)';
+        like $stdout, qr/^Usage:/m, '-h text (command ignored)';
+
+    };
+
+} #parse_exec
+
+sub parse : Tests {
     subtest 'when command specified, not a git directory' => sub {
         my $directory = t::test::prepare_test_code('contain_ignores');
-        my $g = mock_guard 'Cwd' => {
-            getcwd => "$directory",
-        };
+        my $g = pushd($directory);
 
         my $cli = App::PRT::CLI->new;
         $cli->parse(qw{replace_token foo bar});
@@ -61,9 +138,7 @@ sub parse : Tests {
     subtest 'when command specified, git directory' => sub {
         my $directory = t::test::prepare_test_code('dinner');
         t::test::prepare_as_git_repository($directory);
-        my $g = mock_guard 'Cwd' => {
-            getcwd => "$directory",
-        };
+        my $g = pushd($directory);
 
         my $cli = App::PRT::CLI->new;
         $cli->parse(qw{replace_token foo bar});
@@ -101,9 +176,7 @@ sub parse : Tests {
 
     subtest 'when target ' => sub {
         my $directory = t::test::prepare_test_code('contain_ignores');
-        my $g = mock_guard 'Cwd' => {
-            getcwd => "$directory",
-        };
+        my $g = pushd($directory);
 
         my $cli = App::PRT::CLI->new;
         $cli->parse(qw{replace_token foo bar});
@@ -119,9 +192,8 @@ sub parse : Tests {
 
     subtest 'when neither git directory or project root directory detected' => sub {
         my $directory = t::test::prepare_test_code('hello_world');
-        my $g = mock_guard 'Cwd' => {
-            getcwd => "$directory",
-        };
+        my $g = pushd($directory);
+
         my $cli = App::PRT::CLI->new;
         like exception {
             $cli->parse(qw{replace_token foo bar});
@@ -141,7 +213,6 @@ sub parse : Tests {
         $cli->parse('introduce_variables');
         cmp_deeply $cli->collector, isa('App::PRT::Collector::FileHandle');
     };
-
 
 }
 

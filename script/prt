@@ -1,8 +1,11 @@
 #!perl
-
+use 5.010001;
 use strict;
 use warnings;
+use App::PRT;
 use App::PRT::CLI;
+
+our $VERSION = $App::PRT::VERSION;  # for Getopt::Long auto_version
 
 my $cli = App::PRT::CLI->new;
 $cli->set_io(*STDIN, *STDOUT);
@@ -21,11 +24,13 @@ prt - Command line frontend of App::PRT
     $ prt <command> <args>
     $ prt <command> <args> <files>
 
+Run C<prt --man> for full help.
+
 =head1 DESCRIPTION
 
 prt is the command line frontend of L<App::PRT>.
 
-=head1 SUBCOMMANDS
+=head1 COMMANDS
 
 =over 4
 
@@ -100,6 +105,26 @@ C<App::PRT> looks for a C<cpanfile> to detect the project's root directory.
 When executed in a git repository, all files in the repository are used.
 
     prt replace_token foo bar   # Refactor the project in current working directory
+
+=head1 OTHER OPTIONS
+
+These can be specified before the C<< <command> >>:
+
+=over
+
+=item B<-h>, B<--help>, B<-?>
+
+Show brief help
+
+=item B<--man>
+
+Show full help (this page)
+
+=item B<--version>
+
+Show the version of C<prt>
+
+=back
 
 =head1 LICENSE
 

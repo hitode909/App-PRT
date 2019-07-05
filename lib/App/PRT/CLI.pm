@@ -3,9 +3,16 @@ use strict;
 use warnings;
 
 use Class::Load qw(load_class);
-use Getopt::Long qw(GetOptionsFromArray);
-use IO::Interactive qw(is_interactive);
 use Cwd ();
+
+use Getopt::Long 2.34 qw(GetOptionsFromArray :config),
+    qw(auto_help auto_version),     # handle -?, --help, --version
+    qw(passthrough require_order),  # stop at the first unrecognized
+    qw(no_getopt_compat gnu_compat bundling);   # --foo, -x, no +x
+
+use IO::Interactive qw(is_interactive);
+use List::MoreUtils qw(first_index);
+
 use App::PRT::Collector::FileHandle;
 use App::PRT::Collector::Files;
 use App::PRT::Collector::AllFiles;
@@ -26,7 +33,10 @@ sub set_io {
 sub parse {
     my ($self, @args) = @_;
 
-    my $command = shift @args or die 'prt <command> <args>';
+    $self->_process_global_options(\@args);     # E.g., --help.  May exit().
+
+    my $command = shift @args;
+        # _process_global_options exit()s if no args are provided.
 
     my $command_class = $self->_command_name_to_command_class($command);
 
@@ -126,5 +136,26 @@ sub _command_name_to_command_class {
 
     'App::PRT::Command::' . $command_class;
 }
+
+# Process any global options.  Calls exit() if no arguments are left, since
+# that means there's no command.
+# Note: -~ is reserved for testing.  Please do not add '~' as a valid option.
+
+sub _process_global_options {
+    my ($self, $lrArgv) = @_;
+    my %opts;
+
+    # uncoverable branch true
+    GetOptionsFromArray($lrArgv, \%opts, qw(h man))
+        or die 'Error while processing global options';
+        # At present, this always succeeds, because it is configured to simply
+        # stop at the first unrecognized option, and because none of the
+        # options have coderefs or validation.
+
+    Getopt::Long::HelpMessage(-exitval => 0, -verbose => 2) if $opts{man};
+    Getopt::Long::HelpMessage(-exitval => 0) if $opts{h};
+
+    Getopt::Long::HelpMessage(-exitval => 2) unless @$lrArgv;
+} #_process_global_optons
 
 1;

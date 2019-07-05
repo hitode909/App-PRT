@@ -1,6 +1,7 @@
 Revision history for Perl extension App-PRT
 
 {{$NEXT}}
+    - Add options to show help from the prt script: -h, -?, --help (#39)
 
 0.22 2019-05-29T02:56:11Z
     - Add list_files command
