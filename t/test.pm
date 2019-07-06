@@ -9,6 +9,7 @@ use Path::Class;
 # Make all @INC absolute since we will be changing directories
 BEGIN { $_ = Path::Class::Dir->new($_)->absolute->stringify foreach @INC; }
 
+use Cwd ();
 use FindBin;
 use File::Spec::Functions qw/catfile/;
 use File::Temp qw(tempdir);
@@ -54,7 +55,7 @@ sub prepare_test_code {
     my ($name) = @_;
 
     my $base_directory = catfile($FindBin::Bin, 'data', $name);
-    my $tmpdir = tempdir;
+    my $tmpdir = Cwd::abs_path(tempdir);
 
     unless (-d $base_directory) {
         die "$name is not defined";
