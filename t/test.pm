@@ -5,7 +5,9 @@ use warnings;
 use utf8;
 
 use Path::Class;
-use lib file(__FILE__)->dir->parent->subdir('lib')->stringify;
+
+# Make all @INC absolute since we will be changing directories
+BEGIN { $_ = Path::Class::Dir->new($_)->absolute->stringify foreach @INC; }
 
 use FindBin;
 use File::Spec::Functions qw/catfile/;

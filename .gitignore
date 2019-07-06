@@ -1,5 +1,6 @@
 /App-PRT-*
 /.build
+/_build
 /_build_params
 /Build
 /Build.bat
@@ -7,3 +8,6 @@
 !META.json
 !LICENSE
 .perl-version
+/blib/
+/cover_db/
+*.tmp
