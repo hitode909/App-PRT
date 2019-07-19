@@ -17,8 +17,10 @@ sub find_project_root_directory {
 
     my $current = dir($directory);
     while (1) {
-        if (-e $current->file('cpanfile')) {
-            return $current->stringify;
+        for my $file (qw(cpanfile Makefile.PL Build.PL)) {
+            if (-e $current->file($file)) {
+                return $current->stringify;
+            }
         }
 
         if ($current eq $current->parent) {
