@@ -20,10 +20,16 @@ sub find_project_root_directory: Tests {
     };
 
     subtest 'directory with cpanfile' => sub {
-        my $directory = t::test::prepare_test_code('contain_ignores');
+        for my $name (qw(with_cpanfile with_build_pl with_makefile_pl contain_ignores)) {
+            subtest $name => sub {
+                my $directory = t::test::prepare_test_code($name);
 
-        is App::PRT::Collector::AllFiles->find_project_root_directory($directory), $directory, 'found from root directory';
-        is App::PRT::Collector::AllFiles->find_project_root_directory("$directory/lib"), $directory, 'found from sub directory';
+                is App::PRT::Collector::AllFiles->find_project_root_directory($directory), $directory, 'found from root directory';
+                if (-e "$directory/lib") {
+                    is App::PRT::Collector::AllFiles->find_project_root_directory("$directory/lib"), $directory, 'found from sub directory';
+                }
+            };
+        };
     };
 
     subtest 'not existing directory' => sub {
