@@ -12,5 +12,5 @@ jobs:
     - uses: shogo82148/actions-setup-perl@v1
       with:
         perl-version: "5.30"
-    - run: cpanm --installdeps .
-    - run: prove -lv t
+    - run: cpanm --notest --installdeps .
+    - run: prove -Ilib -lv t
