@@ -28,6 +28,6 @@ jobs:
     - env:
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
       run: |
-        echo "repo_token: $COVERALLS_REPO_TOKEN"
+        env
         cover -report coveralls
       if: matrix.perl == '5.30'
