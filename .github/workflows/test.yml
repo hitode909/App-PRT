@@ -25,9 +25,7 @@ jobs:
     - run: prove -Ilib -lv t
       env:
         HARNESS_PERL_SWITCHES: "-MDevel::Cover=+ignore,inc"
-    - run: |
-        cover -test
-        cover -report coveralls
+    - run: cover -report coveralls
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
       if: matrix.perl == '5.30'
