@@ -27,15 +27,15 @@ jobs:
         id: cache
         with:
           path: /usr/local/lib/perl5
-          key: ${{ runner.os }}-perl-${{ matrix.perl-version }}-${{ hashFiles('cpanfile') }}
+          key: ${{ runner.os }}-perl-${{ matrix.perl-version }}-${{ hashFiles('cpanfile', '.github/workflows/test.yml') }}
 
       - name: install deps
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           cpanm --notest --installdeps .
-          cpanm -n Devel::Cover Devel::Cover::Report::Coveralls
+          cpanm -n Devel::Cover Devel::Cover::Report::Coveralls TAP::Harness::JUnit
       - name: test
-        run: prove -Ilib -r
+        run: prove -Ilib -r --harness TAP::Harness::JUnit
         env:
           HARNESS_PERL_SWITCHES: "-MDevel::Cover=+ignore,inc"
 
@@ -46,3 +46,9 @@ jobs:
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         if: matrix.perl-version == 'latest'
+      - name: Archive results
+        uses: actions/upload-artifact@v1
+        with:
+          name: report
+          path: junit_output.xml
+        if: always()
