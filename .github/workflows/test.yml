@@ -27,7 +27,7 @@ jobs:
         id: cache
         with:
           path: /usr/local/lib/perl5
-          key: ${{ runner.os }}-perl-${{ matrix.perl-version }}-${{ hashFiles('cpanfile') }}
+          key: ${{ runner.os }}-perl-${{ matrix.perl-version }}-${{ hashFiles('cpanfile', '.github/workflows/test.yml') }}
 
       - name: install deps
         if: steps.cache.outputs.cache-hit != 'true'
