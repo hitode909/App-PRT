@@ -11,6 +11,7 @@ jobs:
       matrix:
         os: ['ubuntu-latest']
         perl: [ '5.30', '5.24' ]
+      fail-fast: false
     name: Perl ${{ matrix.perl }} on ${{ matrix.os }}
     env:
       PERL_USE_UNSAFE_INC: 1
