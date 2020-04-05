@@ -20,4 +20,8 @@ jobs:
       with:
         perl-version: "5.30"
     - run: cpanm --notest --installdeps .
+    - run: cpanm --quiet --notest --skip-satisfied Devel::Cover::Report::Coveralls
     - run: prove -Ilib -lv t
+      env:
+        HARNESS_PERL_SWITCHES: "-MDevel::Cover=+ignore,inc"
+    - run: cover -report coveralls
