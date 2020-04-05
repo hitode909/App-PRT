@@ -24,7 +24,6 @@ sub execute_NL : Tests {        # Output ending with \n
     do {    # Modified from script/prt
         my $guard = pushd($directory);
         my $cli = App::PRT::CLI->new;
-        $cli->set_io(*STDIN, *STDOUT);
         $cli->parse(qw(list_files));
         ($stdout, $stderr, @result) = capture { $cli->run; };
     };
@@ -50,7 +49,6 @@ sub execute_0 : Tests {         # Output ending with \0
     do {    # Modified from script/prt
         my $guard = pushd($directory);
         my $cli = App::PRT::CLI->new;
-        $cli->set_io(*STDIN, *STDOUT);
         $cli->parse(qw(list_files -0));
         ($stdout, $stderr, @result) = capture { $cli->run; };
     };

@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/cxw42/App-PRT.svg?branch=master)](https://travis-ci.org/cxw42/App-PRT) [![Coverage Status](https://img.shields.io/coveralls/cxw42/App-PRT/master.svg?style=flat)](https://coveralls.io/r/cxw42/App-PRT?branch=master)
 # NAME
 
 App::PRT - Command line Perl Refactoring Tool

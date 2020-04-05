@@ -1,0 +1,48 @@
+---
+name: test
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        perl-version:
+          - '5.14'
+          - latest
+    container:
+      image: perl:${{ matrix.perl-version }}
+    env:
+      PERL_USE_UNSAFE_INC: 1
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: perl-version
+        run: perl -V
+
+      - uses: actions/cache@v1
+        id: cache
+        with:
+          path: /usr/local/lib/perl5
+          key: ${{ runner.os }}-perl-${{ matrix.perl-version }}-${{ hashFiles('cpanfile') }}
+
+      - name: install deps
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          cpanm --notest --installdeps .
+          cpanm -n Devel::Cover Devel::Cover::Report::Coveralls
+      - name: test
+        run: prove -Ilib -r
+        env:
+          HARNESS_PERL_SWITCHES: "-MDevel::Cover=+ignore,inc"
+
+      - name: coverage
+        run: |
+          cpanm -n --reinstall Devel::Cover
+          cover -report coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        if: matrix.perl-version == 'latest'
