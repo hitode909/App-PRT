@@ -30,4 +30,4 @@ jobs:
         cover -report coveralls
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-      if: matrix.perl-version == '5.30'
+      if: matrix.perl == '5.30'
