@@ -26,3 +26,5 @@ jobs:
       env:
         HARNESS_PERL_SWITCHES: "-MDevel::Cover=+ignore,inc"
     - run: cover -report coveralls
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
