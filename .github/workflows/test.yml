@@ -1,0 +1,18 @@
+---
+
+name: Test
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: shogo82148/actions-setup-perl@v1
+      with:
+        perl-version: "5.30"
+    - run: cpanm --quiet --notest --skip-satisfied Devel::Cover::Report::Coveralls
+    - run: cover -delete
+    - run: perl Build.PL && ./Build build && HARNESS_PERL_SWITCHES="-MDevel::Cover=+ignore,inc" PERL5LIB="lib" prove t/
+    - run: cover -report coveralls
